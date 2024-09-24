@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Siswa;
+use App\Models\Laporan;
 use Illuminate\Http\Request;
 
-class SiswaController extends Controller
+class LaporanController extends Controller
 {
     public function index()
     {
-        return view('data_siswa',[
-            'siswa' => Siswa::all(),
-            'active' => 'siswa'
+        return view('laporan',[
+            'laporan' => Laporan::all(),
+            'active' => 'laporan'
         ]);
     }
 
@@ -21,17 +21,17 @@ class SiswaController extends Controller
             // Tambahkan validasi sesuai kebutuhan
         ]);
 
-        Siswa::create([
+        Laporan::create([
             // Tambahkan field sesuai kebutuhan
         ]);
-        return redirect()->route('siswa.index')->with('success', 'Data baru berhasil ditambahkan.');
+        return redirect()->route('laporan.index')->with('success', 'Data baru berhasil ditambahkan.');
     }
 
 
     public function edit($id)
     {
-        $user = Siswa::findOrFail($id);
-        return view('siswa.edit', compact('siswa'));
+        $user = Laporan::findOrFail($id);
+        return view('laporan.edit', compact('laporan'));
     }
 
     public function update(Request $request, $id)
@@ -41,18 +41,18 @@ class SiswaController extends Controller
             // Tambahkan validasi sesuai kebutuhan, misalnya untuk role
         ]);
 
-        $user = Siswa::findOrFail($id);
+        $user = Laporan::findOrFail($id);
         $user->update([
             // Tambahkan field  yang akan diupdate
         ]);
 
-        return redirect()->route('siswa.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect()->route('laporan.index')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        $user = Siswa::findOrFail($id);
+        $user = Laporan::findOrFail($id);
         $user->delete();
-        return redirect()->route('siswa.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('laporan.index')->with('success', 'Data berhasil dihapus.');
     }
 }

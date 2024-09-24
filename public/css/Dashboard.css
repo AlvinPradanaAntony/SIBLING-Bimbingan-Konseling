@@ -288,6 +288,22 @@ input[type="search"]:focus {
   color: #ffffff !important;
   background-color: var(--first-color);
 }
+
+.sidebar .nav-item .sub-menu a.active{
+  color: var(--title-color);
+  font-weight: var(--font-bold);
+}
+.sidebar .nav-item .sub-menu a::before{
+    content: "";
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    left: 35px;
+    border: 2px solid;
+    border-radius: 10px;
+    background: #fff;
+    top: 13.5px;
+}
 /* .sidebar .nav-item-active > .collapse.show .sub-menu{
   border-radius: 0px 0px 14px 14px!important;
   transition: all 0.5s ease;
@@ -727,6 +743,8 @@ input[type="search"]:focus {
 .card-header h5{
   font-family: "Gilroy-Bold";
 }
+
+
 
 
 

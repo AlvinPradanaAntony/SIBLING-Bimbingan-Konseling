@@ -12,6 +12,8 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\BimbinganController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\RekapAbsensiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,17 +72,23 @@ Route::get('/prestasi/{id}/edit', [PrestasiController::class, 'edit'])->name('pr
 Route::put('/prestasi/{id}', [PrestasiController::class, 'update'])->name('prestasi.update');
 Route::delete('/prestasi/{id}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
 
-Route::get('/absensi', [RekapAbsensi::class, 'index'])->name('absensi.index');
-Route::post('/absensi', [RekapAbsensi::class, 'store'])->name('absensi.store');
-Route::get('/absensi/{id}/edit', [RekapAbsensi::class, 'edit'])->name('absensi.edit');
-Route::put('/absensi/{id}', [RekapAbsensi::class, 'update'])->name('absensi.update');
-Route::delete('/absensi/{id}', [RekapAbsensi::class, 'destroy'])->name('absensi.destroy');
+Route::get('/absensi', [RekapAbsensiController::class, 'index'])->name('absensi.index');
+Route::post('/absensi', [RekapAbsensiController::class, 'store'])->name('absensi.store');
+Route::get('/absensi/{id}/edit', [RekapAbsensiController::class, 'edit'])->name('absensi.edit');
+Route::put('/absensi/{id}', [RekapAbsensiController::class, 'update'])->name('absensi.update');
+Route::delete('/absensi/{id}', [RekapAbsensiController::class, 'destroy'])->name('absensi.destroy');
 
 Route::get('/jurusan', [JurusanController::class, 'index'])->name('jurusan.index');
 Route::post('/jurusan', [JurusanController::class, 'store'])->name('jurusan.store');
 Route::get('/jurusan/{id}/edit', [JurusanController::class, 'edit'])->name('jurusan.edit');
 Route::put('/jurusan/{id}', [JurusanController::class, 'update'])->name('jurusan.update');
 Route::delete('/jurusan/{id}', [JurusanController::class, 'destroy'])->name('jurusan.destroy');
+
+Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
+Route::get('/laporan/{id}/edit', [LaporanController::class, 'edit'])->name('laporan.edit');
+Route::put('/laporan/{id}', [LaporanController::class, 'update'])->name('laporan.update');
+Route::delete('/laporan/{id}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
 
 Route::get('/users', [UsersController::class, 'index'])->name('user.index');
 Route::post('/users', [UsersController::class, 'store'])->name('user.store');

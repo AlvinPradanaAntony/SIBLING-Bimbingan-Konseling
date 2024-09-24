@@ -7,7 +7,7 @@
         <div class="mb-4">
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-              <h5 class="m-0 text-primary">Tabel Data Form</h5>
+              <h5 class="m-0 text-primary">Tabel Data Laporan</h5>
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
                 Tambah Data
               </button>
@@ -20,14 +20,14 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      <form action="{{ route('form.store') }}" method="POST">
+                      <form action="{{ route('laporan.store') }}" method="POST">
                         @csrf
                         <!-- Field Nama -->
                         <div class="mb-3">
                           <label for="name" class="col-form-label">Nama:</label>
                           <input type="text" class="form-control" id="name" name="name" required>
                         </div>
-
+                    
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -51,30 +51,30 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($form as $form)
+                    @foreach ($laporan as $laporan)
                       <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $form->name }}</td>
-                        <td>{{ $form->email }}</td>
+                        <td>{{ $laporan->name }}</td>
+                        <td>{{ $laporan->email }}</td>
                         <td>null</td>
                         <td>
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#edit_data{{ $form->id }}">Edit</a>
+                            data-bs-target="#edit_data{{ $laporan->id }}">Edit</a>
                           <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#delete_data{{ $form->id }}">Hapus</a>
+                            data-bs-target="#delete_data{{ $laporan->id }}">Hapus</a>
 
                           <!-- Edit Modal -->
-                          <div class="modal fade" id="edit_data{{ $form->id }}" tabindex="-1"
-                            aria-labelledby="editModalLabel{{ $form->id }}" aria-hidden="true">
+                          <div class="modal fade" id="edit_data{{ $laporan->id }}" tabindex="-1"
+                            aria-labelledby="editModalLabel{{ $laporan->id }}" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="editModalLabel{{ $form->id }}">Edit Data:
-                                    {{ $form->name }}</h5>
+                                  <h5 class="modal-title" id="editModalLabel{{ $laporan->id }}">Edit Data:
+                                    {{ $laporan->name }}</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
-                                <form action="{{ route('user.update', $form->id) }}" method="POST">
+                                <form action="{{ route('user.update', $laporan->id) }}" method="POST">
                                   @csrf
                                   @method('PUT')
                                   <div class="modal-body">
@@ -82,12 +82,12 @@
                                     <div class="mb-3">
                                       <label for="name" class="col-form-label">Nama:</label>
                                       <input type="text" class="form-control" id="name" name="name"
-                                        value="{{ $form->name }}">
+                                        value="{{ $laporan->name }}">
                                     </div>
                                     <div class="mb-3">
                                       <label for="email" class="col-form-label">Email:</label>
                                       <input type="email" class="form-control" id="email" name="email"
-                                        value="{{ $form->email }}">
+                                        value="{{ $laporan->email }}">
                                     </div>
                                     <!-- Add more fields as needed -->
 
@@ -103,23 +103,23 @@
                           </div>
 
                           <!-- Delete Modal -->
-                          <div class="modal fade" id="delete_data{{ $form->id }}" tabindex="-1"
-                            aria-labelledby="deleteModalLabel{{ $form->id }}" aria-hidden="true">
+                          <div class="modal fade" id="delete_data{{ $laporan->id }}" tabindex="-1"
+                            aria-labelledby="deleteModalLabel{{ $laporan->id }}" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="deleteModalLabel{{ $form->id }}">Hapus Data:
-                                    {{ $form->name }}</h5>
+                                  <h5 class="modal-title" id="deleteModalLabel{{ $laporan->id }}">Hapus Data:
+                                    {{ $laporan->name }}</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                  Apakah Anda yakin ingin menghapus data {{ $form->name }}?
+                                  Apakah Anda yakin ingin menghapus data {{ $laporan->name }}?
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Close</button>
-                                  <form action="{{ route('user.destroy', $form->id) }}" method="POST">
+                                  <form action="{{ route('user.destroy', $laporan->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Hapus</button>
@@ -154,3 +154,4 @@
     </div>
   </div>
 @endsection
+

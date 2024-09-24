@@ -10,7 +10,8 @@ class FormsController extends Controller
     public function index()
     {
         return view('data_form',[
-            'form' => Forms::all()
+            'form' => Forms::all(),
+            'active' => 'form'
         ]);
     }
 
