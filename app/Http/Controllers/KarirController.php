@@ -10,7 +10,8 @@ class KarirController extends Controller
     public function index()
     {
         return view('data_karir',[
-            'karir' => Karir::all()
+            'karir' => Karir::all(),
+            'active' => 'karir'
         ]);
     }
 

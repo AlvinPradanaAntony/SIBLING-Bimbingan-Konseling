@@ -10,7 +10,8 @@ class UsersController extends Controller
     public function index()
     {
         return view('autentifikasi', [
-            'users' => User::all()
+            'users' => User::all(),
+            'active' => 'autentifikasi'
         ]);
     }
 

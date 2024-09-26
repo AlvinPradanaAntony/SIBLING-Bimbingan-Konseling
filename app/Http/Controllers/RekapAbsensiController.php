@@ -10,7 +10,8 @@ class RekapAbsensiController extends Controller
     public function index()
     {
         return view('data_absensi',[
-            'absensi' => RekapAbsensi::all()
+            'absensi' => RekapAbsensi::all(),
+            'active' => 'absensi'
         ]);
     }
 
