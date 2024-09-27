@@ -69,7 +69,7 @@
             <div class="align-self-md-center me-3 nav__theme">
               <i class="uil uil-moon change-theme" id="theme-button"></i>
             </div>
-            <a href="{{ route('login') }}" class="btn btn-primary navbar__btn align-self-center pt-1">Login</a>
+            <a href="{{ route('login') }}" class="btn btn-primary navbar__btn align-self-center pt-1" >Login</a>
           </div>
         </div>
       </div>
@@ -313,10 +313,6 @@
     </div>
   </footer>
 
-  <a href="#home" class="scrollup" id="scroll-up">
-    <i class="uil uil-arrow-up scrollup__icon"></i>
-  </a>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -325,23 +321,6 @@
     $(document).ready(function() {
       var badgeText = $('.ornamen span').data('badge'); // Ambil nilai dari data-badge
       $('.ornamen span').css('--badge-content', `"${badgeText}"`); // Set nilai untuk digunakan di CSS
-    
-      $('a[href^="#"]').on('click', function(e) {
-        e.preventDefault();
-
-        var targetId = $(this).attr('href').substring(1);
-        var targetElement = $('#' + targetId);
-
-        if (targetElement.length) {
-          // Menggulir ke elemen yang diinginkan
-          $('html, body').animate({
-            scrollTop: targetElement.offset().top
-          }, 100);
-
-          // Menggunakan history.pushState untuk menghilangkan hash dari URL
-          history.pushState(null, null, ' ');
-        }
-      });
     });
   </script>
 </body>

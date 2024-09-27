@@ -16,15 +16,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UsersController;
-<<<<<<< HEAD
 
-=======
-use App\Http\Controllers\JurusanController;
-use App\Http\Controllers\PrestasiController;
-use App\Http\Controllers\BimbinganController;
-use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\RekapAbsensiController;
->>>>>>> bb09f2138cbd2a20eee2430897b434cf8669653e
 
 /*
 |--------------------------------------------------------------------------
@@ -93,31 +85,17 @@ Route::get('/akses/{id}/edit', [RoleController::class, 'edit'])->name('role.edit
 Route::put('/akses/{id}', [RoleController::class, 'update'])->name('role.update');
 Route::delete('/akses/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
 
-<<<<<<< HEAD
 Route::get('/status', [StatusController::class, 'index'])->name('status.index');
 Route::post('/status', [StatusController::class, 'store'])->name('status.store');
 Route::get('/status/{id}/edit', [StatusController::class, 'edit'])->name('status.edit');
 Route::put('/status/{id}', [StatusController::class, 'update'])->name('status.update');
 Route::delete('/status/{id}', [StatusController::class, 'destroy'])->name('status.destroy');
-=======
-Route::get('/absensi', [RekapAbsensiController::class, 'index'])->name('absensi.index');
-Route::post('/absensi', [RekapAbsensiController::class, 'store'])->name('absensi.store');
-Route::get('/absensi/{id}/edit', [RekapAbsensiController::class, 'edit'])->name('absensi.edit');
-Route::put('/absensi/{id}', [RekapAbsensiController::class, 'update'])->name('absensi.update');
-Route::delete('/absensi/{id}', [RekapAbsensiController::class, 'destroy'])->name('absensi.destroy');
->>>>>>> bb09f2138cbd2a20eee2430897b434cf8669653e
 
 Route::get('/siswa', [StudentController::class, 'index'])->name('student.index');
 Route::post('/siswa', [StudentController::class, 'store'])->name('student.store');
 Route::get('/siswa/{id}/edit', [StudentController::class, 'edit'])->name('student.edit');
 Route::put('/siswa/{id}', [StudentController::class, 'update'])->name('student.update');
 Route::delete('/siswa/{id}', [StudentController::class, 'destroy'])->name('student.destroy');
-
-Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
-Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
-Route::get('/laporan/{id}/edit', [LaporanController::class, 'edit'])->name('laporan.edit');
-Route::put('/laporan/{id}', [LaporanController::class, 'update'])->name('laporan.update');
-Route::delete('/laporan/{id}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
 
 Route::get('/users', [UsersController::class, 'index'])->name('user.index');
 Route::post('/users', [UsersController::class, 'store'])->name('user.store');

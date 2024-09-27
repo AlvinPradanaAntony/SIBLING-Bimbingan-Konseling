@@ -288,41 +288,6 @@ input[type="search"]:focus {
   color: #ffffff !important;
   background-color: var(--first-color);
 }
-
-.sidebar .nav-item .sub-menu a{
-  position: relative;
-}
-
-.sidebar .nav-item .sub-menu a.active{
-  color: var(--title-color);
-  font-weight: var(--font-bold);
-}
-
-.sidebar .nav-item .sub-menu a::after{
-  content: "";
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  left: 34px;
-  border: 2px solid;
-  border-radius: 50%;
-  background: transparent;
-  top: 14px;
-}
-.sidebar .nav-item .sub-menu a::before{
-  content:"";
-  position: absolute;
-  top: -15px;
-  bottom: 0;
-  left: 38px; /* adjust manually */
-  border-left: 1px solid rgba(168, 168, 168, 0.205);
-  height: 78%;
-}
-.sidebar .nav-item .sub-menu li:nth-child(2) a::before {
-  height: 36%;
-  top: 0; 
-}
-
 /* .sidebar .nav-item-active > .collapse.show .sub-menu{
   border-radius: 0px 0px 14px 14px!important;
   transition: all 0.5s ease;
@@ -665,13 +630,6 @@ input[type="search"]:focus {
   font-size: 12px;
 }
 
-.sidebar.close .nav-item .sub-menu a::after {
-  display: none;
-}
-.sidebar.close .nav-item .sub-menu a::before {
-  display: none;
-}
-
 /*========== SCROLL BAR ==========*/
 ::-webkit-scrollbar {
   width: 0.6rem;
@@ -769,8 +727,6 @@ input[type="search"]:focus {
 .card-header h5{
   font-family: "Gilroy-Bold";
 }
-
-
 
 
 

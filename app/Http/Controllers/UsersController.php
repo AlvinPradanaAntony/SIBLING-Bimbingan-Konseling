@@ -8,7 +8,6 @@ use App\Models\Role;
 
 class UsersController extends Controller
 {
-<<<<<<< HEAD
         public function index()
         {
             return view('autentifikasi', [
@@ -16,15 +15,6 @@ class UsersController extends Controller
                 'roles' => Role::all()
             ]);
         }
-=======
-    public function index()
-    {
-        return view('autentifikasi', [
-            'users' => User::all(),
-            'active' => 'autentifikasi'
-        ]);
-    }
->>>>>>> bb09f2138cbd2a20eee2430897b434cf8669653e
 
     public function store(Request $request)
     {
