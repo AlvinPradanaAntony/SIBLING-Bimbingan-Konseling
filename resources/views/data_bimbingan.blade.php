@@ -42,28 +42,37 @@
             <ul class="sub-menu">
               <li><a class="link_name" href="#">DATA</a></li>
               <li>
-                <a href={{ route('siswa.index') }}>Data Siswa</a>
+                <a href={{ route('student.index') }}>Data Siswa</a>
               </li>
               <li>
-                <a href={{ route('karir.index') }}>Data Karir</a>
+                <a href={{ route('guidance.index') }}>Data Bimbingan</a>
               </li>
               <li>
-                <a href={{ route('form.index') }}>Data Form</a>
+                <a href={{ route('case.index') }}>Data Kasus</a>
               </li>
               <li>
-                <a href={{ route('bimbingan.index') }}>Data Bimbingan</a>
+                <a href={{ route('attendance.index') }}>Data Rekap Absensi</a>
               </li>
               <li>
-                <a href={{ route('kasus.index') }}>Data Kasus</a>
+                <a href={{ route('jobVacancy.index') }}>Data Karir</a>
               </li>
               <li>
-                <a href={{ route('prestasi.index') }}>Data Prestasi</a>
+                <a href={{ route('achievement.index') }}>Data Prestasi</a>
               </li>
               <li>
-                <a href={{ route('absensi.index') }}>Data Rekap Absensi</a>
+                <a href={{ route('user.index') }}>Data Guru BK/Walas</a>
               </li>
               <li>
-                <a href={{ route('jurusan.index') }}>Data Jurusan</a>
+                <a href={{ route('major.index') }}>Data Jurusan</a>
+              </li>
+              <li>
+                <a href={{ route('class.index') }}>Data Kelas</a>
+              </li>
+              <li>
+                <a href={{ route('role.index') }}>Data Hak Akses</a>
+              </li>
+              <li>
+                <a href={{ route('status.index') }}>Data Status</a>
               </li>
             </ul>
           </div>
@@ -166,7 +175,7 @@
                 <h5 class="m-0 text-primary">Tabel Data Bimbingan</h5>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                   data-bs-target="#addUserModal">
-                  Tambah Data
+                  Tambah Bimbingan
                 </button>
                 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
                   aria-hidden="true">
@@ -178,12 +187,38 @@
                           aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form action="{{ route('bimbingan.store') }}" method="POST">
+                        <form action="{{ route('guidance.store') }}" method="POST">
                           @csrf
                           <!-- Field Nama -->
                           <div class="mb-3">
-                            <label for="name" class="col-form-label">Nama:</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <label for="student_id" class="col-form-label">Nama Siswa</label>
+                            <select class="form-control" id="student_id" name="student_id" required>
+                              <option value="">-- Pilih Siswa --</option>
+                              @foreach($students as $student)
+                                <option value="{{ $student->id }}">{{ $student->name }}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label for="topics" class="col-form-label">Topik</label>
+                            <input type="text" class="form-control" id="topics" name="topics" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="date" class="col-form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="user_id" class="col-form-label">Guru BK</label>
+                            <select class="form-control" id="user_id" name="user_id" required>
+                              <option value="">-- Pilih Guru BK --</option>
+                              @foreach($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label for="notes" class="col-form-label">Catatan</label>
+                            <input type="textarea" class="form-control" id="notes" name="notes" required>
                           </div>
 
                       </div>
@@ -202,50 +237,83 @@
                     <thead>
                       <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Nama Siswa</th>
+                        <th>Topik</th>
+                        <th>Tanggal</th>
+                        <th>Guru BK</th>
+                        <th>Catatan</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($bimbingan as $bimbingan)
+                      @foreach ($guidances as $guidance)
                         <tr>
                           <td>{{ $loop->iteration }}</td>
-                          <td>{{ $bimbingan->name }}</td>
-                          <td>{{ $bimbingan->email }}</td>
-                          <td>null</td>
+                          <td>{{ $guidance->student->name }}</td>
+                          <td>{{ $guidance->topics }}</td>
+                          <td>{{ $guidance->date }}</td>
+                          <td>{{ $guidance->user->name }}</td>
+                          <td>{{ $guidance->notes }}</td>
                           <td>
                             <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#edit_data{{ $bimbingan->id }}">Edit</a>
+                              data-bs-target="#edit_data{{ $guidance->id }}">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#delete_data{{ $bimbingan->id }}">Hapus</a>
+                              data-bs-target="#delete_data{{ $guidance->id }}">Hapus</a>
 
                             <!-- Edit Modal -->
-                            <div class="modal fade" id="edit_data{{ $bimbingan->id }}" tabindex="-1"
-                              aria-labelledby="editModalLabel{{ $bimbingan->id }}" aria-hidden="true">
+                            <div class="modal fade" id="edit_data{{ $guidance->id }}" tabindex="-1"
+                              aria-labelledby="editModalLabel{{ $guidance->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="editModalLabel{{ $bimbingan->id }}">Edit Data:
-                                      {{ $bimbingan->name }}</h5>
+                                    <h5 class="modal-title" id="editModalLabel{{ $guidance->id }}">Edit Data:
+                                      {{ $guidance->topics }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
-                                  <form action="{{ route('user.update', $bimbingan->id) }}" method="POST">
+                                  <form action="{{ route('user.update', $guidance->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="modal-body">
 
                                       <div class="mb-3">
-                                        <label for="name" class="col-form-label">Nama:</label>
-                                        <input type="text" class="form-control" id="name" name="name"
-                                          value="{{ $bimbingan->name }}">
+                                        <label for="student_id" class="col-form-label">Nama Siswa</label>
+                                        <select class="form-control" id="user_id" name="student_id" required>
+                                          <option value="">-- Pilih Kelas --</option>
+                                          @foreach($students as $student)
+                                            <option value="{{ $student->id }}" 
+                                              {{ $guidance->student_id == $student->id ? 'selected' : '' }}>
+                                              {{ $student->name }} 
+                                            </option>
+                                          @endforeach
+                                        </select>
                                       </div>
                                       <div class="mb-3">
-                                        <label for="email" class="col-form-label">Email:</label>
-                                        <input type="email" class="form-control" id="email" name="email"
-                                          value="{{ $bimbingan->email }}">
+                                        <label for="topics" class="col-form-label">Topik</label>
+                                        <input type="text" class="form-control" id="topics" name="topics"
+                                          value="{{ $guidance->topics }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="date" class="col-form-label">Topik</label>
+                                        <input type="date" class="form-control" id="date" name="date"
+                                          value="{{ $guidance->date }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="user_id" class="col-form-label">Nama Guru BK</label>
+                                        <select class="form-control" id="user_id" name="user_id" required>
+                                          <option value="">-- Pilih Kelas --</option>
+                                          @foreach($users as $user)
+                                            <option value="{{ $user->id }}" 
+                                              {{ $guidance->user_id == $user->id ? 'selected' : '' }}>
+                                              {{ $user->name }} 
+                                            </option>
+                                          @endforeach
+                                        </select>
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="notes" class="col-form-label">Catatan</label>
+                                        <input type="textarea" class="form-control" id="notes" name="notes"
+                                          value="{{ $guidance->notes }}">
                                       </div>
                                       <!-- Add more fields as needed -->
 
@@ -261,23 +329,23 @@
                             </div>
 
                             <!-- Delete Modal -->
-                            <div class="modal fade" id="delete_data{{ $bimbingan->id }}" tabindex="-1"
-                              aria-labelledby="deleteModalLabel{{ $bimbingan->id }}" aria-hidden="true">
+                            <div class="modal fade" id="delete_data{{ $guidance->id }}" tabindex="-1"
+                              aria-labelledby="deleteModalLabel{{ $guidance->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel{{ $bimbingan->id }}">Hapus Data:
-                                      {{ $bimbingan->name }}</h5>
+                                    <h5 class="modal-title" id="deleteModalLabel{{ $guidance->id }}">Hapus Data:
+                                      {{ $guidance->topics }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
                                   <div class="modal-body">
-                                    Apakah Anda yakin ingin menghapus data {{ $bimbingan->name }}?
+                                    Apakah Anda yakin ingin menghapus data {{ $guidance->topics }}?
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                       data-bs-dismiss="modal">Close</button>
-                                    <form action="{{ route('user.destroy', $bimbingan->id) }}" method="POST">
+                                    <form action="{{ route('user.destroy', $guidance->id) }}" method="POST">
                                       @csrf
                                       @method('DELETE')
                                       <button type="submit" class="btn btn-danger">Hapus</button>
@@ -292,9 +360,11 @@
                     <tfoot>
                       <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Nama Siswa</th>
+                        <th>Topik</th>
+                        <th>Tanggal</th>
+                        <th>Guru BK</th>
+                        <th>Catatan</th>
                         <th>Aksi</th>
                       </tr>
                     </tfoot>

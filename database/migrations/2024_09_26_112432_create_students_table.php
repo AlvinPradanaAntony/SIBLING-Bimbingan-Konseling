@@ -11,18 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('nip', 20)->unique();
+            $table->string('nisn', 20);
             $table->string('name', 50);
-            $table->enum('gender', ['Laki-laki', 'Perempuan'])->nullable();
-            $table->string('place_of_birth', 50)->nullable();
-            $table->date('date_of_birth')->nullable();
-            $table->string('religion', 30)->nullable();
-            $table->string('phone_number', 20)->nullable();
-            $table->text('address')->nullable();
+            $table->enum('gender', ['Laki-laki', 'Perempuan']);
+            $table->string('place_of_birth', 50);
+            $table->date('date_of_birth');
+            $table->string('religion', 30);
+            $table->string('phone_number', 20);
+            $table->string('address');
             $table->string('photo')->nullable();
-            $table->integer('role_id')->nullable();
+            $table->date('admission_date');
+            $table->string('guardian_name', 50);
+            $table->string('guardian_phone_number', 20);
+            $table->integer('class_id');
+            $table->integer('status_id');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -36,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('students');
     }
 };

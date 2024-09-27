@@ -42,28 +42,37 @@
             <ul class="sub-menu">
               <li><a class="link_name" href="#">DATA</a></li>
               <li>
-                <a href={{ route('siswa.index') }}>Data Siswa</a>
+                <a href={{ route('student.index') }}>Data Siswa</a>
               </li>
               <li>
-                <a href={{ route('karir.index') }}>Data Karir</a>
+                <a href={{ route('guidance.index') }}>Data Bimbingan</a>
               </li>
               <li>
-                <a href={{ route('form.index') }}>Data Form</a>
+                <a href={{ route('case.index') }}>Data Kasus</a>
               </li>
               <li>
-                <a href={{ route('bimbingan.index') }}>Data Bimbingan</a>
+                <a href={{ route('attendance.index') }}>Data Rekap Absensi</a>
               </li>
               <li>
-                <a href={{ route('kasus.index') }}>Data Kasus</a>
+                <a href={{ route('jobVacancy.index') }}>Data Karir</a>
               </li>
               <li>
-                <a href={{ route('prestasi.index') }}>Data Prestasi</a>
+                <a href={{ route('achievement.index') }}>Data Prestasi</a>
               </li>
               <li>
-                <a href={{ route('absensi.index') }}>Data Rekap Absensi</a>
+                <a href={{ route('user.index') }}>Data Guru BK/Walas</a>
               </li>
               <li>
-                <a href={{ route('jurusan.index') }}>Data Jurusan</a>
+                <a href={{ route('major.index') }}>Data Jurusan</a>
+              </li>
+              <li>
+                <a href={{ route('class.index') }}>Data Kelas</a>
+              </li>
+              <li>
+                <a href={{ route('role.index') }}>Data Hak Akses</a>
+              </li>
+              <li>
+                <a href={{ route('status.index') }}>Data Status</a>
               </li>
             </ul>
           </div>
@@ -165,25 +174,71 @@
               <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h5 class="m-0 text-primary">Tabel Data Prestasi</h5>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                  data-bs-target="#addUserModal">
+                  data-bs-target="#AddAchievementModal">
                   Tambah Data
                 </button>
-                <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
+                <div class="modal fade" id="AddAchievementModal" tabindex="-1" aria-labelledby="AddAchievementModalLabel"
                   aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="addUserModalLabel">Tambah Data Baru</h5>
+                        <h5 class="modal-title" id="AddAchievementModalLabel">Tambah Data Baru</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                           aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form action="{{ route('prestasi.store') }}" method="POST">
+                        <form action="{{ route('achievement.store') }}" method="POST">
                           @csrf
                           <!-- Field Nama -->
                           <div class="mb-3">
-                            <label for="name" class="col-form-label">Nama:</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <label for="student_id" class="col-form-label">Nama Siswa</label>
+                            <select class="form-control" id="student_id" name="student_id" required>
+                              <option value="">-- Pilih Siswa --</option>
+                              @foreach($students as $student)
+                                <option value="{{ $student->id }}">{{ $student->name }}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label for="ranking" class="col-form-label">Peringkat</label>
+                            <input type="text" class="form-control" id="ranking" name="ranking" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="achievements_name" class="col-form-label">Kejuaraan</label>
+                            <input type="text" class="form-control" id="achievements_name" name="achievements_name" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="level" class="col-form-label">Tingkat</label>
+                            <select class="form-control" id="level" name="level">
+                              <option value="kecamatan" >Kecamatan</option>
+                              <option value="kabupaten" >Kabupaten</option>
+                              <option value="provinsi" >Provinsi</option>
+                              <option value="nasional" >Nasional</option>
+                              <option value="internasional" >Internasional</option>
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label for="type" class="col-form-label">Tipe</label>
+                            <select class="form-control" id="type" name="type">
+                              <option value="individu" >Individu</option>
+                              <option value="kelompok" >Kelompok</option>
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label for="date" class="col-form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="recognition" class="col-form-label">Penyelenggara</label>
+                            <input type="text" class="form-control" id="recognition" name="recognition" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="certificate" class="col-form-label">Sertifikat</label>
+                            <input type="file" class="form-control" id="certificate" name="certificate" accept="image/*" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="description" class="col-form-label">Deskripsi</label>
+                            <input type="text" class="form-control" id="description" name="description" required>
                           </div>
 
                       </div>
@@ -203,49 +258,111 @@
                       <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Peringkat</th>
+                        <th>Kejuaraan</th>
+                        <th>Tingkat</th>
+                        <th>Tipe</th>
+                        <th>Tanggal</th>
+                        <th>Penyelenggara</th>
+                        <th>Sertifikat</th>
+                        <th>Deskripsi</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($prestasi as $prestasi)
+                      @foreach ($achievements as $achievement)
                         <tr>
                           <td>{{ $loop->iteration }}</td>
-                          <td>{{ $prestasi->name }}</td>
-                          <td>{{ $prestasi->email }}</td>
-                          <td>null</td>
+                          <td>{{ $achievement->student->name }}</td>
+                          <td>{{ $achievement->ranking }}</td>
+                          <td>{{ $achievement->achievements_name }}</td>
+                          <td>{{ $achievement->level }}</td>
+                          <td>{{ $achievement->type }}</td>
+                          <td>{{ $achievement->date }}</td>
+                          <td>{{ $achievement->recognition }}</td>
+                          <td>{{ $achievement->certificate }}</td>
+                          <td>{{ $achievement->description }}</td>
+                          <td>{{ $achievement->email }}</td>
                           <td>
                             <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#edit_data{{ $prestasi->id }}">Edit</a>
+                              data-bs-target="#edit_data{{ $achievement->id }}">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#delete_data{{ $prestasi->id }}">Hapus</a>
+                              data-bs-target="#delete_data{{ $achievement->id }}">Hapus</a>
 
                             <!-- Edit Modal -->
-                            <div class="modal fade" id="edit_data{{ $prestasi->id }}" tabindex="-1"
-                              aria-labelledby="editModalLabel{{ $prestasi->id }}" aria-hidden="true">
+                            <div class="modal fade" id="edit_data{{ $achievement->id }}" tabindex="-1"
+                              aria-labelledby="editModalLabel{{ $achievement->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="editModalLabel{{ $prestasi->id }}">Edit Data:
-                                      {{ $prestasi->name }}</h5>
+                                    <h5 class="modal-title" id="editModalLabel{{ $achievement->id }}">Edit Data:
+                                      {{ $achievement->achievements_name }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
-                                  <form action="{{ route('user.update', $prestasi->id) }}" method="POST">
+                                  <form action="{{ route('achievement.update', $achievement->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="modal-body">
 
                                       <div class="mb-3">
-                                        <label for="name" class="col-form-label">Nama:</label>
-                                        <input type="text" class="form-control" id="name" name="name"
-                                          value="{{ $prestasi->name }}">
+                                        <label for="student_id" class="col-form-label">Nama Siswa</label>
+                                        <select class="form-control" id="user_id" name="student_id" required>
+                                          <option value="">-- Pilih Kelas --</option>
+                                          @foreach($students as $student)
+                                            <option value="{{ $student->id }}" 
+                                              {{ $achievement->student_id == $student->id ? 'selected' : '' }}>
+                                              {{ $student->name }} 
+                                            </option>
+                                          @endforeach
+                                        </select>
                                       </div>
                                       <div class="mb-3">
-                                        <label for="email" class="col-form-label">Email:</label>
-                                        <input type="email" class="form-control" id="email" name="email"
-                                          value="{{ $prestasi->email }}">
+                                        <label for="ranking" class="col-form-label">Peringkat</label>
+                                        <input type="text" class="form-control" id="ranking" name="ranking"
+                                          value="{{ $achievement->ranking }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="achievements_name" class="col-form-label">Kejuaraan</label>
+                                        <input type="text" class="form-control" id="achievements_name" name="achievements_name"
+                                          value="{{ $achievement->achievements_name }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="level" class="col-form-label">Tingkat</label>
+                                        <select class="form-control" id="level" name="level">
+                                          <option value="kecamatan" {{ $achievement->level == 'kecamatan' ? 'selected' : '' }}>Kecamatan</option>
+                                          <option value="kabupaten" {{ $achievement->level == 'kabupaten' ? 'selected' : '' }}>Kabupaten</option>
+                                          <option value="provinsi" {{ $achievement->level == 'provinsi' ? 'selected' : '' }}>Provinsi</option>
+                                          <option value="nasional" {{ $achievement->level == 'nasional' ? 'selected' : '' }}>Nasional</option>
+                                          <option value="internasional" {{ $achievement->level == 'internasional' ? 'selected' : '' }}>Internasional</option>
+                                        </select>
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="type" class="col-form-label">Tingkat</label>
+                                        <select class="form-control" id="type" name="type">
+                                          <option value="individu" {{ $achievement->type == 'individu' ? 'selected' : '' }}>Individu</option>
+                                          <option value="kelompok" {{ $achievement->type == 'kelompok' ? 'selected' : '' }}>Kelompok</option>
+                                        </select>
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="date" class="col-form-label">Tanggal</label>
+                                        <input type="date" class="form-control" id="date" name="date"
+                                          value="{{ $achievement->date }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="recognition" class="col-form-label">recognition:</label>
+                                        <input type="text" class="form-control" id="recognition" name="recognition"
+                                          value="{{ $achievement->recognition }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="certificate" class="col-form-label">certificate:</label>
+                                        <input type="file" class="form-control" id="certificate" name="certificate" accept="image/*"
+                                          value="{{ $achievement->certificate }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="description" class="col-form-label">description:</label>
+                                        <input type="textarea" class="form-control" id="description" name="description"
+                                          value="{{ $achievement->description }}">
                                       </div>
                                       <!-- Add more fields as needed -->
 
@@ -261,23 +378,23 @@
                             </div>
 
                             <!-- Delete Modal -->
-                            <div class="modal fade" id="delete_data{{ $prestasi->id }}" tabindex="-1"
-                              aria-labelledby="deleteModalLabel{{ $prestasi->id }}" aria-hidden="true">
+                            <div class="modal fade" id="delete_data{{ $achievement->id }}" tabindex="-1"
+                              aria-labelledby="deleteModalLabel{{ $achievement->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel{{ $prestasi->id }}">Hapus Data:
-                                      {{ $user->name }}</h5>
+                                    <h5 class="modal-title" id="deleteModalLabel{{ $achievement->id }}">Hapus Data:
+                                      {{ $achievement->achievements_name }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
                                   <div class="modal-body">
-                                    Apakah Anda yakin ingin menghapus data {{ $prestasi->name }}?
+                                    Apakah Anda yakin ingin menghapus data {{ $achievement->name }}?
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                       data-bs-dismiss="modal">Close</button>
-                                    <form action="{{ route('user.destroy', $prestasi->id) }}" method="POST">
+                                    <form action="{{ route('achievement.destroy', $achievement->id) }}" method="POST">
                                       @csrf
                                       @method('DELETE')
                                       <button type="submit" class="btn btn-danger">Hapus</button>
@@ -293,8 +410,14 @@
                       <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Peringkat</th>
+                        <th>Kejuaraan</th>
+                        <th>Tingkat</th>
+                        <th>Tipe</th>
+                        <th>Tanggal</th>
+                        <th>Penyelenggara</th>
+                        <th>Sertifikat</th>
+                        <th>Deskripsi</th>
                         <th>Aksi</th>
                       </tr>
                     </tfoot>

@@ -42,29 +42,41 @@
             <ul class="sub-menu">
               <li><a class="link_name" href="#">DATA</a></li>
               <li>
-                <a href={{ route('siswa.index') }}>Data Siswa</a>
+                <a href={{ route('student.index') }}>Data Siswa</a>
               </li>
               <li>
-                <a href={{ route('karir.index') }}>Data Karir</a>
+                <a href={{ route('guidance.index') }}>Data Bimbingan</a>
               </li>
               <li>
+                <a href={{ route('case.index') }}>Data Kasus</a>
+              </li>
+              <li>
+                <a href={{ route('attendance.index') }}>Data Rekap Absensi</a>
+              </li>
+              <li>
+                <a href={{ route('jobVacancy.index') }}>Data Karir</a>
+              </li>
+              <li>
+                <a href={{ route('achievement.index') }}>Data Prestasi</a>
+              </li>
+              <li>
+                <a href={{ route('user.index') }}>Data Guru BK/Walas</a>
+              </li>
+              <li>
+                <a href={{ route('major.index') }}>Data Jurusan</a>
+              </li>
+              <li>
+                <a href={{ route('class.index') }}>Data Kelas</a>
+              </li>
+              <li>
+                <a href={{ route('role.index') }}>Data Hak Akses</a>
+              </li>
+              <li>
+                <a href={{ route('status.index') }}>Data Status</a>
+              </li>
+              {{-- <li>
                 <a href={{ route('form.index') }}>Data Form</a>
-              </li>
-              <li>
-                <a href={{ route('bimbingan.index') }}>Data Bimbingan</a>
-              </li>
-              <li>
-                <a href={{ route('kasus.index') }}>Data Kasus</a>
-              </li>
-              <li>
-                <a href={{ route('prestasi.index') }}>Data Prestasi</a>
-              </li>
-              <li>
-                <a href={{ route('absensi.index') }}>Data Rekap Absensi</a>
-              </li>
-              <li>
-                <a href={{ route('jurusan.index') }}>Data Jurusan</a>
-              </li>
+              </li> --}}
             </ul>
           </div>
         </li>
@@ -163,8 +175,8 @@
           <div class="mb-4">
             <div class="card shadow mb-4">
               <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h5 class="m-0 text-primary">Tabel Data User</h5>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                <h5 class="m-0 text-primary">Tabel Data Guru BK/Walas</h5>
+                {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                   data-bs-target="#addUserModal">
                   Tambah Pengguna
                 </button>
@@ -182,23 +194,59 @@
                           @csrf
                           <!-- Field Nama -->
                           <div class="mb-3">
+                            <label for="photo" class="col-form-label">Foto</label>
+                            <input type="text" class="form-control" id="photo" name="photo" required>
+                          </div>
+                          <!-- Field Nama -->
+                          <div class="mb-3">
                             <label for="name" class="col-form-label">Nama:</label>
                             <input type="text" class="form-control" id="name" name="name" required>
+                          </div>
+                          <!-- Field NIP -->
+                          <div class="mb-3">
+                            <label for="nip" class="col-form-label">NIP/NUPTK:</label>
+                            <input type="text" class="form-control" id="nip" name="nip" required>
+                          </div>
+                          <!-- Field Jenis Kelamin -->
+                          <div class="mb-3">
+                            <label for="gender" class="col-form-label">Jenis Kelamin</label>
+                            <input type="text" class="form-control" id="gender" name="gender" required>
+                          </div>
+                          <!-- Field Jenis Kelamin -->
+                          <div class="mb-3">
+                            <label for="gender" class="col-form-label">Jenis Kelamin</label>
+                            <input type="text" class="form-control" id="gender" name="gender" required>
+                          </div>
+                          <!-- Field Jenis Kelamin -->
+                          <div class="mb-3">
+                            <label for="gender" class="col-form-label">Jenis Kelamin</label>
+                            <input type="text" class="form-control" id="gender" name="gender" required>
+                          </div>
+                          <!-- Field Jenis Kelamin -->
+                          <div class="mb-3">
+                            <label for="gender" class="col-form-label">Jenis Kelamin</label>
+                            <input type="text" class="form-control" id="gender" name="gender" required>
+                          </div>
+                          <!-- Field Jenis Kelamin -->
+                          <div class="mb-3">
+                            <label for="gender" class="col-form-label">Jenis Kelamin</label>
+                            <input type="text" class="form-control" id="gender" name="gender" required>
+                          </div>
+                          <!-- Field Jenis Kelamin -->
+                          <div class="mb-3">
+                            <label for="gender" class="col-form-label">Jenis Kelamin</label>
+                            <input type="text" class="form-control" id="gender" name="gender" required>
                           </div>
                           <!-- Field Email -->
                           <div class="mb-3">
                             <label for="email" class="col-form-label">Email:</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                           </div>
-                          <!-- Field Role -->
-                          {{-- <div class="mb-3">
-                            <label for="role" class="col-form-label">Role:</label>
-                            <select class="form-select" id="role" name="role" required>
-                              <option value="admin">Admin</option>
-                              <option value="user">User</option>
-                              <!-- Tambahkan opsi lainnya sesuai kebutuhan -->
-                            </select>
-                          </div> --}}
+                          <!-- Field Jenis Kelamin -->
+                          <div class="mb-3">
+                            <label for="gender" class="col-form-label">Jenis Kelamin</label>
+                            <input type="text" class="form-control" id="gender" name="gender" required>
+                          </div>
                           <div class="mb-3">
                             <label for="password" class="col-form-label">Password:</label>
                             <input type="password" class="form-control" id="password" name="password" required>
@@ -211,7 +259,7 @@
                       </form>
                     </div>
                   </div>
-                </div>
+                </div> --}}
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -219,9 +267,17 @@
                     <thead>
                       <tr>
                         <th>No</th>
+                        <th>Foto</th>
                         <th>Nama</th>
+                        <th>NIP/NUPTK</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Tempat Lahir</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Agama</th>
+                        <th>Nomor Telepon</th>
+                        <th>Alamat</th>
                         <th>Email</th>
-                        <th>Role</th>
+                        <th>Akses</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
@@ -229,9 +285,17 @@
                       @foreach ($users as $user)
                         <tr>
                           <td>{{ $loop->iteration }}</td>
+                          <td>{{ $user->photo }}</td>
                           <td>{{ $user->name }}</td>
+                          <td>{{ $user->nip }}</td>
+                          <td>{{ $user->gender }}</td>
+                          <td>{{ $user->place_of_birth }}</td>
+                          <td>{{ $user->date_of_birth }}</td>
+                          <td>{{ $user->religion }}</td>
+                          <td>{{ $user->phone_number }}</td>
+                          <td>{{ $user->address }}</td>
                           <td>{{ $user->email }}</td>
-                          <td>null</td>
+                          <td>{{ $user->role->role_name }}</td>
                           <td>
                             <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                               data-bs-target="#edit_data{{ $user->id }}">Edit</a>
@@ -255,22 +319,78 @@
                                     <div class="modal-body">
 
                                       <div class="mb-3">
+                                        <label for="photo" class="col-form-label">Foto:</label>
+                                        <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+                                      </div>
+                                      <div class="mb-3">
                                         <label for="name" class="col-form-label">Nama:</label>
                                         <input type="text" class="form-control" id="name" name="name"
                                           value="{{ $user->name }}">
                                       </div>
                                       <div class="mb-3">
-                                        <label for="email" class="col-form-label">Email:</label>
+                                        <label for="nip" class="col-form-label">NIP/NUPTK</label>
+                                        <input type="text" class="form-control" id="nip" name="nip"
+                                          value="{{ $user->nip }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="gender" class="col-form-label">Jenis Kelamin</label>
+                                        <select class="form-control" id="gender" name="gender">
+                                          <option value="laki-laki" {{ $user->gender == 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                          <option value="perempuan" {{ $user->gender == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
+                                        </select>
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="place_of_birth" class="col-form-label">Tempat Lahir</label>
+                                        <input type="text" class="form-control" id="place_of_birth" name="place_of_birth"
+                                          value="{{ $user->place_of_birth }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="date_of_birth" class="col-form-label">Tanggal Lahir</label>
+                                        <input type="text" class="form-control" id="date_of_birth" name="date_of_birth"
+                                          value="{{ $user->date_of_birth }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="religion" class="col-form-label">Agama</label>
+                                        <select class="form-control" id="religion" name="religion">
+                                          <option value="Islam" {{ $user->religion == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                          <option value="Kristen" {{ $user->religion == 'Kristen' ? 'selected' : '' }}>Kristen</option>
+                                          <option value="Katolik" {{ $user->religion == 'Katolik' ? 'selected' : '' }}>Katolik</option>
+                                          <option value="Hindu" {{ $user->religion == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                                          <option value="Buddha" {{ $user->religion == 'Buddha' ? 'selected' : '' }}>Buddha</option>
+                                          <option value="Konghucu" {{ $user->religion == 'Konghucu' ? 'selected' : '' }}>Konghucu</option>
+                                        </select>
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="phone_number" class="col-form-label">Nomor Telepon</label>
+                                        <input type="text" class="form-control" id="phone_number" name="phone_number"
+                                          value="{{ $user->phone_number }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="address" class="col-form-label">Alamat</label>
+                                        <input type="textarea" class="form-control" id="address" name="address"
+                                          value="{{ $user->address }}">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="email" class="col-form-label">Email</label>
                                         <input type="email" class="form-control" id="email" name="email"
                                           value="{{ $user->email }}">
                                       </div>
-                                      <!-- Add more fields as needed -->
+                                      <div class="mb-3">
+                                        <label for="role_id" class="col-form-label">Akses</label>
+                                        <select class="form-control" id="role_id" name="role_id">
+                                          @foreach($roles as $role)
+                                            <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                                              {{ $role->role_name }}
+                                            </option>
+                                          @endforeach
+                                        </select>
+                                      </div>
 
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                      <button type="submit" class="btn btn-primary">Save changes</button>
+                                        data-bs-dismiss="modal">Tutup</button>
+                                      <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                                     </div>
                                   </form>
                                 </div>
@@ -293,7 +413,7 @@
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                      data-bs-dismiss="modal">Close</button>
+                                      data-bs-dismiss="modal">Tutup</button>
                                     <form action="{{ route('user.destroy', $user->id) }}" method="POST">
                                       @csrf
                                       @method('DELETE')
@@ -309,9 +429,17 @@
                     <tfoot>
                       <tr>
                         <th>No</th>
+                        <th>Foto</th>
                         <th>Nama</th>
+                        <th>NIP/NUPTK</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Tempat Lahir</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Agama</th>
+                        <th>Nomor Telepon</th>
+                        <th>Alamat</th>
                         <th>Email</th>
-                        <th>Role</th>
+                        <th>Akses</th>
                         <th>Aksi</th>
                       </tr>
                     </tfoot>

@@ -42,28 +42,37 @@
             <ul class="sub-menu">
               <li><a class="link_name" href="#">DATA</a></li>
               <li>
-                <a href={{ route('siswa.index') }}>Data Siswa</a>
+                <a href={{ route('student.index') }}>Data Siswa</a>
               </li>
               <li>
-                <a href={{ route('karir.index') }}>Data Karir</a>
+                <a href={{ route('guidance.index') }}>Data Bimbingan</a>
               </li>
               <li>
-                <a href={{ route('form.index') }}>Data Form</a>
+                <a href={{ route('case.index') }}>Data Kasus</a>
               </li>
               <li>
-                <a href={{ route('bimbingan.index') }}>Data Bimbingan</a>
+                <a href={{ route('attendance.index') }}>Data Rekap Absensi</a>
               </li>
               <li>
-                <a href={{ route('kasus.index') }}>Data Kasus</a>
+                <a href={{ route('jobVacancy.index') }}>Data Karir</a>
               </li>
               <li>
-                <a href={{ route('prestasi.index') }}>Data Prestasi</a>
+                <a href={{ route('achievement.index') }}>Data Prestasi</a>
               </li>
               <li>
-                <a href={{ route('absensi.index') }}>Data Rekap Absensi</a>
+                <a href={{ route('user.index') }}>Data Guru BK/Walas</a>
               </li>
               <li>
-                <a href={{ route('jurusan.index') }}>Data Jurusan</a>
+                <a href={{ route('major.index') }}>Data Jurusan</a>
+              </li>
+              <li>
+                <a href={{ route('class.index') }}>Data Kelas</a>
+              </li>
+              <li>
+                <a href={{ route('role.index') }}>Data Hak Akses</a>
+              </li>
+              <li>
+                <a href={{ route('status.index') }}>Data Status</a>
               </li>
             </ul>
           </div>
@@ -179,7 +188,7 @@
                           aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form action="{{ route('absensi.store') }}" method="POST">
+                        <form action="{{ route('attendance.store') }}" method="POST">
                           @csrf
                           <!-- Field Nama -->
                           <div class="mb-3">
@@ -203,37 +212,41 @@
                     <thead>
                       <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Nama Siswa</th>
+                        <th>Tanggal</th>
+                        <th>Status Kehadiran</th>
+                        <th>Keterangan</th>
+                        <th>Wali Kelas</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($absensi as $absensi)
+                      @foreach ($attendances as $attendance)
                         <tr>
                           <td>{{ $loop->iteration }}</td>
-                          <td>{{ $absensi->name }}</td>
-                          <td>{{ $absensi->email }}</td>
-                          <td>null</td>
+                          <td>{{ $attendance->student->name }}</td>
+                          <td>{{ $attendance->date }}</td>
+                          <td>{{ $attendance->presence_status }}</td>
+                          <td>{{ $attendance->description }}</td>
+                          <td>{{ $attendance->user->name }}</td>
                           <td>
                             <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#edit_data{{ $absensi->id }}">Edit</a>
+                              data-bs-target="#edit_data{{ $attendance->id }}">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#delete_data{{ $absensi->id }}">Hapus</a>
+                              data-bs-target="#delete_data{{ $attendance->id }}">Hapus</a>
 
                             <!-- Edit Modal -->
-                            <div class="modal fade" id="edit_data{{ $absensi->id }}" tabindex="-1"
-                              aria-labelledby="editModalLabel{{ $absensi->id }}" aria-hidden="true">
+                            <div class="modal fade" id="edit_data{{ $attendance->id }}" tabindex="-1"
+                              aria-labelledby="editModalLabel{{ $attendance->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="editModalLabel{{ $absensi->id }}">Edit Data:
-                                      {{ $absensi->name }}</h5>
+                                    <h5 class="modal-title" id="editModalLabel{{ $attendance->id }}">Edit Data:
+                                      {{ $attendance->name }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
-                                  <form action="{{ route('user.update', $absensi->id) }}" method="POST">
+                                  <form action="{{ route('attendance.update', $attendance->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="modal-body">
@@ -241,12 +254,12 @@
                                       <div class="mb-3">
                                         <label for="name" class="col-form-label">Nama:</label>
                                         <input type="text" class="form-control" id="name" name="name"
-                                          value="{{ $user->name }}">
+                                          value="{{ $attendance->name }}">
                                       </div>
                                       <div class="mb-3">
                                         <label for="email" class="col-form-label">Email:</label>
                                         <input type="email" class="form-control" id="email" name="email"
-                                          value="{{ $user->email }}">
+                                          value="{{ $attendance->email }}">
                                       </div>
                                       <!-- Add more fields as needed -->
 
@@ -262,23 +275,23 @@
                             </div>
 
                             <!-- Delete Modal -->
-                            <div class="modal fade" id="delete_data{{ $absensi->id }}" tabindex="-1"
-                              aria-labelledby="deleteModalLabel{{ $absensi->id }}" aria-hidden="true">
+                            <div class="modal fade" id="delete_data{{ $attendance->id }}" tabindex="-1"
+                              aria-labelledby="deleteModalLabel{{ $attendance->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel{{ $absensi->id }}">Hapus Data:
-                                      {{ $absensi->name }}</h5>
+                                    <h5 class="modal-title" id="deleteModalLabel{{ $attendance->id }}">Hapus Data:
+                                      {{ $attendance->name }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
                                   <div class="modal-body">
-                                    Apakah Anda yakin ingin menghapus data {{ $absensi->name }}?
+                                    Apakah Anda yakin ingin menghapus data {{ $attendance->name }}?
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                       data-bs-dismiss="modal">Close</button>
-                                    <form action="{{ route('user.destroy', $absensi->id) }}" method="POST">
+                                    <form action="{{ route('attendance.destroy', $attendance->id) }}" method="POST">
                                       @csrf
                                       @method('DELETE')
                                       <button type="submit" class="btn btn-danger">Hapus</button>

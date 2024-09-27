@@ -41,29 +41,41 @@
             <ul class="sub-menu">
               <li><a class="link_name" href="#">DATA</a></li>
               <li>
-                <a href={{ route('siswa.index') }}>Data Siswa</a>
+                <a href={{ route('student.index') }}>Data Siswa</a>
               </li>
               <li>
-                <a href={{ route('karir.index') }}>Data Karir</a>
+                <a href={{ route('guidance.index') }}>Data Bimbingan</a>
               </li>
               <li>
+                <a href={{ route('case.index') }}>Data Kasus</a>
+              </li>
+              <li>
+                <a href={{ route('attendance.index') }}>Data Rekap Absensi</a>
+              </li>
+              <li>
+                <a href={{ route('jobVacancy.index') }}>Data Karir</a>
+              </li>
+              <li>
+                <a href={{ route('achievement.index') }}>Data Prestasi</a>
+              </li>
+              <li>
+                <a href={{ route('user.index') }}>Data Guru BK/Walas</a>
+              </li>
+              <li>
+                <a href={{ route('major.index') }}>Data Jurusan</a>
+              </li>
+              <li>
+                <a href={{ route('class.index') }}>Data Kelas</a>
+              </li>
+              <li>
+                <a href={{ route('role.index') }}>Data Hak Akses</a>
+              </li>
+              <li>
+                <a href={{ route('status.index') }}>Data Status Status</a>
+              </li>
+              {{-- <li>
                 <a href={{ route('form.index') }}>Data Form</a>
-              </li>
-              <li>
-                <a href={{ route('bimbingan.index') }}>Data Bimbingan</a>
-              </li>
-              <li>
-                <a href={{ route('kasus.index') }}>Data Kasus</a>
-              </li>
-              <li>
-                <a href={{ route('prestasi.index') }}>Data Prestasi</a>
-              </li>
-              <li>
-                <a href={{ route('absensi.index') }}>Data Rekap Absensi</a>
-              </li>
-              <li>
-                <a href={{ route('jurusan.index') }}>Data Jurusan</a>
-              </li>
+              </li> --}}
             </ul>
           </div>
         </li>

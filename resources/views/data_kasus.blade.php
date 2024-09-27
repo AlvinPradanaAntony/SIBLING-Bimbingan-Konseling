@@ -42,28 +42,37 @@
             <ul class="sub-menu">
               <li><a class="link_name" href="#">DATA</a></li>
               <li>
-                <a href={{ route('siswa.index') }}>Data Siswa</a>
+                <a href={{ route('student.index') }}>Data Siswa</a>
               </li>
               <li>
-                <a href={{ route('karir.index') }}>Data Karir</a>
+                <a href={{ route('guidance.index') }}>Data Bimbingan</a>
               </li>
               <li>
-                <a href={{ route('form.index') }}>Data Form</a>
+                <a href={{ route('case.index') }}>Data Kasus</a>
               </li>
               <li>
-                <a href={{ route('bimbingan.index') }}>Data Bimbingan</a>
+                <a href={{ route('attendance.index') }}>Data Rekap Absensi</a>
               </li>
               <li>
-                <a href={{ route('kasus.index') }}>Data Kasus</a>
+                <a href={{ route('jobVacancy.index') }}>Data Karir</a>
               </li>
               <li>
-                <a href={{ route('prestasi.index') }}>Data Prestasi</a>
+                <a href={{ route('achievement.index') }}>Data Prestasi</a>
               </li>
               <li>
-                <a href={{ route('absensi.index') }}>Data Rekap Absensi</a>
+                <a href={{ route('user.index') }}>Data Guru BK/Walas</a>
               </li>
               <li>
-                <a href={{ route('jurusan.index') }}>Data Jurusan</a>
+                <a href={{ route('major.index') }}>Data Jurusan</a>
+              </li>
+              <li>
+                <a href={{ route('class.index') }}>Data Kelas</a>
+              </li>
+              <li>
+                <a href={{ route('role.index') }}>Data Hak Akses</a>
+              </li>
+              <li>
+                <a href={{ route('status.index') }}>Data Status</a>
               </li>
             </ul>
           </div>
@@ -178,7 +187,7 @@
                           aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form action="{{ route('kasus.store') }}" method="POST">
+                        <form action="{{ route('case.store') }}" method="POST">
                           @csrf
                           <!-- Field Nama -->
                           <div class="mb-3">
@@ -202,37 +211,45 @@
                     <thead>
                       <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Nama Siswa</th>
+                        <th>Kasus</th>
+                        <th>Poin Kasus</th>
+                        <th>Tanggal</th>
+                        <th>Keterangan</th>
+                        <th>Solusi</th>
+                        <th>Guru BK</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($kasus as $kasus)
+                      @foreach ($cases as $case)
                         <tr>
                           <td>{{ $loop->iteration }}</td>
-                          <td>{{ $kasus->name }}</td>
-                          <td>{{ $kasus->email }}</td>
+                          <td>{{ $case->student->name }}</td>
+                          <td>{{ $case->case_name }}</td>
+                          <td>{{ $case->case_point }}</td>
+                          <td>{{ $case->date }}</td>
+                          <td>{{ $case->description }}</td>
+                          <td>{{ $case->resolution }}</td>
                           <td>null</td>
                           <td>
                             <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#edit_data{{ $kasus->id }}">Edit</a>
+                              data-bs-target="#edit_data{{ $case->id }}">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#delete_data{{ $kasus->id }}">Hapus</a>
+                              data-bs-target="#delete_data{{ $case->id }}">Hapus</a>
 
                             <!-- Edit Modal -->
-                            <div class="modal fade" id="edit_data{{ $kasus->id }}" tabindex="-1"
-                              aria-labelledby="editModalLabel{{ $kasus->id }}" aria-hidden="true">
+                            <div class="modal fade" id="edit_data{{ $case->id }}" tabindex="-1"
+                              aria-labelledby="editModalLabel{{ $case->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="editModalLabel{{ $kasus->id }}">Edit Data:
-                                      {{ $kasus->name }}</h5>
+                                    <h5 class="modal-title" id="editModalLabel{{ $case->id }}">Edit Data:
+                                      {{ $case->name }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
-                                  <form action="{{ route('user.update', $kasus->id) }}" method="POST">
+                                  <form action="{{ route('user.update', $case->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="modal-body">
@@ -240,12 +257,12 @@
                                       <div class="mb-3">
                                         <label for="name" class="col-form-label">Nama:</label>
                                         <input type="text" class="form-control" id="name" name="name"
-                                          value="{{ $kasus->name }}">
+                                          value="{{ $case->name }}">
                                       </div>
                                       <div class="mb-3">
                                         <label for="email" class="col-form-label">Email:</label>
                                         <input type="email" class="form-control" id="email" name="email"
-                                          value="{{ $kasus->email }}">
+                                          value="{{ $case->email }}">
                                       </div>
                                       <!-- Add more fields as needed -->
 
@@ -261,23 +278,23 @@
                             </div>
 
                             <!-- Delete Modal -->
-                            <div class="modal fade" id="delete_data{{ $kasus->id }}" tabindex="-1"
-                              aria-labelledby="deleteModalLabel{{ $kasus->id }}" aria-hidden="true">
+                            <div class="modal fade" id="delete_data{{ $case->id }}" tabindex="-1"
+                              aria-labelledby="deleteModalLabel{{ $case->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel{{ $kasus->id }}">Hapus Data:
-                                      {{ $kasus->name }}</h5>
+                                    <h5 class="modal-title" id="deleteModalLabel{{ $case->id }}">Hapus Data:
+                                      {{ $case->name }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
                                   <div class="modal-body">
-                                    Apakah Anda yakin ingin menghapus data {{ $kasus->name }}?
+                                    Apakah Anda yakin ingin menghapus data {{ $case->name }}?
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                       data-bs-dismiss="modal">Close</button>
-                                    <form action="{{ route('user.destroy', $kasus->id) }}" method="POST">
+                                    <form action="{{ route('user.destroy', $case->id) }}" method="POST">
                                       @csrf
                                       @method('DELETE')
                                       <button type="submit" class="btn btn-danger">Hapus</button>
@@ -292,9 +309,13 @@
                     <tfoot>
                       <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Nama Siswa</th>
+                        <th>Kasus</th>
+                        <th>Poin Kasus</th>
+                        <th>Tanggal</th>
+                        <th>Keterangan</th>
+                        <th>Solusi</th>
+                        <th>Guru BK</th>
                         <th>Aksi</th>
                       </tr>
                     </tfoot>

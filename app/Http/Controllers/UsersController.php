@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Role;
 
 class UsersController extends Controller
 {
-    public function index()
-    {
-        return view('autentifikasi', [
-            'users' => User::all()
-        ]);
-    }
+        public function index()
+        {
+            return view('autentifikasi', [
+                'users' => User::with('role')->get(),
+                'roles' => Role::all()
+            ]);
+        }
 
     public function store(Request $request)
     {

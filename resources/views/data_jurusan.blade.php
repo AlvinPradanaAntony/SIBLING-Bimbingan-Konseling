@@ -42,29 +42,41 @@
             <ul class="sub-menu">
               <li><a class="link_name" href="#">DATA</a></li>
               <li>
-                <a href={{ route('siswa.index') }}>Data Siswa</a>
+                <a href={{ route('student.index') }}>Data Siswa</a>
               </li>
               <li>
-                <a href={{ route('karir.index') }}>Data Karir</a>
+                <a href={{ route('guidance.index') }}>Data Bimbingan</a>
               </li>
               <li>
+                <a href={{ route('case.index') }}>Data Kasus</a>
+              </li>
+              <li>
+                <a href={{ route('attendance.index') }}>Data Rekap Absensi</a>
+              </li>
+              <li>
+                <a href={{ route('jobVacancy.index') }}>Data Karir</a>
+              </li>
+              <li>
+                <a href={{ route('achievement.index') }}>Data Prestasi</a>
+              </li>
+              <li>
+                <a href={{ route('user.index') }}>Data Guru BK/Walas</a>
+              </li>
+              <li>
+                <a href={{ route('major.index') }}>Data Jurusan</a>
+              </li>
+              <li>
+                <a href={{ route('class.index') }}>Data Kelas</a>
+              </li>
+              <li>
+                <a href={{ route('role.index') }}>Data Hak Akses</a>
+              </li>
+              <li>
+                <a href={{ route('status.index') }}>Data Status</a>
+              </li>
+              {{-- <li>
                 <a href={{ route('form.index') }}>Data Form</a>
-              </li>
-              <li>
-                <a href={{ route('bimbingan.index') }}>Data Bimbingan</a>
-              </li>
-              <li>
-                <a href={{ route('kasus.index') }}>Data Kasus</a>
-              </li>
-              <li>
-                <a href={{ route('prestasi.index') }}>Data Prestasi</a>
-              </li>
-              <li>
-                <a href={{ route('absensi.index') }}>Data Rekap Absensi</a>
-              </li>
-              <li>
-                <a href={{ route('jurusan.index') }}>Data Jurusan</a>
-              </li>
+              </li> --}}
             </ul>
           </div>
         </li>
@@ -165,27 +177,26 @@
               <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h5 class="m-0 text-primary">Tabel Data Jurusan</h5>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                  data-bs-target="#addUserModal">
-                  Tambah Data
+                  data-bs-target="#addMajorModal">
+                  Tambah Jurusan
                 </button>
-                <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
+                <div class="modal fade" id="addMajorModal" tabindex="-1" aria-labelledby="addMajorModalLabel"
                   aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="addUserModalLabel">Tambah Data Baru</h5>
+                        <h5 class="modal-title" id="addMajorModalLabel">Tambah Jurusan Baru</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                           aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form action="{{ route('jurusan.store') }}" method="POST">
+                        <form action="{{ route('major.store') }}" method="POST">
                           @csrf
                           <!-- Field Nama -->
                           <div class="mb-3">
-                            <label for="name" class="col-form-label">Nama:</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <label for="major_name" class="col-form-label">Jurusan</label>
+                            <input type="text" class="form-control" id="major_name" name="major_name" required>
                           </div>
-                        
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -202,58 +213,49 @@
                     <thead>
                       <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Jurusan</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($jurusan as $jurusan)
+                      @foreach ($majors as $major)
                         <tr>
                           <td>{{ $loop->iteration }}</td>
-                          <td>{{ $jurusan->name }}</td>
-                          <td>{{ $jurusan->email }}</td>
-                          <td>null</td>
+                          <td>{{ $major->major_name }}</td>
                           <td>
                             <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#edit_data{{ $jurusan->id }}">Edit</a>
+                              data-bs-target="#edit_data{{ $major->id }}">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#delete_data{{ $jurusan->id }}">Hapus</a>
+                              data-bs-target="#delete_data{{ $major->id }}">Hapus</a>
 
                             <!-- Edit Modal -->
-                            <div class="modal fade" id="edit_data{{ $jurusan->id }}" tabindex="-1"
-                              aria-labelledby="editModalLabel{{ $jurusan->id }}" aria-hidden="true">
+                            <div class="modal fade" id="edit_data{{ $major->id }}" tabindex="-1"
+                              aria-labelledby="editModalLabel{{ $major->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="editModalLabel{{ $jurusan->id }}">Edit Data:
-                                      {{ $jurusan->name }}</h5>
+                                    <h5 class="modal-title" id="editModalLabel{{ $major->id }}">Edit Data:
+                                      {{ $major->major_name }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
-                                  <form action="{{ route('user.update', $jurusan->id) }}" method="POST">
+                                  <form action="{{ route('major.update', $major->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="modal-body">
 
                                       <div class="mb-3">
-                                        <label for="name" class="col-form-label">Nama:</label>
-                                        <input type="text" class="form-control" id="name" name="name"
-                                          value="{{ $user->name }}">
-                                      </div>
-                                      <div class="mb-3">
-                                        <label for="email" class="col-form-label">Email:</label>
-                                        <input type="email" class="form-control" id="email" name="email"
-                                          value="{{ $user->email }}">
+                                        <label for="major_name" class="col-form-label">Jurusan</label>
+                                        <input type="text" class="form-control" id="major_name" name="major_name"
+                                          value="{{ $major->major_name }}">
                                       </div>
                                       <!-- Add more fields as needed -->
 
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                      <button type="submit" class="btn btn-primary">Save changes</button>
+                                        data-bs-dismiss="modal">Tutup</button>
+                                      <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                                     </div>
                                   </form>
                                 </div>
@@ -261,23 +263,23 @@
                             </div>
 
                             <!-- Delete Modal -->
-                            <div class="modal fade" id="delete_data{{ $jurusan->id }}" tabindex="-1"
-                              aria-labelledby="deleteModalLabel{{ $jurusan->id }}" aria-hidden="true">
+                            <div class="modal fade" id="delete_data{{ $major->id }}" tabindex="-1"
+                              aria-labelledby="deleteModalLabel{{ $major->id }}" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel{{ $jurusan->id }}">Hapus Data:
-                                      {{ $jurusan->name }}</h5>
+                                    <h5 class="modal-title" id="deleteModalLabel{{ $major->id }}">Hapus Data:
+                                      {{ $major->major_name }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                       aria-label="Close"></button>
                                   </div>
                                   <div class="modal-body">
-                                    Apakah Anda yakin ingin menghapus data {{ $jurusan->name }}?
+                                    Apakah Anda yakin ingin menghapus data {{ $major->major_name }}?
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                      data-bs-dismiss="modal">Close</button>
-                                    <form action="{{ route('user.destroy', $jurusan->id) }}" method="POST">
+                                      data-bs-dismiss="modal">Tutup</button>
+                                    <form action="{{ route('major.destroy', $major->id) }}" method="POST">
                                       @csrf
                                       @method('DELETE')
                                       <button type="submit" class="btn btn-danger">Hapus</button>
@@ -292,9 +294,7 @@
                     <tfoot>
                       <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Jurusan</th>
                         <th>Aksi</th>
                       </tr>
                     </tfoot>
