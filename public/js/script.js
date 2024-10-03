@@ -5,6 +5,17 @@ $(document).ready(function () {
   });
 });
 
+/*========== SPINNER ON BUTTON ==========*/
+$(document).ready(function() {
+  $('#formLogin').submit(function() {
+    let btnSubmit = $(this).find('button[type="submit"]');
+    let spinner = btnSubmit.find('.spinner-border');
+    $('#btnSubmit').prop('disabled', true);
+    $('.text_btn').hide();
+    spinner.show(); 
+  });
+});
+
 /*========== COLLAPSE/ACCORDION ==========*/
 $(document).ready(function () {
   $(".collapse").on("show.bs.collapse", function () {
@@ -160,12 +171,8 @@ $("#passInput").keyup(function () {
   $("#spanEye").fadeIn("slow");
   if (inputs == "") {
     $("#spanEye").fadeOut("slow");
-    $("#spanEye").removeClass("show");
-    $("#spanEye").addClass("hidden");
   } else {
     $("#spanEye").fadeIn("slow");
-    $("#spanEye").removeClass("hidden");
-    $("#spanEye").addClass("show");
   }
 });
 $(".show-hide").click(function () {
@@ -176,7 +183,7 @@ $(".show-hide").click(function () {
     $("#iconShowHide").css("color", "var(--first-color)");
   } else {
     input.attr("type", "password");
-    $("#iconShowHide").css("color", "var(--text-color-light)");
+    $("#iconShowHide").css("color", "var(--text-color)");
   }
 });
 
