@@ -5,8 +5,8 @@
     <div class="card border-0">
       <div class="card-body p-0">
         <div class="row">
-          <div class="col-lg-6 d-none d-lg-block banner">
-            <img src="img/wavy-lines.svg" class="wavy-lines" alt="..." />
+          <div class="col-lg-6 d-none d-lg-flex banner flex-column justify-content-center">
+            <img src="img/ornamen3.svg" class="wavy-lines" alt="..." />
             <img src="img/character1.png" class="img-fluid" width="420" alt="" />
           </div>
           <div class="col-lg-6 p-5 py-4">
@@ -16,13 +16,18 @@
             <form method="POST" action="{{ route('login') }}" id="formLogin" class="mt-4">
               @csrf
               <h2>Login</h2>
-              @error('email')
-                <div class="alert alert-danger d-flex align-items-center" role="alert">
-                  <span>
-                    <b>{{ $message }}</b>
-                  </span>
-                </div>
-              @enderror
+              @if ($errors->any())
+                <script>
+                  document.addEventListener("DOMContentLoaded", function() {
+                    let errorMessage = "{{ $errors->has('email') ? 'Silakan hubungi administrator untuk didaftarkan.' : 'Masukkan Kata Sandi Dengan Benar.' }}";
+                    Swal.fire({
+                      icon: 'error',
+                      title: '{{ $errors->first() }}',
+                      text: errorMessage,
+                    });
+                  });
+                </script>
+              @endif
               <div>
                 <label>Email</label>
                 <input id="email" type="email" placeholder="example@gmail.com" name="email"

@@ -31,8 +31,8 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.1.7/js/dataTables.bootstrap5.js"></script>
-  <script src="js/script.js"></script>
   <script src="js/moment.js"></script>
+  <script src="js/script.js"></script>
   <script>
     new DataTable('#example');
   </script>

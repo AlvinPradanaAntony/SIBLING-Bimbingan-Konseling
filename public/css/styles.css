@@ -468,17 +468,26 @@ bottom: 40px;
   width: 100%;
   min-height: 485px;
   border-radius: 18px !important;
-  background-color: var(--first-color);;
+  background: radial-gradient(circle, rgba(72,147,236,1) 50%, rgba(19,100,195,1) 100%);
   color: #fff;
   position: relative;
   z-index: 1;
   overflow: hidden;
 }
+#register .banner {
+  background: linear-gradient(257deg, rgba(72,147,236,1) 0%, rgba(19,100,195,1) 100%);
+}
+#register .card{
+  width: 802px;
+}
+
 .banner .wavy-lines{
+  width: 100%;
+  position: absolute;
   left: 0;
-  bottom: -45px;
-  z-index: 2;
-  opacity: 0.35;
+  bottom: 0;
+  z-index: -1;
+  opacity: 0.80;
 }
 
 #formLogin input {
@@ -508,6 +517,10 @@ span.eye {
 .forgotPassword a:hover{
   color: var(--title-color);
 }
+
+/*==================== Register ====================*/
+
+
 
 /*========== SCROLL UP ==========*/
 .scrollup {
@@ -559,6 +572,7 @@ label {
 
 input:focus {
   border: 1px solid #5563ef !important;
+  transition: all 0.3s ease-in-out;
 }
 
 input {
@@ -587,6 +601,37 @@ button.btn-primary {
   font-weight: 400;
 }
 
+
+/*==================== SweetAlert2 Custom ====================*/
+.swal2-popup {
+  border-radius: 20px;
+  font-size: 0.825rem;
+  width: 365px;
+}
+.swal2-title {
+  font-family: NunitoSans-ExtraBold;
+  font-size: calc( var(--h3-font-size) - 0.25rem);
+  color: var(--title-color);
+}
+.swal2-html-container {
+  margin-top: 6px !important;
+  margin-bottom: 6px !important;
+  padding-top: 0 !important;
+  font-size: var(--normal-font-size);
+}
+.swal2-confirm {
+  min-width: 100px;
+  border-radius: 20px !important;
+  background-color: var(--first-color) !important;
+
+}
+.swal2-popup .swal2-styled:focus {
+  box-shadow: none !important;
+}
+.swal2-cancel {
+  min-width: 100px;
+  border-radius: 20px !important;
+}
 
 
 

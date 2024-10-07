@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -41,5 +45,27 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         return view('auth.login')->with('title', 'Login');
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $errors = [];
+
+        // Cari user berdasarkan email
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            // User tidak ditemukan, berikan pesan bahwa email tidak terdaftar
+            $errors['email'] = ['Akun Tidak Terdaftar'];
+        } elseif (!Hash::check($request->password, $user->password)) {
+            // Jika user ditemukan tapi password salah
+            $errors['password'] = ['Password anda salah'];
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json($errors, 422);
+        }
+
+        throw ValidationException::withMessages($errors);
     }
 }
