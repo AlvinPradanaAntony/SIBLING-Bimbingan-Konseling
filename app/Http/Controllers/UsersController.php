@@ -12,7 +12,8 @@ class UsersController extends Controller
         {
             return view('autentifikasi', [
                 'users' => User::with('role')->get(),
-                'roles' => Role::all()
+                'roles' => Role::all(),
+                'active' => 'user'
             ]);
         }
 

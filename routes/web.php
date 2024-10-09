@@ -12,11 +12,11 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\GuidanceController;
 use App\Http\Controllers\JobVacancyController;
 use App\Http\Controllers\MajorController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UsersController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +102,12 @@ Route::post('/users', [UsersController::class, 'store'])->name('user.store');
 Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('user.edit');
 Route::put('/users/{id}', [UsersController::class, 'update'])->name('user.update');
 Route::delete('/users/{id}', [UsersController::class, 'destroy'])->name('user.destroy');
+
+Route::get('/laporan', [ReportsController::class, 'index'])->name('reports.index');
+Route::post('/laporan', [ReportsController::class, 'store'])->name('reports.store');
+Route::get('/laporan/{id}/edit', [ReportsController::class, 'edit'])->name('reports.edit');
+Route::put('/laporan/{id}', [ReportsController::class, 'update'])->name('reports.update');
+Route::delete('/laporan/{id}', [ReportsController::class, 'destroy'])->name('reports.destroy');
 
 // Route::get('/form', [FormsController::class, 'index'])->name('form.index');
 // Route::post('/form', [FormsController::class, 'store'])->name('form.store');

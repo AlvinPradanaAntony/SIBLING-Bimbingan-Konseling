@@ -14,7 +14,8 @@ class AttendanceController extends Controller
         return view('data_absensi', [
             'attendances' => Attendance::with(['student', 'user'])->get(),
             'users' => User::all(),
-            'students' => Student::all()
+            'students' => Student::all(),
+            'active' => 'attendance'
         ]);
     }
     public function store(Request $request)

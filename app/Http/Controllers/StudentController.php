@@ -11,6 +11,7 @@ class StudentController extends Controller
     {
         return view('data_siswa', [
             'students' => Student::with(['class', 'status'])->get(),
+            'active' => 'student'
         ]);
     }
 }

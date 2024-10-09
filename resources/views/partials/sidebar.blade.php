@@ -14,7 +14,7 @@
     </li>
     <li class="nav-item">
       <a data-bs-toggle="collapse" href="#data" aria-expanded="false" aria-controls="data"
-        class="nav-link {{ in_array($active, ['siswa', 'karir', 'form', 'bimbingan', 'kasus', 'prestasi', 'absensi', 'jurusan']) ? 'active' : '' }}">
+        class="nav-link {{ in_array($active, ['student','guidance', 'case', 'attendance', 'job_vacancy', 'user', 'major', 'class', 'role','status']) ? 'active' : '' }}">
         <i class="uil uil-database"></i>
         <span style="vertical-align: middle" class="link_name"> Data </span>
         <span class="menu-arrow uil-angle-right"></span>
@@ -23,34 +23,49 @@
         <ul class="sub-menu">
           <li><a class="link_name" href="#">DATA</a></li>
           <li>
-            <a href="{{ route('siswa.index') }}" class="{{ ($active === 'siswa') ? 'active' : '' }}">Data Siswa</a>
+            <a href="{{ route('student.index') }}" class="{{ $active === 'student' ? 'active' : '' }}">Data Siswa</a>
           </li>
           <li>
-            <a href="{{ route('karir.index') }}" class="{{ ($active === 'karir') ? 'active' : '' }}">Data Karir</a>
+            <a href="{{ route('guidance.index') }}" class="{{ $active === 'guidance' ? 'active' : '' }}">Data
+              Bimbingan</a>
           </li>
           <li>
-            <a href="{{ route('form.index') }}" class="{{ ($active === 'form') ? 'active' : '' }}">Data Form</a>
+            <a href="{{ route('case.index') }}" class="{{ $active === 'case' ? 'active' : '' }}">Data Kasus</a>
           </li>
           <li>
-            <a href="{{ route('bimbingan.index') }}" class="{{ ($active === 'bimbingan') ? 'active' : '' }}">Data Bimbingan</a>
+            <a href="{{ route('attendance.index') }}" class="{{ $active === 'attendance' ? 'active' : '' }}">Data
+              Rekap Absensi</a>
           </li>
           <li>
-            <a href="{{ route('kasus.index') }}" class="{{ ($active === 'kasus') ? 'active' : '' }}">Data Kasus</a>
+            <a href="{{ route('jobVacancy.index') }}" class="{{ $active === 'job_vacancy' ? 'active' : '' }}">Data
+              Karir</a>
           </li>
           <li>
-            <a href="{{ route('prestasi.index') }}" class="{{ ($active === 'prestasi') ? 'active' : '' }}">Data Prestasi</a>
+            <a href="{{ route('achievement.index') }}" class="{{ $active === 'achievement' ? 'active' : '' }}">Data
+              Prestasi</a>
           </li>
           <li>
-            <a href="{{ route('absensi.index') }}" class="{{ ($active === 'absensi') ? 'active' : '' }}">Data Rekap Absensi</a>
+            <a href="{{ route('user.index') }}" class="{{ $active === 'user' ? 'active' : '' }}">Data Guru
+              BK/Walas</a>
           </li>
           <li>
-            <a href="{{ route('jurusan.index') }}" class="{{ ($active === 'jurusan') ? 'active' : '' }}">Data Jurusan</a>
+            <a href="{{ route('major.index') }}" class="{{ $active === 'major' ? 'active' : '' }}">Data Jurusan</a>
+          </li>
+          <li>
+            <a href="{{ route('class.index') }}" class="{{ $active === 'class' ? 'active' : '' }}">Data Kelas</a>
+          </li>
+          <li>
+            <a href="{{ route('role.index') }}" class="{{ $active === 'role' ? 'active' : '' }}">Data Hak Akses</a>
+          </li>
+          <li>
+            <a href="{{ route('status.index') }}" class="{{ $active === 'status' ? 'active' : '' }}">Data Status
+              Status</a>
           </li>
         </ul>
       </div>
     </li>
     <li class="nav-item">
-      <a href="{{ route('laporan.index') }}" class="nav-link {{ $active === 'laporan' ? 'active' : '' }}">
+      <a href="{{ route('reports.index') }}" class="nav-link {{ $active === 'laporan' ? 'active' : '' }}">
         <i class="uil uil-file-info-alt"></i>
         <span style="vertical-align: middle" class="link_name">Laporan</span>
       </a>

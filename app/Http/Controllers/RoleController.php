@@ -12,6 +12,7 @@ class RoleController extends Controller
     {
         return view('data_akses', [
             'roles' => Role::all(),
+            'active' => 'role'
         ]);
     }
 

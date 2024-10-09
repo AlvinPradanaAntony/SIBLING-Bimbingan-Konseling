@@ -12,6 +12,7 @@ class MajorController extends Controller
     {
         return view('data_jurusan', [
             'majors' => Major::all(),
+            'active' => 'major'
         ]);
     }
 

@@ -13,7 +13,8 @@ class CaseController extends Controller
         return view('data_kasus', [
             'cases' => Cases::with(['student', 'user'])->get(),
             'students' => Student::all(),
-            'users' => User::all()
+            'users' => User::all(),
+            'active' => 'case'
         ]);
     }
 }

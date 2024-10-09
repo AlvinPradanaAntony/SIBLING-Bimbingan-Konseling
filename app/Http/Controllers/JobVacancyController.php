@@ -13,6 +13,7 @@ class JobVacancyController extends Controller
         return view('data_loker', [
             'job_vacancies' => JobVacancy::with([ 'user'])->get(),
             'users' => User::all(),
+            'active' => 'job_vacancy'
         ]);
     }
     public function store(Request $request)

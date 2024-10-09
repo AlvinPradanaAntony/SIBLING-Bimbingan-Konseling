@@ -12,6 +12,7 @@ class StatusController extends Controller
     {
         return view('data_status', [
             'statuses' => Status::all(),
+            'active' => 'status'
         ]);
     }
 

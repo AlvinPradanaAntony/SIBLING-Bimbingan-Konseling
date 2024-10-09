@@ -14,7 +14,8 @@ class GuidanceController extends Controller
         return view('data_bimbingan', [
             'guidances' => Guidance::with(['student', 'user'])->get(),
             'users' => User::all(),
-            'students' => Student::all()
+            'students' => Student::all(),
+            'active' => 'guidance'
         ]);
     }
 

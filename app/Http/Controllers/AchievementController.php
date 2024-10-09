@@ -12,7 +12,8 @@ class AchievementController extends Controller
     {
         return view('data_prestasi', [
             'achievements' => Achievement::with(['student'])->get(),
-            'students' => Student::all()
+            'students' => Student::all(),
+            'active' => 'achievement'
         ]);
     }
     public function store(Request $request)

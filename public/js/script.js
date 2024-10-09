@@ -5,6 +5,17 @@ $(document).ready(function () {
   });
 });
 
+/*========== SPINNER ON BUTTON ==========*/
+$(document).ready(function() {
+  $('#formLogin').submit(function() {
+    let btnSubmit = $(this).find('button[type="submit"]');
+    let spinner = btnSubmit.find('.spinner-border');
+    $('#btnSubmit').prop('disabled', true);
+    $('.text_btn').hide();
+    spinner.show(); 
+  });
+});
+
 /*========== COLLAPSE/ACCORDION ==========*/
 $(document).ready(function () {
   $(".collapse").on("show.bs.collapse", function () {
@@ -155,30 +166,33 @@ $(document).ready(function () {
 });
 
 /*========== SHOW/HIDE PASSWORD INPUT ==========*/
-$("#passInput").keyup(function () {
-  var inputs = $("#passInput").val();
-  $("#spanEye").fadeIn("slow");
-  if (inputs == "") {
-    $("#spanEye").fadeOut("slow");
-    $("#spanEye").removeClass("show");
-    $("#spanEye").addClass("hidden");
-  } else {
-    $("#spanEye").fadeIn("slow");
-    $("#spanEye").removeClass("hidden");
-    $("#spanEye").addClass("show");
-  }
-});
-$(".show-hide").click(function () {
-  $(this).toggleClass("uil-eye-slash uil-eye");
-  var input = $($(this).attr("toggle"));
-  if (input.attr("type") == "password") {
-    input.attr("type", "text");
-    $("#iconShowHide").css("color", "var(--first-color)");
-  } else {
-    input.attr("type", "password");
-    $("#iconShowHide").css("color", "var(--text-color-light)");
-  }
-});
+function togglePassword(inputField, iconField, eyeContainer) {
+  $(inputField).keyup(function () {
+    var inputs = $(inputField).val();
+    $(eyeContainer).fadeIn("slow");
+    if (inputs == "") {
+      $(eyeContainer).fadeOut("slow");
+    } else {
+      $(eyeContainer).fadeIn("slow");
+    }
+  });
+
+  $(iconField).click(function () {
+    $(this).toggleClass("uil-eye-slash uil-eye");
+    var input = $(inputField);
+    if (input.attr("type") == "password") {
+      input.attr("type", "text");
+      $(iconField).css("color", "var(--first-color)");
+    } else {
+      input.attr("type", "password");
+      $(iconField).css("color", "var(--text-color)");
+    }
+  });
+}
+
+// Panggil fungsi untuk masing-masing input
+togglePassword("#passInput", "#iconShowHide", "#spanEye");
+togglePassword("#password-confirm", "#iconShowHide2", "#spanEye2");
 
 /*========== GET CURRENT YEAR ==========*/
 var currentYear = new Date().getFullYear();

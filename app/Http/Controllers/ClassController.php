@@ -14,6 +14,7 @@ class ClassController extends Controller
         return view('data_kelas', [
             'majors' => Major::all(),
             'classes' => Classes::with('major')->get(),
+            'active' => 'class'
         ]);
     }
 
