@@ -7,6 +7,10 @@ use App\Models\Status;
 
 class StatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+    }
     // Menampilkan semua status
     public function index()
     {

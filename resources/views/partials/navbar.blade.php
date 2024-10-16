@@ -18,14 +18,15 @@
             <a class="nav-link dropdown-toggle nav-user" href="/#" id="navbarDropdown" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
               <span class="account-user-avatar d-inline-block"><img
-                  src="https://ui-avatars.com/api/?name=User+Testing&background=random"
+                  src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=random"
                   class="cust-avatar img-fluid rounded-circle" /></span>
-              <span class="account-user-name">{{ auth()->user()->name }}</span><span class="account-position">Guru BK</span>
+              <span class="account-user-name">{{ auth()->user()->name }}</span><span class="account-position">Guru
+                BK</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end me-1 border border-0 custom-rounded"
               aria-labelledby="navbarDropdown" style="">
               <li>
-                <a class="text-decoration-none" href="/profile">
+                <a class="text-decoration-none" href="/settings">
                   <div class="dropdown-item custom-item-dropdown d-flex align-items-center">
                     <i class="uil uil-user me-2"></i>
                     <span class="nameItem">My Profile</span>

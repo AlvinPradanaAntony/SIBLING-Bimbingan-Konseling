@@ -9,6 +9,12 @@ use App\Models\User;
 
 class CaseController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+    }
+    
     public function index(){
         return view('data_kasus', [
             'cases' => Cases::with(['student', 'user'])->get(),

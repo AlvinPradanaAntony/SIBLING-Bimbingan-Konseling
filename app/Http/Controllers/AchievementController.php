@@ -8,6 +8,10 @@ use App\Models\Student;
 
 class AchievementController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+    }
     public function index()
     {
         return view('data_prestasi', [

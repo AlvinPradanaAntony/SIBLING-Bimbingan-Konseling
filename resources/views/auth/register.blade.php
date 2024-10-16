@@ -11,10 +11,21 @@
             <img src="img/12.png" class="img-fluid" width="420" alt="" />
           </div>
           <div class="col-lg-9 p-5 py-4">
-            <a href="/" class="text-decoration-none">
-              <img src="img/app_logo_extend.png" class="img-fluid ms-auto me-auto d-block" alt=""
-                width="120" />
-            </a>
+            <div>
+              {{-- Navigation back to login --}}
+              <a href="{{ route('login') }}" class="text-decoration-none">
+                <i class="uil uil-arrow-left"></i>
+                <span>Kembali</span>
+              </a>
+              <div class="text-center mt-2">
+                <a href="/" class="text-decoration-none">
+                  <img src="img/app_logo_extend.png" class="img-fluid" alt=""
+                  width="120" />
+                </a>
+              </div>
+
+            </div>
+            
             <form method="POST" action="{{ route('register') }}" id="formLogin" class="mt-4">
               @csrf
               <h2>Daftar</h2>

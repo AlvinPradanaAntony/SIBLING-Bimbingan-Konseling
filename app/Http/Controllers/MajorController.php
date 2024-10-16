@@ -7,6 +7,10 @@ use App\Models\Major;
 
 class MajorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+    }
     // Menampilkan semua jurusan
     public function index()
     {

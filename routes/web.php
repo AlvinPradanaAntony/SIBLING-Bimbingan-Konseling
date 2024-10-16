@@ -1,22 +1,24 @@
 <?php
 
+use App\Models\Role;
+use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\FormsController;
 
-use App\Http\Controllers\AchievementController;
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CaseController;
-use App\Http\Controllers\ClassController;
-use App\Http\Controllers\GuidanceController;
-use App\Http\Controllers\JobVacancyController;
-use App\Http\Controllers\MajorController;
-use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\StatusController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ClassController;
+use App\Http\Controllers\FormsController;
+use App\Http\Controllers\MajorController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\GuidanceController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\JobVacancyController;
+use App\Http\Controllers\AchievementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,15 @@ use App\Http\Controllers\UsersController;
 Route::get('/', function () {
     return view('landing');
 });
+Route::get('/coba', function () {
+    return view('coba', ['siswa' => Student::with(['class', 'status'])->get()]);
+});
+Route::get('/settings', function () {
+    return view('settings',[
+        'active' => 'settings',
+        'roles' => Role::all()]);
+});
+
 
 Auth::routes(['verify' => true]);
 

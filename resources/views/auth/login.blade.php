@@ -53,6 +53,9 @@
                   style="display: none;"></span>
               </button>
             </form>
+            <div>
+              <p class="text-center mt-4 small">Belum punya akun? <a href="{{ route('register') }}">Daftar</a></p>
+            </div>
           </div>
         </div>
       </div>

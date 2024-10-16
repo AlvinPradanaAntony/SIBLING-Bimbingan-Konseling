@@ -8,6 +8,11 @@ use App\Models\Major;
 
 class ClassController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+    }
+    
     // Menampilkan semua kelas
     public function index()
     {

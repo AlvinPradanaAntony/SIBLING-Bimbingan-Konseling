@@ -8,6 +8,10 @@ use App\Models\User;
 
 class JobVacancyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+    }
     public function index()
     {
         return view('data_loker', [
