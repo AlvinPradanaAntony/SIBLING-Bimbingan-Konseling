@@ -8,7 +8,7 @@
           Swal.fire({
             icon: 'success',
             title: 'Verifikasi Email',
-            text: 'Tautan verifikasi baru telah dikirim ke alamat email Anda.',
+            text: 'Tautan verifikasi baru telah dikirim ke alamat {{ auth()->user()->email }}',
           });
         });
       </script>
@@ -23,7 +23,7 @@
           </div>
           @if (session('resent'))
             <div class="alert alert-success" role="alert">
-              Tautan verifikasi baru telah dikirim ke alamat email Anda.
+              Tautan verifikasi baru telah dikirim ke alamat <b>{{ auth()->user()->email }}</b>
             </div>
           @endif
           <form class="text-center" method="POST" action="{{ route('verification.resend') }}">

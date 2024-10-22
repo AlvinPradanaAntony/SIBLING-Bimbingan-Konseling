@@ -28,6 +28,7 @@ class UsersController extends Controller
 			'name' => 'required|string|max:255',
 			'email' => 'required|email|unique:users,email',
 			'password' => 'required|string|min:8',
+			'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 		]);
 
 		// Buat user baru
@@ -35,6 +36,7 @@ class UsersController extends Controller
 			'name' => $request->name,
 			'email' => $request->email,
 			'password' => bcrypt($request->password),
+			'photo' => $request->file('photo')->store('photos', 'public'),
 			// Tambahkan field lainnya sesuai kebutuhan
 		]);
 
@@ -67,6 +69,7 @@ class UsersController extends Controller
 		$user->update([
 			'name' => $request->name,
 			'email' => $request->email,
+			'photo' => $request->file('photo')->store('photos'), 
 			// Tambahkan field lain yang akan diupdate
 		]);
 

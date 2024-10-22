@@ -65,7 +65,7 @@
                         <td>{{ $job_vacancy->salary }}</td>
                         <td>{{ $job_vacancy->deadline_date }}</td>
                         <td>{{ $job_vacancy->pamphlet }}</td>
-                        <td>{{ $job_vacancy->user->name }}</td>
+                        <td>{{ $job_vacancy->user ? $job_vacancy->user->name : '-' }}</td>
                         <td>
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $job_vacancy->id }}">Edit</a>

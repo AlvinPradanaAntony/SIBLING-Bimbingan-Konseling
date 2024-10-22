@@ -116,7 +116,11 @@
                     @foreach ($users as $user)
                       <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $user->photo }}</td>
+                        <td>
+                          <img src="{{ $user->photo }}" alt="foto-profil" class="img-fluid rounded-circle"
+                            style="width: 50px; height: 50px; cursor: pointer;"
+                            onclick="showFullscreen(this.src)">
+                        </td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->nip }}</td>
                         <td>{{ $user->gender }}</td>
@@ -144,15 +148,22 @@
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
-                                <form action="{{ route('user.update', $user->id) }}" method="POST">
+                                <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                                   @csrf
                                   @method('PUT')
                                   <div class="modal-body">
-
+                                    <div>
+                                      <img id="profilePreview{{ $user->id }}" 
+                                      src="{{ $user->photo }}" 
+                                      class="object-fit-cover img-fluid rounded-circle mx-auto d-block" 
+                                      onclick="showFullscreen(this.src)" 
+                                      title="Click to view fullscreen"
+                                      style="width: 150px; height: 150px; cursor: pointer;">
+                                    </div>
                                     <div class="mb-3">
-                                      <label for="photo" class="col-form-label">Foto:</label>
-                                      <input type="file" class="form-control" id="photo" name="photo"
-                                        accept="image/*">
+                                      <label for="photo{{ $user->id }}" class="col-form-label">Foto:</label>
+                                      <input type="file" class="form-control" id="photo{{ $user->id }}" name="photo{{ $user->id }}"
+                                        accept="image/*" onchange="previewImage(event, '{{ $user->id }}')">
                                     </div>
                                     <div class="mb-3">
                                       <label for="name" class="col-form-label">Nama:</label>
@@ -167,6 +178,7 @@
                                     <div class="mb-3">
                                       <label for="gender" class="col-form-label">Jenis Kelamin</label>
                                       <select class="form-control" id="gender" name="gender">
+                                        <option value="" selected disabled>Pilih Jenis Kelamin</option>
                                         <option value="laki-laki" {{ $user->gender == 'laki-laki' ? 'selected' : '' }}>
                                           Laki-laki</option>
                                         <option value="perempuan" {{ $user->gender == 'perempuan' ? 'selected' : '' }}>
@@ -180,12 +192,13 @@
                                     </div>
                                     <div class="mb-3">
                                       <label for="date_of_birth" class="col-form-label">Tanggal Lahir</label>
-                                      <input type="text" class="form-control" id="date_of_birth" name="date_of_birth"
+                                      <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
                                         value="{{ $user->date_of_birth }}">
                                     </div>
                                     <div class="mb-3">
                                       <label for="religion" class="col-form-label">Agama</label>
                                       <select class="form-control" id="religion" name="religion">
+                                        <option value="" selected disabled>Pilih Agama</option>
                                         <option value="Islam" {{ $user->religion == 'Islam' ? 'selected' : '' }}>Islam
                                         </option>
                                         <option value="Kristen" {{ $user->religion == 'Kristen' ? 'selected' : '' }}>
@@ -194,7 +207,8 @@
                                           Katolik</option>
                                         <option value="Hindu" {{ $user->religion == 'Hindu' ? 'selected' : '' }}>Hindu
                                         </option>
-                                        <option value="Buddha" {{ $user->religion == 'Buddha' ? 'selected' : '' }}>Buddha
+                                        <option value="Buddha" {{ $user->religion == 'Buddha' ? 'selected' : '' }}>
+                                          Buddha
                                         </option>
                                         <option value="Konghucu" {{ $user->religion == 'Konghucu' ? 'selected' : '' }}>
                                           Konghucu</option>
@@ -236,6 +250,12 @@
                                 </form>
                               </div>
                             </div>
+                          </div>
+
+                          <!-- Fullscreen Image Preview -->
+                          <div id="fullscreenPreview" onclick="closeFullscreen()">
+                            <span class="close-preview">&times;</span>
+                            <img src="" alt="Fullscreen preview">
                           </div>
 
                           <!-- Delete Modal -->
@@ -290,11 +310,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="row gx-4 pt-4">
-      <div class="col-lg-9">
-      </div>
-      <div class="col-lg-3 m-0"></div>
     </div>
   </div>
 @endsection

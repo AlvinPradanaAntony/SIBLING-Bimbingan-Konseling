@@ -35,7 +35,7 @@ Route::get('/', function () {
     return view('landing');
 });
 Route::get('/coba', function () {
-    return view('coba', ['siswa' => Student::with(['class', 'status'])->get()]);
+    return view('coba', ['siswa' => Student::with(['class', 'status'])->get(), 'active' => 'coba']);
 });
 Route::get('/settings', function () {
     return view('settings',[

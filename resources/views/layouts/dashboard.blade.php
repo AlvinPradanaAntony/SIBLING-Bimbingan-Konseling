@@ -38,5 +38,31 @@
   <script>
     new DataTable('#example');
   </script>
+  <script>
+    // Show fullscreen image preview
+    function showFullscreen(imgSrc) {
+      const preview = document.getElementById('fullscreenPreview');
+      preview.querySelector('img').src = imgSrc;
+      preview.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close fullscreen preview
+    function closeFullscreen() {
+      document.getElementById('fullscreenPreview').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Handle image upload preview
+    function previewImage(event, id) {
+      var reader = new FileReader();
+      reader.onload = function() {
+        var output = document.getElementById('profilePreview' + id);
+        output.src = reader.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
 </body>
+
 </html>
