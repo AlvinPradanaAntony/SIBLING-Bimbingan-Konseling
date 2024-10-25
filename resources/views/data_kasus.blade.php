@@ -23,8 +23,42 @@
                         @csrf
                         <!-- Field Nama -->
                         <div class="mb-3">
-                          <label for="name" class="col-form-label">Nama:</label>
-                          <input type="text" class="form-control" id="name" name="name" required>
+                          <label for="student_id" class="col-form-label">Nama Siswa</label>
+                          <select class="form-control" id="student_id" name="student_id" required>
+                            <option value="">-- Pilih Siswa --</option>
+                            @foreach ($students as $student)
+                              <option value="{{ $student->id }}">{{ $student->name }}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="case_name" class="col-form-label">Kasus</label>
+                          <input type="text" class="form-control" id="case_name" name="case_name" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="case_point" class="col-form-label">Poin Kasus</label>
+                          <input type="number" class="form-control" id="case_point" name="case_point" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="date" class="col-form-label">Tanggal</label>
+                          <input type="datetime-local" class="form-control" id="date" name="date" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="description" class="col-form-label">Keterangan</label>
+                          <textarea type="text" class="form-control" id="description" name="description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                          <label for="resolution" class="col-form-label">Solusi</label>
+                          <textarea type="text" class="form-control" id="resolution" name="resolution" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                          <label for="user_id" class="col-form-label">Guru BK</label>
+                          <select class="form-control" id="user_id" name="user_id" required>
+                            <option value="">-- Pilih Guru BK --</option>
+                            @foreach ($users as $user)
+                              <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                          </select>
                         </div>
 
                     </div>
@@ -57,13 +91,13 @@
                     @foreach ($cases as $case)
                       <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $case->student->name }}</td>
+                        <td>{{ optional($case->student)->name }}</td>
                         <td>{{ $case->case_name }}</td>
                         <td>{{ $case->case_point }}</td>
                         <td>{{ $case->date }}</td>
                         <td>{{ $case->description }}</td>
                         <td>{{ $case->resolution }}</td>
-                        <td>null</td>
+                        <td>{{ optional($case->user)->name }}</td>
                         <td>
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $case->id }}">Edit</a>
@@ -81,28 +115,65 @@
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
-                                <form action="{{ route('user.update', $case->id) }}" method="POST">
+                                <form action="{{ route('case.update', $case->id) }}" method="POST">
                                   @csrf
                                   @method('PUT')
                                   <div class="modal-body">
 
                                     <div class="mb-3">
-                                      <label for="name" class="col-form-label">Nama:</label>
-                                      <input type="text" class="form-control" id="name" name="name"
-                                        value="{{ $case->name }}">
+                                      <label for="student_id" class="col-form-label">Nama Siswa</label>
+                                      <select class="form-control" id="user_id" name="student_id" required>
+                                        <option value="">-- Pilih Siswa --</option>
+                                        @foreach ($students as $student)
+                                          <option value="{{ $student->id }}"
+                                            {{ $case->student_id == $student->id ? 'selected' : '' }}>
+                                            {{ $student->name }}
+                                          </option>
+                                        @endforeach
+                                      </select>
                                     </div>
                                     <div class="mb-3">
-                                      <label for="email" class="col-form-label">Email:</label>
-                                      <input type="email" class="form-control" id="email" name="email"
-                                        value="{{ $case->email }}">
+                                      <label for="case_name" class="col-form-label">Kasus</label>
+                                      <input type="text" class="form-control" id="case_name" name="case_name"
+                                        value="{{ $case->case_name }}">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="case_point" class="col-form-label">Poin Kasus</label>
+                                      <input type="number" class="form-control" id="case_point" name="case_point"
+                                        value="{{ $case->case_point }}">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="date" class="col-form-label">Tanggal</label>
+                                      <input type="datetime-local" class="form-control" id="date" name="date"
+                                        value="{{ $case->date }}">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="description" class="col-form-label">Keterangan</label>
+                                      <textarea class="form-control" id="description" name="description">{{ $case->description }}</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="resolution" class="col-form-label">Solusi</label>
+                                      <textarea class="form-control" id="resolution" name="resolution">{{ $case->resolution }}</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="user_id" class="col-form-label">Nama Guru BK</label>
+                                      <select class="form-control" id="user_id" name="user_id" required>
+                                        <option value="">-- Pilih Guru BK --</option>
+                                        @foreach ($users as $user)
+                                          <option value="{{ $user->id }}"
+                                            {{ $case->user_id == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                          </option>
+                                        @endforeach
+                                      </select>
                                     </div>
                                     <!-- Add more fields as needed -->
 
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                      data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                      data-bs-dismiss="modal">Tutup</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
                                   </div>
                                 </form>
                               </div>
@@ -116,17 +187,17 @@
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <h5 class="modal-title" id="deleteModalLabel{{ $case->id }}">Hapus Data:
-                                    {{ $case->name }}</h5>
+                                    {{ $case->case_name }}</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                  Apakah Anda yakin ingin menghapus data {{ $case->name }}?
+                                  Apakah Anda yakin ingin menghapus data {{ $case->case_name }}?
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">Close</button>
-                                  <form action="{{ route('user.destroy', $case->id) }}" method="POST">
+                                    data-bs-dismiss="modal">Tutup</button>
+                                  <form action="{{ route('case.destroy', $case->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Hapus</button>

@@ -19,7 +19,7 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      <form action="{{ route('achievement.store') }}" method="POST">
+                      <form action="{{ route('achievement.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <!-- Field Nama -->
                         <div class="mb-3">
@@ -67,12 +67,14 @@
                         </div>
                         <div class="mb-3">
                           <label for="certificate" class="col-form-label">Sertifikat</label>
-                          <input type="file" class="form-control" id="certificate" name="certificate" accept="image/*"
-                            required>
+                          <input type="file" class="form-control" id="certificate" name="certificate" accept="image/*" onchange="loadFile(event)" required>
+                        </div>
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                          <img id="output" style="width: 90px; height: 90px; object-fit: cover;"/>
                         </div>
                         <div class="mb-3">
                           <label for="description" class="col-form-label">Deskripsi</label>
-                          <input type="text" class="form-control" id="description" name="description" required>
+                          <textarea type="text" class="form-control" id="description" name="description" required></textarea>
                         </div>
 
                     </div>
@@ -116,7 +118,6 @@
                         <td>{{ $achievement->recognition }}</td>
                         <td>{{ $achievement->certificate }}</td>
                         <td>{{ $achievement->description }}</td>
-                        <td>{{ $achievement->email }}</td>
                         <td>
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $achievement->id }}">Edit</a>
@@ -134,7 +135,7 @@
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
-                                <form action="{{ route('achievement.update', $achievement->id) }}" method="POST">
+                                <form action="{{ route('achievement.update', $achievement->id) }}" method="POST" enctype="multipart/form-data">
                                   @csrf
                                   @method('PUT')
                                   <div class="modal-body">
@@ -192,27 +193,32 @@
                                         value="{{ $achievement->date }}">
                                     </div>
                                     <div class="mb-3">
-                                      <label for="recognition" class="col-form-label">recognition:</label>
+                                      <label for="recognition" class="col-form-label">Penyelenggara</label>
                                       <input type="text" class="form-control" id="recognition" name="recognition"
                                         value="{{ $achievement->recognition }}">
                                     </div>
                                     <div class="mb-3">
-                                      <label for="certificate" class="col-form-label">certificate:</label>
-                                      <input type="file" class="form-control" id="certificate" name="certificate"
-                                        accept="image/*" value="{{ $achievement->certificate }}">
+                                      <label for="certificate" class="col-form-label">Sertifikat</label>
+                                      <input type="file" class="form-control" id="certificate" name="certificate" accept="image/*" onchange="loadFileUpdate(event)" required>
+                                    </div>
+                                    <div style="display: flex; justify-content: center; align-items: center;">
+                                      @if($achievement->certificate)
+                                        <img src="{{ asset('storage/certificates/' . $achievement->certificate) }}" id="outputUpdate" style="width: 90px; height: 90px; object-fit: cover; " />
+                                      @else
+                                        <img id="outputUpdate" style="width: 90px; height: 90px; object-fit: cover;" />
+                                      @endif
                                     </div>
                                     <div class="mb-3">
-                                      <label for="description" class="col-form-label">description:</label>
-                                      <input type="textarea" class="form-control" id="description" name="description"
-                                        value="{{ $achievement->description }}">
+                                      <label for="description" class="col-form-label">Deskripsi</label>
+                                      <textarea type="text" class="form-control" id="description" name="description">{{ $achievement->description }}</textarea>
                                     </div>
                                     <!-- Add more fields as needed -->
 
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                      data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                      data-bs-dismiss="modal">Tutup</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
                                   </div>
                                 </form>
                               </div>
@@ -277,3 +283,15 @@
     </div>
   </div>
 @endsection
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    
+  }
+  var loadFileUpdate = function(event) {
+    var outputUpdate = document.getElementById('outputUpdate');
+    outputUpdate.src = URL.createObjectURL(event.target.files[0]);
+    
+  }
+</script>

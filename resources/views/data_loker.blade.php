@@ -19,14 +19,41 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      <form action="{{ route('jobVacancy.store') }}" method="POST">
+                      <form action="{{ route('jobVacancy.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <!-- Field Nama -->
-                        <div class="mb-3">
-                          <label for="name" class="col-form-label">Nama:</label>
-                          <input type="text" class="form-control" id="name" name="name" required>
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                          <img id="output" style="width: 90px; height: 90px; object-fit: cover;"/>
                         </div>
-
+                        <div class="mb-3">
+                          <label for="pamphlet" class="col-form-label">Brosur</label>
+                          <input type="file" class="form-control" id="pamphlet" name="pamphlet" accept="image/*" onchange="loadFile(event)" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="position" class="col-form-label">Posisi</label>
+                          <input type="text" class="form-control" id="position" name="position" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="company_name" class="col-form-label">Nama Perusahaan</label>
+                          <input type="text" class="form-control" id="company_name" name="company_name" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="description" class="col-form-label">Deskripsi</label>
+                          <textarea type="text" class="form-control" id="description" name="description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                          <label for="location" class="col-form-label">Lokasi</label>
+                          <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="salary" class="col-form-label">Gaji</label>
+                          <input type="text" class="form-control" id="salary" name="salary" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="dateline_date" class="col-form-label">Batas Waktu</label>
+                          <input type="date" class="form-control" id="dateline_date" name="dateline_date" required>
+                        </div>
+                        <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -43,13 +70,13 @@
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th>Brosur</th>
                       <th>Posisi</th>
                       <th>Nama Perusahaan</th>
                       <th>Deskripsi</th>
                       <th>Lokasi</th>
                       <th>Gaji</th>
                       <th>Batas Waktu</th>
-                      <th>Brosur</th>
                       <th>Ditambah oleh</th>
                       <th>Aksi</th>
                     </tr>
@@ -58,13 +85,18 @@
                     @foreach ($job_vacancies as $job_vacancy)
                       <tr>
                         <td>{{ $loop->iteration }}</td>
+                        <td>
+                          <img src="{{ $job_vacancy->pamphlet ? asset('storage/pamphlets/' . $job_vacancy->pamphlet) : 'https://ui-avatars.com/api/?name=' . urlencode($job_vacancy->position) . '&background=random'}}" 
+                            alt="pamphlet" class="img-fluid rounded"
+                            style="width: 100px; height: 100px; cursor: pointer;" 
+                            onclick="showFullscreen(this.src)">
+                        </td>
                         <td>{{ $job_vacancy->position }}</td>
                         <td>{{ $job_vacancy->company_name }}</td>
                         <td>{{ $job_vacancy->description }}</td>
                         <td>{{ $job_vacancy->location }}</td>
                         <td>{{ $job_vacancy->salary }}</td>
-                        <td>{{ $job_vacancy->deadline_date }}</td>
-                        <td>{{ $job_vacancy->pamphlet }}</td>
+                        <td>{{ $job_vacancy->dateline_date }}</td>
                         <td>{{ $job_vacancy->user ? $job_vacancy->user->name : '-' }}</td>
                         <td>
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
@@ -79,32 +111,71 @@
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <h5 class="modal-title" id="editModalLabel{{ $job_vacancy->id }}">Edit Data:
-                                    {{ $job_vacancy->name }}</h5>
+                                    {{ $job_vacancy->position }}</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
-                                <form action="{{ route('user.update', $job_vacancy->id) }}" method="POST">
+                                <form action="{{ route('jobVacancy.update', $job_vacancy->id) }}" method="POST" enctype="multipart/form-data">
                                   @csrf
                                   @method('PUT')
                                   <div class="modal-body">
-
-                                    <div class="mb-3">
-                                      <label for="name" class="col-form-label">Nama:</label>
-                                      <input type="text" class="form-control" id="name" name="name"
-                                        value="{{ $job_vacancy->name }}">
+                                    <div style="display: flex; justify-content: center; align-items: center;">
+                                      @if($job_vacancy->pamphlet)
+                                        <img src="{{ asset('storage/pamphlets/' . $job_vacancy->pamphlet) }}" id="outputUpdate" style="width: 90px; height: 90px; object-fit: cover; " />
+                                      @else
+                                        <img id="outputUpdate" style="width: 90px; height: 90px; object-fit: cover;" />
+                                      @endif
                                     </div>
                                     <div class="mb-3">
-                                      <label for="email" class="col-form-label">Email:</label>
-                                      <input type="email" class="form-control" id="email" name="email"
-                                        value="{{ $job_vacancy->email }}">
+                                      <label for="pamphlet" class="col-form-label">Brosur</label>
+                                      <input type="file" class="form-control" id="pamphlet" name="pamphlet" accept="image/*" onchange="loadFileUpdate(event)" required>
                                     </div>
-                                    <!-- Add more fields as needed -->
-
+                                    <div class="mb-3">
+                                      <label for="position" class="col-form-label">Posisi</label>
+                                      <input type="text" class="form-control" id="position" name="position"
+                                        value="{{ $job_vacancy->position }}">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="company_name" class="col-form-label">Nama Perusahaan</label>
+                                      <input type="text" class="form-control" id="company_name" name="company_name"
+                                        value="{{ $job_vacancy->company_name }}">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="description" class="col-form-label">Deskripsi</label>
+                                      <textarea type="text" class="form-control" id="description" name="description">{{ $job_vacancy->description }}</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="location" class="col-form-label">Lokasi</label>
+                                      <input type="text" class="form-control" id="location" name="location"
+                                        value="{{ $job_vacancy->location }}">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="salary" class="col-form-label">Gaji</label>
+                                      <input type="text" class="form-control" id="salary" name="salary"
+                                        value="{{ $job_vacancy->salary }}">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="dateline_date" class="col-form-label">Tanggal</label>
+                                      <input type="date" class="form-control" id="dateline_date" name="dateline_date"
+                                        value="{{ $job_vacancy->dateline_date }}">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="user_id" class="col-form-label">Nama Guru BK</label>
+                                      <select class="form-control" id="user_id" name="user_id" required>
+                                        <option value="">-- Pilih Guru BK --</option>
+                                        @foreach ($users as $user)
+                                          <option value="{{ $user->id }}"
+                                            {{ $job_vacancy->user_id == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                          </option>
+                                        @endforeach
+                                      </select>
+                                    </div>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                      data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                      data-bs-dismiss="modal">Tutup</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
                                   </div>
                                 </form>
                               </div>
@@ -118,17 +189,17 @@
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <h5 class="modal-title" id="deleteModalLabel{{ $job_vacancy->id }}">Hapus Data:
-                                    {{ $job_vacancy->name }}</h5>
+                                    {{ $job_vacancy->position }}</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                  Apakah Anda yakin ingin menghapus data {{ $job_vacancy->name }}?
+                                  Apakah Anda yakin ingin menghapus data {{ $job_vacancy->position }}?
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Close</button>
-                                  <form action="{{ route('user.destroy', $job_vacancy->id) }}" method="POST">
+                                  <form action="{{ route('jobVacancy.destroy', $job_vacancy->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Hapus</button>
@@ -143,13 +214,13 @@
                   <tfoot>
                     <tr>
                       <th>No</th>
+                      <th>Brosur</th>
                       <th>Posisi</th>
                       <th>Nama Perusahaan</th>
                       <th>Deskripsi</th>
                       <th>Lokasi</th>
                       <th>Gaji</th>
                       <th>Batas Waktu</th>
-                      <th>Brosur</th>
                       <th>Ditambah oleh</th>
                       <th>Aksi</th>
                     </tr>
@@ -168,3 +239,15 @@
     </div>
   </div>
 @endsection
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    
+  }
+  var loadFileUpdate = function(event) {
+    var outputUpdate = document.getElementById('outputUpdate');
+    outputUpdate.src = URL.createObjectURL(event.target.files[0]);
+    
+  }
+</script>

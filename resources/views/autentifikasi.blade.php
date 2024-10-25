@@ -117,9 +117,8 @@
                       <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                          <img src="{{ $user->photo }}" alt="foto-profil" class="img-fluid rounded-circle"
-                            style="width: 50px; height: 50px; cursor: pointer;"
-                            onclick="showFullscreen(this.src)">
+                          <img src="{{ $user->photo ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=random'}}" alt="foto-profil" class="img-fluid rounded-circle"
+                            style="width: 50px; height: 50px; cursor: pointer;" onclick="showFullscreen(this.src)">
                         </td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->nip }}</td>

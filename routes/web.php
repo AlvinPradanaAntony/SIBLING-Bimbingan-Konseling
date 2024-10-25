@@ -19,6 +19,7 @@ use App\Http\Controllers\GuidanceController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\JobVacancyController;
 use App\Http\Controllers\AchievementController;
+use App\Models\JobVacancy;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,7 @@ use App\Http\Controllers\AchievementController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', [JobVacancyController::class, 'landing'], function () {
     return view('landing');
 });
 Route::get('/coba', function () {

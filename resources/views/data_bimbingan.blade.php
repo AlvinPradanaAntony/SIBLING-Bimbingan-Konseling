@@ -8,7 +8,7 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Bimbingan</h5>
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                Tambah Bimbingan
+                Tambah Data
               </button>
               <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
                 aria-hidden="true">
@@ -50,7 +50,7 @@
                         </div>
                         <div class="mb-3">
                           <label for="notes" class="col-form-label">Catatan</label>
-                          <input type="textarea" class="form-control" id="notes" name="notes" required>
+                          <textarea type="text" class="form-control" id="notes" name="notes" required></textarea>
                         </div>
 
                     </div>
@@ -103,7 +103,7 @@
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
-                                <form action="{{ route('user.update', $guidance->id) }}" method="POST">
+                                <form action="{{ route('guidance.update', $guidance->id) }}" method="POST">
                                   @csrf
                                   @method('PUT')
                                   <div class="modal-body">
@@ -111,7 +111,7 @@
                                     <div class="mb-3">
                                       <label for="student_id" class="col-form-label">Nama Siswa</label>
                                       <select class="form-control" id="user_id" name="student_id" required>
-                                        <option value="">-- Pilih Kelas --</option>
+                                        <option value="">-- Pilih Siswa --</option>
                                         @foreach ($students as $student)
                                           <option value="{{ $student->id }}"
                                             {{ $guidance->student_id == $student->id ? 'selected' : '' }}>
@@ -126,14 +126,14 @@
                                         value="{{ $guidance->topics }}">
                                     </div>
                                     <div class="mb-3">
-                                      <label for="date" class="col-form-label">Topik</label>
+                                      <label for="date" class="col-form-label">Tanggal</label>
                                       <input type="date" class="form-control" id="date" name="date"
                                         value="{{ $guidance->date }}">
                                     </div>
                                     <div class="mb-3">
-                                      <label for="user_id" class="col-form-label">Nama Guru BK</label>
+                                      <label for="user_id" class="col-form-label">Guru BK</label>
                                       <select class="form-control" id="user_id" name="user_id" required>
-                                        <option value="">-- Pilih Kelas --</option>
+                                        <option value="">-- Pilih Guru BK --</option>
                                         @foreach ($users as $user)
                                           <option value="{{ $user->id }}"
                                             {{ $guidance->user_id == $user->id ? 'selected' : '' }}>
@@ -144,16 +144,16 @@
                                     </div>
                                     <div class="mb-3">
                                       <label for="notes" class="col-form-label">Catatan</label>
-                                      <input type="textarea" class="form-control" id="notes" name="notes"
-                                        value="{{ $guidance->notes }}">
+                                      <textarea class="form-control" id="notes" name="notes">{{ $guidance->notes }}</textarea>
                                     </div>
+
                                     <!-- Add more fields as needed -->
 
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                      data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                      data-bs-dismiss="modal">Tutup</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
                                   </div>
                                 </form>
                               </div>
@@ -177,7 +177,7 @@
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Close</button>
-                                  <form action="{{ route('user.destroy', $guidance->id) }}" method="POST">
+                                  <form action="{{ route('guidance.destroy', $guidance->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Hapus</button>

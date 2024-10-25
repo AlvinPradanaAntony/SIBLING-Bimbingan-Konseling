@@ -83,10 +83,8 @@
         <span class="custom-badge">Karir</span>
         <div class="row">
           <div class="col-lg-6">
-            <h1 class="home__title mb-4 position-relative">Shopee & SeaMoney Graduate Development Program 2025
-              (Indonesia)</h1>
-            <p class="home__description mb-5 pe-4 position-relative">Shopee International Indonesia saat ini membuka
-              peluang bagi generasi muda terbuka bagi lulusan baru.</span></p>
+            <h1 class="home__title mb-4 position-relative">Program Pengembangan Karir Lulusan SMK Negeri 7 Jember</h1>
+            <p class="home__description mb-5 pe-4 position-relative">Saat ini, kami membuka peluang bagi generasi muda, terutama lulusan baru, untuk bergabung dan mengembangkan keterampilan di dunia kerja.</span></p>
             <div class="d-flex nav__btns position-relative">
               <button class="btn button me-3" type="submit">Daftar Sekarang !</button>
               <button class="btn button-alt" type="submit">Detail</button>
@@ -111,11 +109,22 @@
     <!--==================== NEWS ====================-->
     <section class="news section" id="news">
       <div class="container">
-        <h2 class="section__title">Berita</h2>
+        <h2 class="section__title">Informasi Lowongan Pekerjaan</h2>
         <p class="section__subtitle">Berita terbaru seputar dunia kerja dan karir</p>
 
         <div class="row mb-5">
+          @foreach ($job_vacancies as $job_vacancy)
           <div class="col-lg-4">
+            <div class="card">
+              <img src="{{ asset('storage/pamphlets/' . $job_vacancy->pamphlet) }}" class="card-img-top" alt="Gambar lowongan kerja" />
+              <div class="card-body">
+                <h5 class="card-title">{{ $job_vacancy->position }}</h5>
+                <p class="card-text">{{ $job_vacancy->description }}</p>
+                <a href="#" class="btn button">Detail</a>
+              </div>
+            </div>
+          </div>
+          {{-- <div class="col-lg-4">
             <div class="card">
               <img src="img/samples_offer.jpg" class="card-img-top" alt="..." />
               <div class="card-body">
@@ -136,18 +145,8 @@
                 <a href="#" class="btn button">Detail</a>
               </div>
             </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="card">
-              <img src="img/samples_offer.jpg" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Shopee & SeaMoney Graduate Development Program 2025 (Indonesia)</h5>
-                <p class="card-text">Shopee International Indonesia saat ini membuka peluang bagi generasi muda terbuka
-                  bagi lulusan baru.</p>
-                <a href="#" class="btn button">Detail</a>
-              </div>
-            </div>
-          </div>
+          </div> --}}
+          @endforeach
         </div>
 
         <div class="d-flex justify-content-center">
@@ -196,7 +195,7 @@
                 <i class="uil uil-phone me-3 fs-4"></i>
                 <div>
                   <h3>Telepon</h3>
-                  <span>(0331) 487 000</span>
+                  <span>031-8292038</span>
                 </div>
               </div>
 
@@ -204,8 +203,8 @@
                 <i class="uil uil-envelope me-3 fs-4"></i>
                 <div>
                   <h3>Email</h3>
-                  <span><a href="mailto:info@yourwebsite.com"
-                      class="contact__info__email">info@yourwebsite.com</a></span>
+                  <span><a href="mailto:info@smkn7jember.sch.id"
+                      class="contact__info__email">info@smkn7jember.sch.id</a></span>
                 </div>
               </div>
 
@@ -213,7 +212,7 @@
                 <i class="uil uil-map-marker me-3 fs-4"></i>
                 <div>
                   <h3>Alamat</h3>
-                  <span>Jl. Mawar No. 20, Jember, Jawa Timur</span>
+                  <span>Jl. Randu Agung Jatiroto, Jam Koong, Jatiroto, Kec. Sumberbaru, Kabupaten Jember, Jawa Timur 68156</span>
                 </div>
               </div>
 
@@ -221,7 +220,7 @@
                 <i class="uil uil-clock me-3 fs-4"></i>
                 <div>
                   <h3>Jam Kerja</h3>
-                  <span>Senin - Jumat: 09.00 - 17.00</span>
+                  <span>Senin - Jumat: 07.00 - 15.00</span>
                 </div>
               </div>
             </div>
@@ -287,7 +286,7 @@
         <div class="col-lg-auto mt-3 mt-lg-0 ms-auto">
           <h5 class="mb-3">Link Terkait</h5>
           <ul class="nav flex-column">
-            <li class="nav-item"><a href="#" class="nav-link px-0 py-1">Profil SMKN 7 Jember</a></li>
+            <li class="nav-item"><a href="https://smkn7jember.sch.id/" class="nav-link px-0 py-1">Profil SMKN 7 Jember</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-0 py-1">Berita Karir</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-0 py-1">BKK</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-0 py-1">LSP</a></li>

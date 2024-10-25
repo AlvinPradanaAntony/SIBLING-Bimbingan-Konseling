@@ -32,8 +32,8 @@
                             <i class="uil uil-users-alt"></i>
                           </div>
                           <div class=" ms-auto card-detail">
-                            <p class="mb-0 card-detail_text">Data Siswa</p>
-                            <h4 class="my-1 card-detail_data">0</h4>
+                            <p class="mb-0 card-detail_text">Data Bimbingan</p>
+                            <h4 class="my-1 card-detail_data">{{ $total_guidances }}</h4>
                           </div>
                         </div>
                       </div>
@@ -49,8 +49,8 @@
                             <i class="uil uil-database"></i>
                           </div>
                           <div class=" ms-auto card-detail">
-                            <p class="mb-0 card-detail_text">Informasi Karir</p>
-                            <h4 class="my-1 card-detail_data">0</h4>
+                            <p class="mb-0 card-detail_text">Data Kasus</p>
+                            <h4 class="my-1 card-detail_data">{{ $total_cases }}</h4>
                           </div>
                         </div>
                       </div>
@@ -66,8 +66,8 @@
                             <i class="uil uil-notes"></i>
                           </div>
                           <div class=" ms-auto card-detail">
-                            <p class="mb-0 card-detail_text">Form Masuk</p>
-                            <h4 class="my-1 card-detail_data">0</h4>
+                            <p class="mb-0 card-detail_text">Data Loker</p>
+                            <h4 class="my-1 card-detail_data">{{ $total_job_vacancies }}</h4>
                           </div>
                         </div>
                       </div>

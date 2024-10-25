@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Http\Request;
 use App\Models\Achievement;
 use App\Models\Student;
@@ -26,13 +28,19 @@ class AchievementController extends Controller
             'ranking' => 'required|string|max:255',
             'achievements_name' => 'required|string|max:255',
             'level' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'description' => 'required',
             'type' => 'required|string|max:255',
-            'date' => 'required|string|max:255',
+            'date' => 'required|date',
             'recognition' => 'required|string|max:255',
-            'certificate' => 'required|string|max:255',
+            'certificate' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'student_id' => 'required|string|max:255',
         ]);
+
+        if ($request->hasFile('certificate')) {
+            $file = $request->file('certificate');
+            $path = $file->store('certificates', 'public');
+            $filename = basename($path);
+        }
 
         $achievement = new Achievement();
         $achievement->ranking = $request->input('ranking');
@@ -42,7 +50,7 @@ class AchievementController extends Controller
         $achievement->type = $request->input('type');
         $achievement->date = $request->input('date');
         $achievement->recognition = $request->input('recognition');
-        $achievement->certificate = $request->input('certificate');
+        $achievement->certificate = $filename;
         $achievement->student_id = $request->input('student_id');
         $achievement->save();
 
@@ -56,13 +64,19 @@ class AchievementController extends Controller
             'ranking' => 'required|string|max:255',
             'achievements_name' => 'required|string|max:255',
             'level' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'description' => 'required',
             'type' => 'required|string|max:255',
-            'date' => 'required|string|max:255',
+            'date' => 'required|date',
             'recognition' => 'required|string|max:255',
-            'certificate' => 'required|string|max:255',
+            'certificate' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'student_id' => 'required|string|max:255',
         ]);
+
+        if ($request->hasFile('certificate')) {
+            $file = $request->file('certificate');
+            $path = $file->store('certificates', 'public');
+            $filename = basename($path);
+        }
 
         $achievement = Achievement::findOrFail($id);
         $achievement->ranking = $request->input('ranking');
@@ -72,7 +86,18 @@ class AchievementController extends Controller
         $achievement->type = $request->input('type');
         $achievement->date = $request->input('date');
         $achievement->recognition = $request->input('recognition');
-        $achievement->certificate = $request->input('certificate');
+        // $achievement->certificate = $filename;
+        if ($request->hasFile('certificate')) {
+            // Hapus sertifikat lama jika ada
+            if ($achievement->certificate) {
+                Storage::disk('public')->delete('certificates/' . $achievement->certificate);
+            }
+
+            // Simpan sertifikat baru
+            $file = $request->file('certificate');
+            $path = $file->store('certificates', 'public');
+            $achievement->certificate = basename($path); // Menyimpan nama file pamflet baru
+        }
         $achievement->student_id = $request->input('student_id');
         $achievement->save();
 
