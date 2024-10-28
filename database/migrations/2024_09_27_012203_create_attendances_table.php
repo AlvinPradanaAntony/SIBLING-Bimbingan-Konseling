@@ -16,8 +16,8 @@ return new class extends Migration
             $table->date('date'); 
             $table->enum('presence_status', ['Hadir', 'Ijin', 'Alpa', 'Sakit']);
             $table->string('description');
-            $table->integer('user_id');
-            $table->integer('student_id');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('student_id')->constrained();
             $table->timestamps();
         });
     }

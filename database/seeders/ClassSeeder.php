@@ -12,8 +12,8 @@ class ClassSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void{
-        $major_id = [1,2,3,4,5];
         $class_level = ['X', 'XI', 'XII'];
+        $major_id = [1,2,3,4,5];
         $classroom = ['1', '2'];
 
         foreach ($class_level as $level) {

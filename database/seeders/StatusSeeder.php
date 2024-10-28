@@ -13,26 +13,20 @@ class StatusSeeder extends Seeder
      */
     public function run(): void
     {
-        Status::create([
-            'status_name' => 'Aktif',
-        ]);
-        Status::create([
-            'status_name' => 'Cuti',
-        ]);
-        Status::create([
-            'status_name' => 'Berhenti',
-        ]);
-        Status::create([
-            'status_name' => 'Lulus',
-        ]);
-        Status::create([
-            'status_name' => 'Non-Aktif',
-        ]);
-        Status::create([
-            'status_name' => 'Tunda Studi',
-        ]);
-        Status::create([
-            'status_name' => 'Dikeluarkan',
-        ]);
+        $statuses = [
+            'Aktif',
+            'Cuti',
+            'Berhenti',
+            'Lulus',
+            'Non-Aktif',
+            'Tunda Studi',
+            'Dikeluarkan'
+        ];
+    
+        foreach ($statuses as $status) {
+            Status::create([
+                'status_name' => $status,
+            ]);
+        }
     }
 }

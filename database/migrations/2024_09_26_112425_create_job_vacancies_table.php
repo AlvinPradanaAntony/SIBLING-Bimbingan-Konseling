@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('salary');
             $table->date('dateline_date');
             $table->string('pamphlet');
-            $table->integer('user_id');
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

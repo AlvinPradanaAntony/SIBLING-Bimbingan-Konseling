@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('ranking');
             $table->string('achievements_name', 30);
-            $table->enum('level', ['kecamatan', 'kabupaten', 'provinsi', 'nasional', 'internasional']);
+            $table->enum('level', ['Kecamatan', 'Kabupaten', 'Provinsi', 'Nasional', 'Internasional']);
             $table->string('description');
-            $table->enum('type', ['individu', 'kelompok']);
+            $table->enum('type', ['Individu', 'Kelompok']);
             $table->date('date');
             $table->string('recognition');
             $table->string('certificate');
-            $table->integer('student_id');
+            $table->foreignId('student_id')->constrained();
             $table->timestamps();
         });
     }

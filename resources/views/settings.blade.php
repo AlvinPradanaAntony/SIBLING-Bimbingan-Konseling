@@ -1,12 +1,12 @@
 @extends('layouts.dashboard')
 @section('content')
-<div class="pt-4">
-  <h3 style="font-family: NunitoSans-ExtraBold; color: var(--title-color)">Pengaturan Akun</h3>
-  <div class="card border-0 mt-4 shadowNavbar" id="settings">
+<div>
+  <h4 class="my-2" style="font-family: NunitoSans-ExtraBold; color: var(--title-color);line-height: 75px;">Pengaturan Akun</h4>
+  <div class="card border-0 shadowNavbar" id="panel">
     <div class="card-body">
       <div class="row">
         <div class="col-md-3">
-          <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <div class="nav flex-column nav-pills me-3 settings" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <button class="nav-link text-start active mb-2" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home"
               type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Profile</button>
             <button class="nav-link text-start mb-2" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"

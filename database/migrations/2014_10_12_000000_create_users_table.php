@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('phone_number', 20)->nullable();
             $table->text('address')->nullable();
             $table->string('photo')->nullable();
-            $table->integer('role_id')->nullable();
+            $table->foreignId('role_id')->constrained('roles');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

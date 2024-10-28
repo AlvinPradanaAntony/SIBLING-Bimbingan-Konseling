@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('resolution');
             $table->integer('case_point');
             $table->dateTime('date');
-            $table->integer('user_id');
-            $table->integer('student_id');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('student_id')->constrained();
             $table->timestamps();
         });
     }

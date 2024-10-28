@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(RoleSeeder::class);
         $this->call(MajorSeeder::class);
         $this->call(ClassSeeder::class);
         $this->call(StatusSeeder::class);
@@ -23,6 +24,5 @@ class DatabaseSeeder extends Seeder
         $this->call(JobVacancySeeder::class);
         $this->call(GuidanceSeeder::class);
         $this->call(CaseSeeder::class);
-        $this->call(RoleSeeder::class);
     }
 }

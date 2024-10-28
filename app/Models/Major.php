@@ -9,6 +9,8 @@ class Major extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function classes()
     {
         return $this->hasMany(Classes::class);

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Cases extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
     
     public function student(){
         return $this->belongsTo(Student::class);
