@@ -72,7 +72,7 @@
                   <a href="{{ route('achievement.index') }}" class="{{ $active === 'achievement' ? 'active' : '' }}">Prestasi</a>
                 </li> 
                 <li>
-                  <a href="{{ route('achievement.index') }}" class="{{ $active === 'assessment' ? 'active' : '' }}">Assessment</a>
+                  <a href="{{ route('assessment.index') }}" class="{{ $active === 'assessment' ? 'active' : '' }}">Assessment</a>
                 </li> 
               </ul>
           </li>
