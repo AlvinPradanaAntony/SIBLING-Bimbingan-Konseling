@@ -9,6 +9,8 @@ class Status extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function students()
     {
         return $this->hasMany(Student::class);

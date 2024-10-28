@@ -13,20 +13,16 @@ class MajorSeeder extends Seeder
      */
     public function run(): void
     {
-        Major::create([
-            'major_name' => 'Teknik Kendaraan Ringan',
-        ]);
-        Major::create([
-            'major_name' => 'Teknik Bisnis Sepeda Motor',
-        ]);
-        Major::create([
-            'major_name' => 'Teknik Komputer dan Jaringan',
-        ]);
-        Major::create([
-            'major_name' => 'Desain Komunikasi Visual',
-        ]);
-        Major::create([
-            'major_name' => 'Tata Kecantikan Kulit dan Rambut',
-        ]);
+        $majors = [
+            'Teknik Kendaraan Ringan',
+            'Teknik Bisnis Sepeda Motor',
+            'Teknik Komputer dan Jaringan',
+            'Desain Komunikasi Visual',
+            'Tata Kecantikan Kulit dan Rambut',
+        ];
+
+        foreach ($majors as $major) {
+            Major::create(['major_name' => $major]);
+        }
     }
 }

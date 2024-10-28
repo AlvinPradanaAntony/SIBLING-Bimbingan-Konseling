@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Attendance;
-use App\Models\Student;
 use App\Models\User;
+use App\Models\Major;
+use App\Models\Student;
+use App\Models\Attendance;
+use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
@@ -19,6 +20,7 @@ class AttendanceController extends Controller
             'attendances' => Attendance::with(['student', 'user'])->get(),
             'users' => User::all(),
             'students' => Student::all(),
+            'majors' => Major::all(),
             'active' => 'attendance'
         ]);
     }

@@ -20,6 +20,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\JobVacancyController;
 use App\Http\Controllers\AchievementController;
 use App\Models\JobVacancy;
+use App\Http\Controllers\AssessmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,12 @@ Route::get('/settings', function () {
 Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/assessment', [AssessmentController::class, 'index'])->name('assessment.index');
+Route::post('/assessment', [AssessmentController::class, 'store'])->name('assessment.store');
+Route::get('/assessment/{id}/edit', [AssessmentController::class, 'edit'])->name('assessment.edit');
+Route::put('/assessment/{id}', [AssessmentController::class, 'update'])->name('assessment.update');
+Route::delete('/assessment/{id}', [AssessmentController::class, 'destroy'])->name('assessment.destroy');
 
 Route::get('/prestasi', [AchievementController::class, 'index'])->name('achievement.index');
 Route::post('/prestasi', [AchievementController::class, 'store'])->name('achievement.store');

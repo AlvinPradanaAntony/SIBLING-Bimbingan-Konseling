@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_vacancies', function (Blueprint $table) {
+        Schema::create('cases', function (Blueprint $table) {
             $table->id();
-            $table->string('position', 50);
-            $table->string('company_name', 50);
+            $table->string('case_name',30);
             $table->string('description');
-            $table->string('location');
-            $table->string('salary');
-            $table->date('dateline_date');
-            $table->string('pamphlet');
+            $table->string('resolution');
+            $table->integer('case_point');
+            $table->dateTime('date');
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('student_id')->constrained();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('job_vacancies');
+        Schema::dropIfExists('cases');
     }
 };

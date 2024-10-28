@@ -8,19 +8,21 @@
           <div class="p-0">
             <div class="row mb-2">
               <div class="col-lg-8 m-0">
-                <div class="custCard mb-4">
-                  <div class="px-2 py-0">
-                    <div class="row no-gutters">
-                      <div class="col-lg ps-4 pe-0 align-content-center">
-                        <h4 class="mb-lg-3 mt-lg-3">Selamat datang kembali, <b>{{ auth()->user()->name }}</b></h4>
-                        <p style="font-size: 14px;">Terima kasih anda telah mengakses layanan bimbingan
-                          konseling. Kami siap membantu Anda dalam mengatasi berbagai tantangan dan mencapai
-                          perkembangan yang lebih baik di sekolah.</p>
-                      </div>
-                      <div class="col-lg-auto p-0 ms-3">
-                        <img src="img/1.png" class="img-fluid" alt="" />
-                      </div>
-                    </div>
+                <div class="custCard mb-4" style="padding: 20px">
+                  <img src="img/footer-bg.png" class="ornament" alt="">
+                  <div class="order-2 position-relative z-10">
+                    <img src="img/cardChar.png" width="200" alt="">
+                  </div>
+                  <div class="mt-2 order-1 flex-fill align-content-center">
+                    <h3>
+                      Selamat Pagi, <span style="font-family: NunitoSans-ExtraBold">{{ auth()->user()->name }}</span>
+                    </h3>
+                    <p class="mt-2 m-0" style="line-height: 1.625;">Semoga harimu menyenangkan di tempat kerja</p>
+                    <p>Kelola data sesi bimbingan Anda!</p>
+    
+                    <button class="btn mt-3 text-white">
+                      Lihat data
+                    </button>
                   </div>
                 </div>
                 <div class="row">

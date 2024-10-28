@@ -12,14 +12,14 @@
         <li><a class="link_name" href="#">Beranda</a></li>
       </ul>
     </li>
-    <li class="nav-item {{ in_array($active, ['student','guidance', 'case', 'attendance', 'job_vacancy', 'user', 'major', 'class', 'role','status', 'achievement']) ? 'nav-item-active' : '' }}">
-      <a data-bs-toggle="collapse" href="#data" aria-expanded="{{ in_array($active, ['student','guidance', 'case', 'attendance', 'job_vacancy', 'user', 'major', 'class', 'role','status', 'achievement']) ? 'true' : 'false' }}" aria-controls="data"
-        class="nav-link {{ in_array($active, ['student','guidance', 'case', 'attendance', 'job_vacancy', 'user', 'major', 'class', 'role','status', 'achievement']) ? 'active' : '' }}">
+    <li class="nav-item {{ in_array($active, ['student','guidance', 'case', 'attendance', 'job_vacancy', 'user', 'major', 'class', 'role','status', 'achievement','assessment']) ? 'nav-item-active' : '' }}">
+      <a data-bs-toggle="collapse" href="#data" aria-expanded="{{ in_array($active, ['student','guidance', 'case', 'attendance', 'job_vacancy', 'user', 'major', 'class', 'role','status', 'achievement','assessment']) ? 'true' : 'false' }}" aria-controls="data"
+        class="nav-link {{ in_array($active, ['student','guidance', 'case', 'attendance', 'job_vacancy', 'user', 'major', 'class', 'role','status', 'achievement','assessment']) ? 'active' : '' }}">
         <i class="uil uil-database"></i>
         <span style="vertical-align: middle" class="link_name"> Data </span>
         <span class="menu-arrow uil-angle-right"></span>
       </a>
-      <div class="collapse {{ in_array($active, ['student','guidance', 'case', 'attendance', 'job_vacancy', 'user', 'major', 'class', 'role','status', 'achievement']) ? 'show' : '' }}" id="data">
+      <div class="collapse {{ in_array($active, ['student','guidance', 'case', 'attendance', 'job_vacancy', 'user', 'major', 'class', 'role','status', 'achievement', 'assessment']) ? 'show' : '' }}" id="data">
         <ul class="sub-menu" id="data-collapse">
           <li><a class="link_name" href="#">DATA</a></li>
           <li>
@@ -50,11 +50,11 @@
               </ul>
           </li>
           <li>
-            <a data-bs-toggle="collapse" href="#data_operasional" aria-expanded="{{ in_array($active, ['guidance','case', 'attendance', 'job_vacancy', 'achievement']) ? 'true' : 'false' }}" aria-controls="data_operasional">Operasional
+            <a data-bs-toggle="collapse" href="#data_operasional" aria-expanded="{{ in_array($active, ['guidance','case', 'attendance', 'job_vacancy', 'achievement','assessment']) ? 'true' : 'false' }}" aria-controls="data_operasional">Operasional
               <span class="submenu-dot"></span>
               <span class="menu-arrow uil uil-arrow-right"></span>
             </a>
-            <div class="collapse {{ in_array($active, ['guidance','case', 'attendance', 'job_vacancy', 'achievement']) ? 'show' : '' }}" data-bs-parent="#data-collapse" id="data_operasional">
+            <div class="collapse {{ in_array($active, ['guidance','case', 'attendance', 'job_vacancy', 'achievement','assessment']) ? 'show' : '' }}" data-bs-parent="#data-collapse" id="data_operasional">
               <ul>
                 <li>
                   <a href="{{ route('guidance.index') }}" class="{{ $active === 'guidance' ? 'active' : '' }}">Bimbingan</a>
@@ -70,6 +70,9 @@
                 </li>
                 <li>
                   <a href="{{ route('achievement.index') }}" class="{{ $active === 'achievement' ? 'active' : '' }}">Prestasi</a>
+                </li> 
+                <li>
+                  <a href="{{ route('assessment.index') }}" class="{{ $active === 'assessment' ? 'active' : '' }}">Assessment</a>
                 </li> 
               </ul>
           </li>
