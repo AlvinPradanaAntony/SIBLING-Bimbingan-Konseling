@@ -25,8 +25,8 @@ return new class extends Migration
             $table->date('admission_date');
             $table->string('guardian_name', 50);
             $table->string('guardian_phone_number', 20);
-            $table->foreignId('class_id')->constrained();
-            $table->foreignId('status_id')->constrained('statuses');
+            $table->foreignId('class_id')->constrained()->onDelete('cascade');
+            $table->foreignId('status_id')->constrained('statuses')->onDelete('cascade');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

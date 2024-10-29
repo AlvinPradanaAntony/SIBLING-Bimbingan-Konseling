@@ -11,6 +11,10 @@ class Student extends Model
 
     protected $guarded = ['id'];
 
+    public function student_assessments()
+    {
+        return $this->hasMany(StudentAssessment::class);
+    }
     public function students()
     {
         return $this->hasMany(Student::class);

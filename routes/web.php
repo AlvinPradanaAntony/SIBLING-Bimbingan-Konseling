@@ -19,8 +19,10 @@ use App\Http\Controllers\GuidanceController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\JobVacancyController;
 use App\Http\Controllers\AchievementController;
-use App\Models\JobVacancy;
 use App\Http\Controllers\AssessmentController;
+use App\Http\Controllers\StudentAssessmentController;
+use App\Models\Assessment;
+use App\Models\JobVacancy;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,11 +52,18 @@ Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/assessment', [AssessmentController::class, 'index'])->name('assessment.index');
-Route::post('/assessment', [AssessmentController::class, 'store'])->name('assessment.store');
-Route::get('/assessment/{id}/edit', [AssessmentController::class, 'edit'])->name('assessment.edit');
-Route::put('/assessment/{id}', [AssessmentController::class, 'update'])->name('assessment.update');
-Route::delete('/assessment/{id}', [AssessmentController::class, 'destroy'])->name('assessment.destroy');
+Route::get('/asesmen', [AssessmentController::class, 'index'])->name('assessment.index');
+Route::post('/asesmen', [AssessmentController::class, 'store'])->name('assessment.store');
+Route::get('/asesmen/{id}/edit', [AssessmentController::class, 'edit'])->name('assessment.edit');
+Route::put('/asesmen/{id}', [AssessmentController::class, 'update'])->name('assessment.update');
+Route::delete('/asesmen/{id}', [AssessmentController::class, 'destroy'])->name('assessment.destroy');
+
+Route::get('/asesmen_siswa', [StudentAssessmentController::class, 'index'])->name('student_assessment.index');
+Route::get('/asesmen_siswa/create', [StudentAssessmentController::class, 'create'])->name('student_assessment.create');
+Route::post('/asesmen_siswa', [StudentAssessmentController::class, 'store'])->name('student_assessment.store');
+Route::get('/asesmen_siswa/{id}/edit', [StudentAssessmentController::class, 'edit'])->name('student_assessment.edit');
+Route::put('/asesmen_siswa/{id}', [StudentAssessmentController::class, 'update'])->name('student_assessment.update');
+Route::delete('/asesmen_siswa/{id}', [StudentAssessmentController::class, 'destroy'])->name('student_assessment.destroy');
 
 Route::get('/prestasi', [AchievementController::class, 'index'])->name('achievement.index');
 Route::post('/prestasi', [AchievementController::class, 'store'])->name('achievement.store');
@@ -111,6 +120,7 @@ Route::put('/status/{id}', [StatusController::class, 'update'])->name('status.up
 Route::delete('/status/{id}', [StatusController::class, 'destroy'])->name('status.destroy');
 
 Route::get('/siswa', [StudentController::class, 'index'])->name('student.index');
+Route::get('/siswa/create', [StudentController::class, 'create'])->name('student.create');
 Route::post('/siswa', [StudentController::class, 'store'])->name('student.store');
 Route::get('/siswa/{id}/edit', [StudentController::class, 'edit'])->name('student.edit');
 Route::put('/siswa/{id}', [StudentController::class, 'update'])->name('student.update');

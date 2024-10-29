@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('assessments', function (Blueprint $table) {
             $table->id();
+            $table->string('question');
+            $table->enum('field', ['Pribadi', 'Sosial', 'Belajar', 'Karir']);
             $table->timestamps();
         });
     }

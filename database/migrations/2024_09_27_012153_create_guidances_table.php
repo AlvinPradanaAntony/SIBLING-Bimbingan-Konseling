@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('topics');
             $table->string('notes');
             $table->date('date');
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('student_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

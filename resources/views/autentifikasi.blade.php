@@ -7,90 +7,6 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Guru BK/Walas</h5>
-              {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#addUserModal">
-                Tambah Pengguna
-              </button>
-              <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="addUserModalLabel">Tambah Pengguna Baru</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form action="{{ route('user.store') }}" method="POST">
-                        @csrf
-                        <!-- Field Nama -->
-                        <div class="mb-3">
-                          <label for="photo" class="col-form-label">Foto</label>
-                          <input type="text" class="form-control" id="photo" name="photo" required>
-                        </div>
-                        <!-- Field Nama -->
-                        <div class="mb-3">
-                          <label for="name" class="col-form-label">Nama:</label>
-                          <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <!-- Field NIP -->
-                        <div class="mb-3">
-                          <label for="nip" class="col-form-label">NIP/NUPTK:</label>
-                          <input type="text" class="form-control" id="nip" name="nip" required>
-                        </div>
-                        <!-- Field Jenis Kelamin -->
-                        <div class="mb-3">
-                          <label for="gender" class="col-form-label">Jenis Kelamin</label>
-                          <input type="text" class="form-control" id="gender" name="gender" required>
-                        </div>
-                        <!-- Field Jenis Kelamin -->
-                        <div class="mb-3">
-                          <label for="gender" class="col-form-label">Jenis Kelamin</label>
-                          <input type="text" class="form-control" id="gender" name="gender" required>
-                        </div>
-                        <!-- Field Jenis Kelamin -->
-                        <div class="mb-3">
-                          <label for="gender" class="col-form-label">Jenis Kelamin</label>
-                          <input type="text" class="form-control" id="gender" name="gender" required>
-                        </div>
-                        <!-- Field Jenis Kelamin -->
-                        <div class="mb-3">
-                          <label for="gender" class="col-form-label">Jenis Kelamin</label>
-                          <input type="text" class="form-control" id="gender" name="gender" required>
-                        </div>
-                        <!-- Field Jenis Kelamin -->
-                        <div class="mb-3">
-                          <label for="gender" class="col-form-label">Jenis Kelamin</label>
-                          <input type="text" class="form-control" id="gender" name="gender" required>
-                        </div>
-                        <!-- Field Jenis Kelamin -->
-                        <div class="mb-3">
-                          <label for="gender" class="col-form-label">Jenis Kelamin</label>
-                          <input type="text" class="form-control" id="gender" name="gender" required>
-                        </div>
-                        <!-- Field Email -->
-                        <div class="mb-3">
-                          <label for="email" class="col-form-label">Email:</label>
-                          <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <!-- Field Jenis Kelamin -->
-                        <div class="mb-3">
-                          <label for="gender" class="col-form-label">Jenis Kelamin</label>
-                          <input type="text" class="form-control" id="gender" name="gender" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="password" class="col-form-label">Password:</label>
-                          <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                      <button type="submit" class="btn btn-primary">Simpan Data</button>
-                    </div>
-                    </form>
-                  </div>
-                </div>
-              </div> --}}
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -117,7 +33,7 @@
                       <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                          <img src="{{ $user->photo ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=random'}}" alt="foto-profil" class="img-fluid rounded-circle"
+                          <img src="{{ $user->photo ? asset('storage/user_photos/' . $user->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=random'}}" alt="foto-profil" class="img-fluid rounded-circle"
                             style="width: 50px; height: 50px; cursor: pointer;" onclick="showFullscreen(this.src)">
                         </td>
                         <td>{{ $user->name }}</td>
@@ -151,7 +67,7 @@
                                   @csrf
                                   @method('PUT')
                                   <div class="modal-body">
-                                    <div>
+                                    {{-- <div>
                                       <img id="profilePreview{{ $user->id }}" 
                                       src="{{ $user->photo }}" 
                                       class="object-fit-cover img-fluid rounded-circle mx-auto d-block" 
@@ -163,6 +79,13 @@
                                       <label for="photo{{ $user->id }}" class="col-form-label">Foto:</label>
                                       <input type="file" class="form-control" id="photo{{ $user->id }}" name="photo{{ $user->id }}"
                                         accept="image/*" onchange="previewImage(event, '{{ $user->id }}')">
+                                    </div> --}}
+                                    <div style="display: flex; justify-content: center; align-items: center;">
+                                      <img id="outputUpdate" src="{{ asset('storage/user_photos/' . $user->photo) }}" style="width: 90px; height: 90px; object-fit: cover;"/>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="photo" class="col-form-label">Photo</label>
+                                      <input type="file" class="form-control" id="photo" name="photo" accept="image/*" onchange="loadFileUpdate(event)">
                                     </div>
                                     <div class="mb-3">
                                       <label for="name" class="col-form-label">Nama:</label>
@@ -178,10 +101,8 @@
                                       <label for="gender" class="col-form-label">Jenis Kelamin</label>
                                       <select class="form-control" id="gender" name="gender">
                                         <option value="" selected disabled>Pilih Jenis Kelamin</option>
-                                        <option value="laki-laki" {{ $user->gender == 'laki-laki' ? 'selected' : '' }}>
-                                          Laki-laki</option>
-                                        <option value="perempuan" {{ $user->gender == 'perempuan' ? 'selected' : '' }}>
-                                          Perempuan</option>
+                                        <option value="Laki-laki" {{ $user->gender == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                        <option value="Perempuan" {{ $user->gender == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                                       </select>
                                     </div>
                                     <div class="mb-3">
@@ -312,3 +233,15 @@
     </div>
   </div>
 @endsection
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    
+  }
+  var loadFileUpdate = function(event) {
+    var outputUpdate = document.getElementById('outputUpdate');
+    outputUpdate.src = URL.createObjectURL(event.target.files[0]);
+    
+  }
+</script>

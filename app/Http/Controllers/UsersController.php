@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Support\Facades\Storage;
 
 class UsersController extends Controller
 {
@@ -55,37 +56,48 @@ class UsersController extends Controller
 
 	public function update(Request $request, $id)
 	{
-		// Validasi data yang diterima dari form
 		$request->validate([
+			'nip' => 'required|string|max:255',
 			'name' => 'required|string|max:255',
-			'email' => 'required|email|max:255|unique:users,email,' . $id,
-			// Tambahkan validasi lain sesuai kebutuhan, misalnya untuk role
+			'gender' => 'required|string|max:255',
+			'place_of_birth' => 'required|string|max:255',
+			'date_of_birth' => 'required|date',
+			'religion' => 'required|string|max:255',
+			'phone_number' => 'required|string|max:255',
+			'address' => 'required|string|max:255',
+			'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+			'role_id' => 'required|integer|max:255',
+			'email' => 'required|email',
 		]);
 
-		// Cari user berdasarkan ID
 		$user = User::findOrFail($id);
 
-		// Perbarui data user
-		$user->update([
-			'name' => $request->name,
-			'email' => $request->email,
-			'photo' => $request->file('photo')->store('photos'), 
-			// Tambahkan field lain yang akan diupdate
-		]);
-
-		// Redirect ke halaman yang diinginkan dengan pesan sukses
+		$user->nip = $request->input('nip');
+		$user->name = $request->input('name');
+		$user->gender = $request->input('gender');
+		$user->place_of_birth = $request->input('place_of_birth');
+		$user->date_of_birth = $request->input('date_of_birth');
+		$user->religion = $request->input('religion');
+		$user->phone_number = $request->input('phone_number');
+		$user->address = $request->input('address');
+		if ($request->hasFile('photo')) {
+            if ($user->photo) {
+                Storage::disk('public')->delete('user_photos/' . $user->photo);
+            }
+            $file = $request->file('photo');
+            $path = $file->store('user_photos', 'public');
+            $user->photo = basename($path);
+        }
+		$user->role_id = $request->input('role_id');
+		$user->email = $request->input('email');
+		$user->save();
 		return redirect()->route('user.index')->with('success', 'Data pengguna berhasil diperbarui.');
 	}
 
 	public function destroy($id)
 	{
-		// Cari user berdasarkan ID
 		$user = User::findOrFail($id);
-
-		// Hapus user
 		$user->delete();
-
-		// Redirect ke halaman users dengan pesan sukses
 		return redirect()->route('user.index')->with('success', 'Pengguna berhasil dihapus.');
 	}
 }

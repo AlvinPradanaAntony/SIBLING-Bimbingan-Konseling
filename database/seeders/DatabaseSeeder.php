@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Assessment;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
@@ -24,5 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(JobVacancySeeder::class);
         $this->call(GuidanceSeeder::class);
         $this->call(CaseSeeder::class);
+        $this->call(AssessmentSeeder::class);
+        $this->call(StudentAssessmentSeeder::class);
     }
 }

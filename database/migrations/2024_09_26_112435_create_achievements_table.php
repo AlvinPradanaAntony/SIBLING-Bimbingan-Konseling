@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('recognition');
             $table->string('certificate');
-            $table->foreignId('student_id')->constrained();
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +31,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('achievements', function (Blueprint $table) {
+            $table->dropForeign(['student_id']);
+        });
         Schema::dropIfExists('achievements');
     }
 };

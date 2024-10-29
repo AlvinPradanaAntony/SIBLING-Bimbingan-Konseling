@@ -18,6 +18,8 @@
 </head>
 
 <body>
+  {{-- @include('partials.sidebar')
+  @include('partials.navbar') --}}
   <div id="app">
     <main>
       @yield('content')
