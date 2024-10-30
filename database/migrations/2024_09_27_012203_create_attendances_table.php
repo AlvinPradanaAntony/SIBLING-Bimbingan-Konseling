@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->date('date'); 
             $table->enum('presence_status', ['Hadir', 'Ijin', 'Alpa', 'Sakit']);
-            $table->string('description');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('description')->nullable();
+            $table->foreignId('user_id_bk')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id_walas')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

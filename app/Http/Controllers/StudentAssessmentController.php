@@ -46,24 +46,20 @@ class StudentAssessmentController extends Controller
         return redirect()->route('student_assessment.index')->with('success', 'Data Berhasil');
     }
 
-    public function edit($id)
-    {
-        $student_assessment = StudentAssessment::find($id);
-        return view('student_assessment.edit', [
-            'active' => 'student_assessment',
-            'student_assessment' => $student_assessment
-        ]);
-    }
-
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'answer' => 'required|in:0,1',
+            'student_id' => 'required|exists:students,id',
+            'answers' => 'required|array',
         ]);
-        $student_assessment = StudentAssessment::findOrFail($id);
-        $student_assessment->update([
-            'answer' => $validated['answer']
-        ]);
+
+        foreach ($validated['answers'] as $assessmentId => $answer) {
+            // Update atau simpan jawaban siswa
+            StudentAssessment::updateOrCreate(
+                ['student_id' => $validated['student_id'], 'assessment_id' => $assessmentId],
+                ['answer' => $answer]
+            );
+        }
         return redirect()->route('student_assessment.index')->with('success', 'Jawaban berhasil diperbarui');
     }
 
@@ -71,8 +67,7 @@ class StudentAssessmentController extends Controller
 
     public function destroy($id)
     {
-        $student_assessment = StudentAssessment::find($id);
-        $student_assessment->delete();
+        StudentAssessment::where('student_id', $id)->delete();
         return redirect()->route('student_assessment.index')->with('success', 'Data Berhasil');
     }
 }

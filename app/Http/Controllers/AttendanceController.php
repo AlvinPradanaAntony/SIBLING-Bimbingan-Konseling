@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Major;
+use App\Models\Classes;
 use App\Models\Student;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
@@ -14,66 +16,115 @@ class AttendanceController extends Controller
     {
         $this->middleware(['auth', 'verified']);
     }
-    public function index()
+
+    public function index(Request $request)
     {
-        return view('data_absensi', [
-            'attendances' => Attendance::with(['student', 'user'])->get(),
-            'users' => User::all(),
-            'students' => Student::all(),
-            'majors' => Major::all(),
-            'active' => 'attendance'
+        $selectedMonth = $request->input('month', now()->format('m'));
+        $selectedYear = $request->input('year', now()->format('Y'));
+        $selectedClass = $request->input('class'); // Ambil input kelas
+        
+        $dates = [];
+        $startDate = Carbon::createFromDate($selectedYear, $selectedMonth, 1);
+        $endDate = $startDate->copy()->endOfMonth();
+
+        for ($date = $startDate; $date <= $endDate; $date->addDay()) {
+            $dates[] = [
+                'date' => $date->format('Y-m-d'),
+                'isWeekend' => $date->isWeekend()
+            ];
+        }
+
+        $attendances = Attendance::with(['student', 'user'])
+            ->whereYear('date', $selectedYear)
+            ->whereMonth('date', $selectedMonth)
+            ->get();
+        
+        $classes = Classes::all();
+        $majors = Major::all();
+        $users = User::all();
+        $years = range(now()->year - 5, now()->year);
+        
+        $students = Student::when($selectedClass, function ($query) use ($selectedClass) {
+                return $query->where('class_id', $selectedClass); // Asumsikan kolom class_id ada di tabel siswa
+            })->get();
+
+        return view('data_absensi', compact(
+            'attendances', 'students', 'classes', 'majors', 'users', 'dates', 
+            'selectedMonth', 'selectedYear', 'selectedClass', 'years'
+        ), [
+            'active' => 'attendance',
         ]);
     }
+
     public function store(Request $request)
     {
         $request->validate([
-            'date' => 'required|string|max:255',
-            'presence_status' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'student_id' => 'required|string|max:255',
-            'user_id' => 'required|string|max:255',
+            'student_id' => 'required|exists:students,id',
+            'month' => 'required|numeric|min:1|max:12',
+            'year' => 'required|numeric',
+            'presence_status' => 'required|array',
+            'presence_status.*' => 'required|in:Hadir,Alpa,Ijin,Sakit',
+            'user_id_walas' => 'required|exists:users,id',
         ]);
 
-        $attendance = new Attendance();
-        $attendance->date = $request->input('date');
-        $attendance->presence_status = $request->input('presence_status');
-        $attendance->description = $request->input('description');
-        $attendance->student_id = $request->input('student_id');
-        $attendance->user_id = $request->input('user_id');
-        $attendance->save();
+        $user_id_bk = auth()->id();
 
-        return redirect()->route('attendance.index')->with('success', 'Jurusan berhasil ditambahkan!');
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $request->month, $request->year);
+
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = Carbon::createFromDate($request->year, $request->month, $day)->format('Y-m-d');
+            if (isset($request->presence_status[$date])) {
+                Attendance::create([
+                    'student_id' => $request->student_id,
+                    'date' => $date,
+                    'presence_status' => $request->presence_status[$date],
+                    'user_id_bk' => $user_id_bk,
+                    'user_id_walas' => $request->user_id_walas,
+                    'month' => $request->month,
+                    'year' => $request->year,
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Data absensi bulanan berhasil ditambahkan');
     }
 
-    // Menyimpan perubahan jurusan ke database
-    public function update(Request $request, $id)
+    public function update(Request $request, $student_id)
     {
         $request->validate([
-            'date' => 'required|string|max:255',
-            'presence_status' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'student_id' => 'required|string|max:255',
-            'user_id' => 'required|string|max:255',
+            'presence_status' => 'required|array',
+            'user_id_walas' => 'required|exists:users,id',
+            'month' => 'required|numeric',
+            'year' => 'required|numeric',
         ]);
 
-        $attendance = Attendance::findOrFail($id);
-        $attendance->date = $request->input('date');
-        $attendance->presence_status = $request->input('presence_status');
-        $attendance->description = $request->input('description');
-        $attendance->student_id = $request->input('student_id');
-        $attendance->user_id = $request->input('user_id');
-        $attendance->save();
+        $user_id_bk = auth()->id();
+        $user_id_walas = $request->input('user_id_walas');
+        
+        foreach ($request->input('presence_status') as $date => $status) {
+            Attendance::updateOrCreate(
+                [
+                    'student_id' => $student_id,
+                    'date' => $date,
+                ],
+                [
+                    'presence_status' => $status,
+                    'user_id_bk' => $user_id_bk,
+                    'user_id_walas' => $user_id_walas,
+                ]
+            );
+        }
 
-        return redirect()->route('attendance.index', $attendance->id)->with('success', 'Jurusan berhasil diupdate!');
+        return redirect()->back()->with('success', 'Absensi berhasil diperbarui');
     }
 
-    // Fungsi untuk menghapus jurusan
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $attendance = Attendance::findOrFail($id);
-        $attendance->delete();
+        Attendance::where('student_id', $id)
+                ->whereMonth('date', $request->month)
+                ->whereYear('date', $request->year)
+                ->delete();
 
-        // Redirect atau menampilkan pesan sukses
-        return redirect()->route('attendance.index')->with('success', 'Jurusan berhasil dihapus!');
+        return redirect()->route('attendance.index')->with('success', 'Data absensi berhasil dihapus.');
     }
 }

@@ -60,11 +60,13 @@
                   <thead style="background-color: #007bff; color: white;">
                     <tr>
                       <th>No</th>
+                      <th>Kelas</th>
                       <th>Nama Siswa</th>
                       @foreach ($assessments as $assessment)
                         <th>{{ $assessment->id }}</th>
                       @endforeach
                       <th>Total</th>
+                      <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -74,54 +76,129 @@
                       $fieldTotals = []; // Array untuk menyimpan total skor per field
                     @endphp
                     @foreach ($students as $student)
-                      <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $student->name }}</td>
-                        @php $studentTotalScore = 0; @endphp
-                        @foreach ($assessments as $key => $assessment)
-                          @php
-                            // Mengambil jawaban siswa untuk assessment ini
-                            $studentAssessment = $student->student_assessments()->where('assessment_id', $assessment->id)->first();
-                            $answer = $studentAssessment ? $studentAssessment->answer : null;
-                            if ($answer === 1) {
-                              $studentTotalScore++; // Menjumlahkan nilai 1 jika jawabannya "1"
-                              $totalScores[$key]++; // Menambahkan ke total score assessment
-                              // Menambahkan skor per field
-                              $fieldTotals[$assessment->field] = ($fieldTotals[$assessment->field] ?? 0) + 1;
-                            }
-                          @endphp
-                          <td style="background-color: 
-                            @switch($assessment->field)
-                              @case('Pribadi')
-                                #d4edda; /* hijau */
-                                @break
-                              @case('Sosial')
-                                #fff3cd; /* kuning */
-                                @break
-                              @case('Belajar')
-                                #ffeeba; /* orange */
-                                @break
-                              @case('Karir')
-                                #f8d7da; /* merah muda */
-                                @break
-                              @default
-                                transparent; /* warna default jika kategori tidak terdaftar */
-                            @endswitch
-                          ">
-                            {{ $answer === 1 ? '1' : ($answer === 0 ? '0' : '-') }}
+                      @if ($student->student_assessments()->whereNotNull('answer')->exists())
+                        <tr>
+                          <td>{{ $loop->iteration }}</td>
+                          <td>{{ $student->class->class_level . ' ' . $student->class->major->major_name . ' ' . $student->class->classroom }}</td>
+                          <td>{{ $student->name }}</td>
+                          @php $studentTotalScore = 0; @endphp
+                          @foreach ($assessments as $key => $assessment)
+                            @php
+                              $student_assessment = $student->student_assessments()->where('assessment_id', $assessment->id)->first();
+                              $answer = $student_assessment ? $student_assessment->answer : null;
+                              if ($answer === 1) {
+                                $studentTotalScore++; // Menjumlahkan nilai 1 jika jawabannya "1"
+                                $totalScores[$key]++; // Menambahkan ke total score assessment
+                                // Menambahkan skor per field
+                                $fieldTotals[$assessment->field] = ($fieldTotals[$assessment->field] ?? 0) + 1;
+                              }
+                            @endphp
+                            <td style="background-color: 
+                              @switch($assessment->field)
+                                @case('Pribadi')
+                                  #d4edda; /* hijau */
+                                  @break
+                                @case('Sosial')
+                                  #fff3cd; /* kuning */
+                                  @break
+                                @case('Belajar')
+                                  #ffeeba; /* orange */
+                                  @break
+                                @case('Karir')
+                                  #f8d7da; /* merah muda */
+                                  @break
+                                @default
+                                  transparent; /* warna default jika kategori tidak terdaftar */
+                              @endswitch
+                            ">
+                              {{ $answer === 1 ? '1' : ($answer === 0 ? '0' : '-') }}
+                            </td>
+                          @endforeach
+                          <td>{{ $studentTotalScore }}</td> <!-- Menampilkan total skor siswa -->
+                          <td>
+                            <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit_data{{ $student->id }}">Edit</a>
+                            <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete_data{{ $student->id }}">Hapus</a>
                           </td>
-                        @endforeach
-                        <td>{{ $studentTotalScore }}</td> <!-- Menampilkan total skor siswa -->
-                      </tr>
-                      @php
-                        $overallTotalScore += $studentTotalScore; // Menjumlahkan total skor siswa ke dalam total keseluruhan
-                      @endphp
+                          <!-- Edit Modal -->
+                          <div class="modal fade" id="edit_data{{ $student->id }}" tabindex="-1" aria-labelledby="edit_data{{ $student->id }}Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="edit_data{{ $student->id }}Label">Edit Data Asesmen</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form action="{{ route('student_assessment.update', $student->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-3">
+                                      <label for="student_id" class="col-form-label">Nama Siswa</label>
+                                      <select class="form-control" id="student_id" name="student_id" required>
+                                        <option value="">-- Pilih Nama Siswa --</option>
+                                        @foreach ($students as $std)
+                                          <option value="{{ $std->id }}" {{ $student->id == $std->id ? 'selected' : '' }}>
+                                            {{ $std->name }}
+                                          </option>
+                                        @endforeach
+                                      </select>
+                                    </div>
+                                    @foreach ($assessments as $assessment)
+                                      @php
+                                        $student_assessment = $student->student_assessments()->where('assessment_id', $assessment->id)->first();
+                                        $answer = $student_assessment ? $student_assessment->answer : null;
+                                      @endphp
+                                      <div class="mb-3">
+                                        <label for="question_{{ $assessment->id }}" class="col-form-label">{{ $assessment->question }}</label>
+                                        <div class="d-flex">
+                                          <input type="radio" id="question_{{ $assessment->id }}_iya" name="answers[{{ $assessment->id }}]" value="1" {{ $answer === 1 ? 'checked' : '' }} required>
+                                          <label for="question_{{ $assessment->id }}_iya" class="ms-2">Iya</label>
+                                          <div class="ms-3"></div> <!-- Menambahkan jarak -->
+                                          <input type="radio" id="question_{{ $assessment->id }}_tidak" name="answers[{{ $assessment->id }}]" value="0" {{ $answer === 0 ? 'checked' : '' }} required>
+                                          <label for="question_{{ $assessment->id }}_tidak" class="ms-2">Tidak</label>
+                                        </div>
+                                      </div>
+                                    @endforeach
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                      <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="modal fade" id="delete_data{{ $student->id }}" tabindex="-1" aria-labelledby="delete_data{{ $student->id }}Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="delete_data{{ $student->id }}Label">Hapus Data Asesmen</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <p>Apakah Anda yakin ingin menghapus semua data asesmen untuk <strong>{{ $student->name }}</strong>?</p>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                  <form action="{{ route('student_assessment.destroy', $student->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Hapus</button>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </tr>
+                        @php
+                          $overallTotalScore += $studentTotalScore; // Menjumlahkan total skor siswa ke dalam total keseluruhan
+                        @endphp
+                      @endif
                     @endforeach
                   </tbody>
                     <tfoot style="background-color: #007bff; color: white;">
                       <tr>
-                        <th></th>
-                        <th>Jumlah Konseli</th>
+                        <th colspan="3" style="text-align: right;">Jumlah Konseli</th>
                         @foreach ($assessments as $key => $assessment)
                           <th>{{ $totalScores[$key] }}</th> <!-- Menampilkan total untuk setiap assessment -->
                         @endforeach
@@ -129,7 +206,7 @@
                         <th></th>
                       </tr>
                       <tr>
-                        <th colspan="2" style="text-align: right;">Persentase Butir</th>
+                        <th colspan="3" style="text-align: right;">Persentase Butir</th>
                         @foreach ($totalScores as $score)
                           <th>
                             @if ($overallTotalScore > 0) <!-- Menghindari pembagian dengan nol -->
@@ -142,7 +219,7 @@
                         <th>100%</th> <!-- Kolom Aksi dibiarkan kosong -->
                       </tr>
                       <tr>
-                        <th colspan="2" style="text-align: right;">Jumlah per Bidang</th>
+                        <th colspan="3" style="text-align: right;">Jumlah per Bidang</th>
                         @php
                           $fieldTotal = array_sum($fieldTotals);
                         @endphp
@@ -162,7 +239,7 @@
                         $overallTotalScore = array_sum($fieldTotals);
                       @endphp
                       <tr>
-                        <th colspan="2" style="text-align: right;">Persentase per Bidang</th>
+                        <th colspan="3" style="text-align: right;">Persentase per Bidang</th>
                         @foreach (['Pribadi', 'Sosial', 'Belajar', 'Karir'] as $field)
                           @php
                             $fieldPercentage = $fieldTotal > 0 ? ($fieldTotals[$field] ?? 0) / $fieldTotal * 100 : 0;
