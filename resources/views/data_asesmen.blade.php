@@ -11,6 +11,12 @@
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAssessmentModal">
                 Tambah Asesmen
               </button>
+              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importAsesmenModal">
+                Import Data dari Excel
+              </button>
+              <a href="{{ route('assessment.export') }}" class="btn btn-success">
+                Ekspor ke Excel
+              </a>
               @endcan
               <div class="modal fade" id="addAssessmentModal" tabindex="-1" aria-labelledby="addAssessmentModalLabel"
                 aria-hidden="true">
@@ -43,6 +49,30 @@
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                       <button type="submit" class="btn btn-primary">Simpan Data</button>
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <!-- Import Modal -->
+              <div class="modal fade" id="importAsesmenModal" tabindex="-1" aria-labelledby="importAsesmenModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="importAsesmenModalLabel">Import Data Asesmen</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{ route('assessment.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                          <label for="file" class="form-label">Pilih File Excel</label>
+                          <input type="file" name="file" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                      <button type="submit" class="btn btn-primary">Import Data</button>
                     </div>
                     </form>
                   </div>

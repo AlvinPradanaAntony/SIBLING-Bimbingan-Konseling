@@ -101,6 +101,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/status', [StatusController::class, 'index'])->name('status.index')->middleware('permission:Lihat Status');
+    Route::post('/status/import', [StatusController::class, 'import'])->name('status.import')->middleware('permission:Tambah Status');
     Route::post('/status', [StatusController::class, 'store'])->name('status.store')->middleware('permission:Tambah Status');
     Route::put('/status/{id}', [StatusController::class, 'update'])->name('status.update')->middleware('permission:Ubah Status');
     Route::delete('/status/{id}', [StatusController::class, 'destroy'])->name('status.destroy')->middleware('permission:Hapus Status');
@@ -108,6 +109,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/asesmen', [AssessmentController::class, 'index'])->name('assessment.index')->middleware('permission:Lihat Asesmen');
+    Route::post('/asesmen/import', [AssessmentController::class, 'import'])->name('assessment.import')->middleware('permission:Tambah Asesmen');
+    Route::get('/asesmen/export', [AssessmentController::class, 'export'])->name('assessment.export')->middleware('permission:Tambah Asesmen');
     Route::post('/asesmen', [AssessmentController::class, 'store'])->name('assessment.store')->middleware('permission:Tambah Asesmen');
     Route::put('/asesmen/{id}', [AssessmentController::class, 'update'])->name('assessment.update')->middleware('permission:Ubah Asesmen');
     Route::delete('/asesmen/{id}', [AssessmentController::class, 'destroy'])->name('assessment.destroy')->middleware('permission:Hapus Asesmen');
