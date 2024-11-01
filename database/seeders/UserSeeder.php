@@ -25,7 +25,6 @@ class UserSeeder extends Seeder
         'address' => 'Jl. Cijagra No. 123',
         'email' => 'mkhoirulr97@gmail.com',
         'password' => bcrypt('khoirul123'),
-        'role_id' => 1,
       ],
       [
         'nip' => fake()->unique()->randomNumber(6),
@@ -38,7 +37,6 @@ class UserSeeder extends Seeder
         'phone_number' => fake()->phoneNumber,
         'address' => fake()->address,
         'password' => bcrypt('password'),
-        'role_id' => 2,
       ],
       [
         'nip' => fake()->unique()->randomNumber(6),
@@ -51,19 +49,23 @@ class UserSeeder extends Seeder
         'phone_number' => fake()->phoneNumber,
         'address' => fake()->address,
         'password' => bcrypt('password'),
-        'role_id' => 3,
       ],
       [
         'nip' => 'superadmin',
         'name' => 'Super Admin',
         'email' => 'superadmin@gmail.com',
         'password' => bcrypt('superadmin'),
-        'role_id' => 4,
       ],
     ];
 
-    foreach ($users as $user) {
-      User::create($user);
-    }
+    foreach ($users as $userData) {
+      $user = User::create($userData);
+      if ($user->name === 'Khoirul') {
+        $user->assignRole('Guru BK');
+      }
+      if ($user->name === 'Super Admin') {
+        $user->assignRole('Super Admin');
+      }
+  }
   }
 }

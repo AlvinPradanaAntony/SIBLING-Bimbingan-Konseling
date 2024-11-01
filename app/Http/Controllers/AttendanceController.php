@@ -64,7 +64,7 @@ class AttendanceController extends Controller
             'year' => 'required|numeric',
             'presence_status' => 'required|array',
             'presence_status.*' => 'required|in:Hadir,Alpa,Ijin,Sakit',
-            'user_id_walas' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         $user_id_bk = auth()->id();
@@ -78,8 +78,7 @@ class AttendanceController extends Controller
                     'student_id' => $request->student_id,
                     'date' => $date,
                     'presence_status' => $request->presence_status[$date],
-                    'user_id_bk' => $user_id_bk,
-                    'user_id_walas' => $request->user_id_walas,
+                    'user_id' => $request->user_id,
                     'month' => $request->month,
                     'year' => $request->year,
                 ]);
@@ -93,13 +92,12 @@ class AttendanceController extends Controller
     {
         $request->validate([
             'presence_status' => 'required|array',
-            'user_id_walas' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
             'month' => 'required|numeric',
             'year' => 'required|numeric',
         ]);
 
-        $user_id_bk = auth()->id();
-        $user_id_walas = $request->input('user_id_walas');
+        $user_id = auth()->id();
         
         foreach ($request->input('presence_status') as $date => $status) {
             Attendance::updateOrCreate(
@@ -109,8 +107,7 @@ class AttendanceController extends Controller
                 ],
                 [
                     'presence_status' => $status,
-                    'user_id_bk' => $user_id_bk,
-                    'user_id_walas' => $user_id_walas,
+                    'user_id' => $user_id,
                 ]
             );
         }

@@ -31,13 +31,6 @@ class ReportsController extends Controller
         return redirect()->route('reports.index')->with('success', 'Data baru berhasil ditambahkan.');
     }
 
-
-    public function edit($id)
-    {
-        $user = Reports::findOrFail($id);
-        return view('reports.edit', compact('reports'));
-    }
-
     public function update(Request $request, $id)
     {
         // Validasi data yang diterima dari form

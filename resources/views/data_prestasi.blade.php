@@ -7,9 +7,11 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Prestasi</h5>
+              @can('Tambah Prestasi')
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddAchievementModal">
                 Tambah Data
               </button>
+              @endcan
               <div class="modal fade" id="AddAchievementModal" tabindex="-1" aria-labelledby="AddAchievementModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -119,10 +121,14 @@
                         <td>{{ $achievement->certificate }}</td>
                         <td>{{ $achievement->description }}</td>
                         <td>
+                          @can('Ubah Prestasi')
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $achievement->id }}">Edit</a>
+                          @endcan
+                          @can('Hapus Prestasi')
                           <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                             data-bs-target="#delete_data{{ $achievement->id }}">Hapus</a>
+                          @endcan
 
                           <!-- Edit Modal -->
                           <div class="modal fade" id="edit_data{{ $achievement->id }}" tabindex="-1"
@@ -165,26 +171,19 @@
                                     <div class="mb-3">
                                       <label for="level" class="col-form-label">Tingkat</label>
                                       <select class="form-control" id="level" name="level">
-                                        <option value="kecamatan"
-                                          {{ $achievement->level == 'kecamatan' ? 'selected' : '' }}>Kecamatan</option>
-                                        <option value="kabupaten"
-                                          {{ $achievement->level == 'kabupaten' ? 'selected' : '' }}>Kabupaten</option>
-                                        <option value="provinsi"
-                                          {{ $achievement->level == 'provinsi' ? 'selected' : '' }}>Provinsi</option>
-                                        <option value="nasional"
-                                          {{ $achievement->level == 'nasional' ? 'selected' : '' }}>Nasional</option>
-                                        <option value="internasional"
-                                          {{ $achievement->level == 'internasional' ? 'selected' : '' }}>Internasional
-                                        </option>
+                                        <option value="Kecamatan" {{ isset($achievement) && $achievement->level == 'Kecamatan' ? 'selected' : '' }}>Kecamatan</option>
+                                        <option value="Kabupaten" {{ isset($achievement) && $achievement->level == 'Kabupaten' ? 'selected' : '' }}>Kabupaten</option>
+                                        <option value="Provinsi" {{ isset($achievement) && $achievement->level == 'Provinsi' ? 'selected' : '' }}>Provinsi</option>
+                                        <option value="Nasional" {{ isset($achievement) && $achievement->level == 'Nasional' ? 'selected' : '' }}>Nasional</option>
+                                        <option value="Internasional" {{ isset($achievement) && $achievement->level == 'Internasional' ? 'selected' : '' }}>Internasional</option>
                                       </select>
                                     </div>
+
                                     <div class="mb-3">
-                                      <label for="type" class="col-form-label">Tingkat</label>
+                                      <label for="type" class="col-form-label">Tipe</label>
                                       <select class="form-control" id="type" name="type">
-                                        <option value="individu"
-                                          {{ $achievement->type == 'individu' ? 'selected' : '' }}>Individu</option>
-                                        <option value="kelompok"
-                                          {{ $achievement->type == 'kelompok' ? 'selected' : '' }}>Kelompok</option>
+                                        <option value="Individu" {{ isset($achievement) && $achievement->type == 'Individu' ? 'selected' : '' }}>Individu</option>
+                                        <option value="Kelompok" {{ isset($achievement) && $achievement->type == 'Kelompok' ? 'selected' : '' }}>Kelompok</option>
                                       </select>
                                     </div>
                                     <div class="mb-3">
@@ -199,7 +198,7 @@
                                     </div>
                                     <div class="mb-3">
                                       <label for="certificate" class="col-form-label">Sertifikat</label>
-                                      <input type="file" class="form-control" id="certificate" name="certificate" accept="image/*" onchange="loadFileUpdate(event)" required>
+                                      <input type="file" class="form-control" id="certificate" name="certificate" accept="image/*" onchange="loadFileUpdate(event)">
                                     </div>
                                     <div style="display: flex; justify-content: center; align-items: center;">
                                       @if($achievement->certificate)

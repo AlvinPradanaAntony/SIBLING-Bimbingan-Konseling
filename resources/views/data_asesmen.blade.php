@@ -7,9 +7,11 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Asesmen</h5>
+              @can('Tambah Asesmen')
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAssessmentModal">
                 Tambah Asesmen
               </button>
+              @endcan
               <div class="modal fade" id="addAssessmentModal" tabindex="-1" aria-labelledby="addAssessmentModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -65,11 +67,14 @@
                         <td>{{ $assessment->question }}</td>
                         <td>{{ $assessment->field }}</td>
                         <td>
+                          @can('Ubah Asesmen')
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $assessment->id }}">Edit</a>
+                          @endcan
+                          @can('Hapus Asesmen')
                           <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                             data-bs-target="#delete_data{{ $assessment->id }}">Hapus</a>
-
+                          @endcan
                           <!-- Edit Modal -->
                           <div class="modal fade" id="edit_data{{ $assessment->id }}" tabindex="-1"
                             aria-labelledby="editModalLabel{{ $assessment->id }}" aria-hidden="true">

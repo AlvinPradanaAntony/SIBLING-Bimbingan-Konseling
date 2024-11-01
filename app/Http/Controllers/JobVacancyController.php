@@ -105,39 +105,6 @@ class JobVacancyController extends Controller
 
         return redirect()->route('jobVacancy.index')->with('success', 'Jurusan berhasil diubah!');
     }
-    // Menyimpan perubahan jurusan ke database
-    // public function update(Request $request, $id)
-    // {
-    //     $request->validate([
-    //         'position' => 'required|string|max:255',
-    //         'company_name' => 'required|string|max:255',
-    //         'description' => 'required',
-    //         'location' => 'required|string|max:255',
-    //         'salary' => 'required|string|max:255',
-    //         'dateline_date' => 'required|date',
-    //         'pamphlet' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    //         'user_id' => 'required|string|max:255',
-    //     ]);
-
-    //     if ($request->hasFile('pamphlet')) {
-    //         $file = $request->file('pamphlet');
-    //         $path = $file->store('pamphlets', 'public');
-    //         $filename = basename($path);
-    //     }
-
-    //     $jobVacancy = JobVacancy::findOrFail($id);
-    //     $jobVacancy->position = $request->input('position');
-    //     $jobVacancy->company_name = $request->input('company_name');
-    //     $jobVacancy->description = $request->input('description');
-    //     $jobVacancy->location = $request->input('location');
-    //     $jobVacancy->salary = $request->input('salary');
-    //     $jobVacancy->dateline_date = $request->input('dateline_date');
-    //     $jobVacancy->pamphlet = $filename;
-    //     $jobVacancy->user_id = $request->input('user_id');
-    //     $jobVacancy->save();
-
-    //     return redirect()->route('jobVacancy.index', $jobVacancy->id)->with('success', 'Jurusan berhasil diupdate!');
-    // }
 
     // Fungsi untuk menghapus jurusan
     public function destroy($id)

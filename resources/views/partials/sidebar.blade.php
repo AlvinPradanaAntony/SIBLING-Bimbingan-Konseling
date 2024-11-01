@@ -92,12 +92,21 @@
       </ul>
     </li>
     <li class="nav-item">
-      <a href="{{ route('user.index') }}" class="nav-link {{ $active === 'autentifikasi' ? 'active' : '' }}">
+      <a href="{{ route('autentifikasi.index') }}" class="nav-link {{ $active === 'autentifikasi' ? 'active' : '' }}">
         <i class="uil uil-shield-check"></i>
         <span style="vertical-align: middle" class="link_name">Autentifikasi</span>
       </a>
       <ul class="sub-menu blank">
         <li><a class="link_name" href="#">Autentifikasi</a></li>
+      </ul>
+    </li>
+    <li class="nav-item">
+      <a href="{{ route('permission.index') }}" class="nav-link {{ $active === 'permission' ? 'active' : '' }}">
+        <i class="uil uil-shield-check"></i>
+        <span style="vertical-align: middle" class="link_name">Permission</span>
+      </a>
+      <ul class="sub-menu blank">
+        <li><a class="link_name" href="#">Permission</a></li>
       </ul>
     </li>
     <li class="nav-item">

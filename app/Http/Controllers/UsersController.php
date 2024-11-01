@@ -15,7 +15,7 @@ class UsersController extends Controller
 	}
 	public function index()
 	{
-		return view('autentifikasi', [
+		return view('data_user', [
 			'users' => User::with('role')->get(),
 			'roles' => Role::all(),
 			'active' => 'user'
@@ -45,15 +45,6 @@ class UsersController extends Controller
 		return redirect()->route('user.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
 	}
 
-	public function edit($id)
-	{
-		// Cari user berdasarkan ID
-		$user = User::findOrFail($id);
-
-		// Tampilkan form edit dengan data user
-		return view('users.edit', compact('user'));
-	}
-
 	public function update(Request $request, $id)
 	{
 		$request->validate([
@@ -66,7 +57,6 @@ class UsersController extends Controller
 			'phone_number' => 'required|string|max:255',
 			'address' => 'required|string|max:255',
 			'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-			'role_id' => 'required|integer|max:255',
 			'email' => 'required|email',
 		]);
 
@@ -88,7 +78,6 @@ class UsersController extends Controller
             $path = $file->store('user_photos', 'public');
             $user->photo = basename($path);
         }
-		$user->role_id = $request->input('role_id');
 		$user->email = $request->input('email');
 		$user->save();
 		return redirect()->route('user.index')->with('success', 'Data pengguna berhasil diperbarui.');

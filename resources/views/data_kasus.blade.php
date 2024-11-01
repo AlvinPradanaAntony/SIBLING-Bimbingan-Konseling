@@ -7,9 +7,11 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Kasus</h5>
+              @can('Tambah Kasus')
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
                 Tambah Data
               </button>
+              @endcan
               <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -56,7 +58,9 @@
                           <select class="form-control" id="user_id" name="user_id" required>
                             <option value="">-- Pilih Guru BK --</option>
                             @foreach ($users as $user)
-                              <option value="{{ $user->id }}">{{ $user->name }}</option>
+                              @if($user->hasRole('Guru BK'))
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                              @endif
                             @endforeach
                           </select>
                         </div>
@@ -99,11 +103,14 @@
                         <td>{{ $case->resolution }}</td>
                         <td>{{ optional($case->user)->name }}</td>
                         <td>
+                          @can('Ubah Kasus')
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $case->id }}">Edit</a>
+                          @endcan
+                          @can('Hapus Kasus')
                           <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                             data-bs-target="#delete_data{{ $case->id }}">Hapus</a>
-
+                          @endcan
                           <!-- Edit Modal -->
                           <div class="modal fade" id="edit_data{{ $case->id }}" tabindex="-1"
                             aria-labelledby="editModalLabel{{ $case->id }}" aria-hidden="true">
@@ -156,18 +163,18 @@
                                       <textarea class="form-control" id="resolution" name="resolution">{{ $case->resolution }}</textarea>
                                     </div>
                                     <div class="mb-3">
-                                      <label for="user_id" class="col-form-label">Nama Guru BK</label>
+                                      <label for="user_id" class="col-form-label">Guru BK</label>
                                       <select class="form-control" id="user_id" name="user_id" required>
                                         <option value="">-- Pilih Guru BK --</option>
                                         @foreach ($users as $user)
-                                          <option value="{{ $user->id }}"
-                                            {{ $case->user_id == $user->id ? 'selected' : '' }}>
-                                            {{ $user->name }}
-                                          </option>
+                                          @if($user->hasRole('Guru BK')) <!-- Menggunakan Spatie Role -->
+                                            <option value="{{ $user->id }}" {{ $case->user_id == $user->id ? 'selected' : '' }}>
+                                              {{ $user->name }}
+                                            </option>
+                                          @endif
                                         @endforeach
                                       </select>
                                     </div>
-                                    <!-- Add more fields as needed -->
 
                                   </div>
                                   <div class="modal-footer">

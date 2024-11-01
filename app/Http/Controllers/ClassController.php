@@ -23,7 +23,6 @@ class ClassController extends Controller
         ]);
     }
 
-    // Menampilkan form untuk menambahkan kelas
     public function store(Request $request)
     {
         $request->validate([
@@ -41,7 +40,6 @@ class ClassController extends Controller
         return redirect()->route('class.index')->with('success', 'Kelas berhasil ditambahkan!');
     }
 
-    // Menyimpan perubahan kelas ke database
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -59,7 +57,6 @@ class ClassController extends Controller
         return redirect()->route('class.index', $class->id)->with('success', 'Kelas berhasil diupdate!');
     }
 
-    // Fungsi untuk menghapus kelas
     public function destroy($id)
     {
         $class = Classes::findOrFail($id);

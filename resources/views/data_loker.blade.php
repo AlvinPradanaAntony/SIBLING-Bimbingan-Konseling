@@ -7,9 +7,11 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Karir</h5>
+              @can('Tambah Loker')
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
                 Tambah Data
               </button>
+              @endcan
               <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -53,7 +55,17 @@
                           <label for="dateline_date" class="col-form-label">Batas Waktu</label>
                           <input type="date" class="form-control" id="dateline_date" name="dateline_date" required>
                         </div>
-                        <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                        <div class="mb-3">
+                          <label for="user_id" class="col-form-label">Guru BK</label>
+                          <select class="form-control" id="user_id" name="user_id" required>
+                            <option value="">-- Pilih Guru BK --</option>
+                            @foreach ($users as $user)
+                              @if($user->hasRole('Guru BK'))
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                              @endif
+                            @endforeach
+                          </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -99,11 +111,14 @@
                         <td>{{ $job_vacancy->dateline_date }}</td>
                         <td>{{ $job_vacancy->user ? $job_vacancy->user->name : '-' }}</td>
                         <td>
+                          @can('Ubah Loker')
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $job_vacancy->id }}">Edit</a>
+                          @endcan
+                          @can('Hapus Loker')
                           <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                             data-bs-target="#delete_data{{ $job_vacancy->id }}">Hapus</a>
-
+                          @endcan
                           <!-- Edit Modal -->
                           <div class="modal fade" id="edit_data{{ $job_vacancy->id }}" tabindex="-1"
                             aria-labelledby="editModalLabel{{ $job_vacancy->id }}" aria-hidden="true">
@@ -128,7 +143,7 @@
                                     </div>
                                     <div class="mb-3">
                                       <label for="pamphlet" class="col-form-label">Brosur</label>
-                                      <input type="file" class="form-control" id="pamphlet" name="pamphlet" accept="image/*" onchange="loadFileUpdate(event)" required>
+                                      <input type="file" class="form-control" id="pamphlet" name="pamphlet" accept="image/*" onchange="loadFileUpdate(event)">
                                     </div>
                                     <div class="mb-3">
                                       <label for="position" class="col-form-label">Posisi</label>
@@ -160,14 +175,15 @@
                                         value="{{ $job_vacancy->dateline_date }}">
                                     </div>
                                     <div class="mb-3">
-                                      <label for="user_id" class="col-form-label">Nama Guru BK</label>
+                                      <label for="user_id" class="col-form-label">Guru BK</label>
                                       <select class="form-control" id="user_id" name="user_id" required>
                                         <option value="">-- Pilih Guru BK --</option>
                                         @foreach ($users as $user)
-                                          <option value="{{ $user->id }}"
-                                            {{ $job_vacancy->user_id == $user->id ? 'selected' : '' }}>
-                                            {{ $user->name }}
-                                          </option>
+                                          @if($user->hasRole('Guru BK')) <!-- Menggunakan Spatie Role -->
+                                            <option value="{{ $user->id }}" {{ $job_vacancy->user_id == $user->id ? 'selected' : '' }}>
+                                              {{ $user->name }}
+                                            </option>
+                                          @endif
                                         @endforeach
                                       </select>
                                     </div>

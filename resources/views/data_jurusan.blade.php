@@ -7,9 +7,11 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Jurusan</h5>
+              @can('Tambah Jurusan')
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMajorModal">
                 Tambah Jurusan
               </button>
+              @endcan
               <div class="modal fade" id="addMajorModal" tabindex="-1" aria-labelledby="addMajorModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -52,11 +54,14 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $major->major_name }}</td>
                         <td>
+                          @can('Ubah Jurusan')
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $major->id }}">Edit</a>
+                          @endcan
+                          @can('Hapus Jurusan')
                           <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                             data-bs-target="#delete_data{{ $major->id }}">Hapus</a>
-
+                          @endcan
                           <!-- Edit Modal -->
                           <div class="modal fade" id="edit_data{{ $major->id }}" tabindex="-1"
                             aria-labelledby="editModalLabel{{ $major->id }}" aria-hidden="true">

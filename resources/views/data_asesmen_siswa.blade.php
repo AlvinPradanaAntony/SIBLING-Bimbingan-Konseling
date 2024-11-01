@@ -7,9 +7,11 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Asesmen</h5>
+              @can('Tambah Asesmen Siswa')
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentAssessmentModal">
                 Tambah Asesmen
               </button>
+              @endcan
               <div class="modal fade" id="addStudentAssessmentModal" tabindex="-1" aria-labelledby="addStudentAssessmentModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -116,8 +118,12 @@
                           @endforeach
                           <td>{{ $studentTotalScore }}</td> <!-- Menampilkan total skor siswa -->
                           <td>
+                            @can('Ubah Asesmen Siswa')
                             <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit_data{{ $student->id }}">Edit</a>
+                            @endcan
+                            @can('Hapus Asesmen Siswa')
                             <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete_data{{ $student->id }}">Hapus</a>
+                            @endcan
                           </td>
                           <!-- Edit Modal -->
                           <div class="modal fade" id="edit_data{{ $student->id }}" tabindex="-1" aria-labelledby="edit_data{{ $student->id }}Label" aria-hidden="true">

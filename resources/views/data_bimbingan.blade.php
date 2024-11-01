@@ -7,9 +7,11 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Bimbingan</h5>
+              @can('Tambah Bimbingan')
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
                 Tambah Data
               </button>
+              @endcan
               <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -44,7 +46,9 @@
                           <select class="form-control" id="user_id" name="user_id" required>
                             <option value="">-- Pilih Guru BK --</option>
                             @foreach ($users as $user)
-                              <option value="{{ $user->id }}">{{ $user->name }}</option>
+                              @if($user->hasRole('Guru BK'))
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                              @endif
                             @endforeach
                           </select>
                         </div>
@@ -87,11 +91,14 @@
                         <td>{{ $guidance->user->name }}</td>
                         <td>{{ $guidance->notes }}</td>
                         <td>
+                          @can('Ubah Bimbingan')
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $guidance->id }}">Edit</a>
+                          @endcan
+                          @can('Hapus Bimbingan')
                           <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                             data-bs-target="#delete_data{{ $guidance->id }}">Hapus</a>
-
+                          @endcan
                           <!-- Edit Modal -->
                           <div class="modal fade" id="edit_data{{ $guidance->id }}" tabindex="-1"
                             aria-labelledby="editModalLabel{{ $guidance->id }}" aria-hidden="true">
@@ -135,10 +142,11 @@
                                       <select class="form-control" id="user_id" name="user_id" required>
                                         <option value="">-- Pilih Guru BK --</option>
                                         @foreach ($users as $user)
-                                          <option value="{{ $user->id }}"
-                                            {{ $guidance->user_id == $user->id ? 'selected' : '' }}>
-                                            {{ $user->name }}
-                                          </option>
+                                          @if($user->hasRole('Guru BK')) <!-- Menggunakan Spatie Role -->
+                                            <option value="{{ $user->id }}" {{ $guidance->user_id == $user->id ? 'selected' : '' }}>
+                                              {{ $user->name }}
+                                            </option>
+                                          @endif
                                         @endforeach
                                       </select>
                                     </div>

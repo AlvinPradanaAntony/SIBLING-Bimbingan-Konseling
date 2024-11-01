@@ -63,8 +63,6 @@ class StudentAssessmentController extends Controller
         return redirect()->route('student_assessment.index')->with('success', 'Jawaban berhasil diperbarui');
     }
 
-
-
     public function destroy($id)
     {
         StudentAssessment::where('student_id', $id)->delete();

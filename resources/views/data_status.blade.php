@@ -7,9 +7,11 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Status</h5>
+              @can('Tambah Status')
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStatusModal">
                 Tambah Status
               </button>
+              @endcan
               <div class="modal fade" id="addStatusModal" tabindex="-1" aria-labelledby="addStatusModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -52,11 +54,14 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $status->status_name }}</td>
                         <td>
+                          @can('Ubah Status')
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $status->id }}">Edit</a>
+                          @endcan
+                          @can('Hapus Status')
                           <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                             data-bs-target="#delete_data{{ $status->id }}">Hapus</a>
-
+                          @endcan
                           <!-- Edit Modal -->
                           <div class="modal fade" id="edit_data{{ $status->id }}" tabindex="-1"
                             aria-labelledby="editModalLabel{{ $status->id }}" aria-hidden="true">

@@ -7,9 +7,11 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h5 class="m-0 text-primary">Tabel Data Akses</h5>
+              @can('Tambah Role')
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
                 Tambah Akses
               </button>
+              @endcan
               <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
@@ -23,8 +25,8 @@
                         @csrf
                         <!-- Field Nama -->
                         <div class="mb-3">
-                          <label for="role_name" class="col-form-label">Akses</label>
-                          <input type="text" class="form-control" id="role_name" name="role_name" required>
+                          <label for="role" class="col-form-label">Akses</label>
+                          <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -50,13 +52,16 @@
                     @foreach ($roles as $role)
                       <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $role->role_name }}</td>
+                        <td>{{ $role->name }}</td>
                         <td>
+                          @can('Ubah Role')
                           <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#edit_data{{ $role->id }}">Edit</a>
+                          @endcan
+                          @can('Hapus Role')
                           <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                             data-bs-target="#delete_data{{ $role->id }}">Hapus</a>
-
+                          @endcan
                           <!-- Edit Modal -->
                           <div class="modal fade" id="edit_data{{ $role->id }}" tabindex="-1"
                             aria-labelledby="editModalLabel{{ $role->id }}" aria-hidden="true">
@@ -64,7 +69,7 @@
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <h5 class="modal-title" id="editModalLabel{{ $role->id }}">Edit Data:
-                                    {{ $role->role_name }}</h5>
+                                    {{ $role->name }}</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
@@ -74,9 +79,9 @@
                                   <div class="modal-body">
 
                                     <div class="mb-3">
-                                      <label for="role_name" class="col-form-label">Akses</label>
-                                      <input type="text" class="form-control" id="role_name" name="role_name"
-                                        value="{{ $role->role_name }}">
+                                      <label for="name" class="col-form-label">Akses</label>
+                                      <input type="text" class="form-control" id="name" name="name"
+                                        value="{{ $role->name }}">
                                     </div>
                                     <!-- Add more fields as needed -->
 
@@ -98,12 +103,12 @@
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <h5 class="modal-title" id="deleteModalLabel{{ $role->id }}">Hapus Data:
-                                    {{ $role->role_name }}</h5>
+                                    {{ $role->name }}</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                  Apakah Anda yakin ingin menghapus data {{ $role->role_name }}?
+                                  Apakah Anda yakin ingin menghapus data {{ $role->name }}?
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary"

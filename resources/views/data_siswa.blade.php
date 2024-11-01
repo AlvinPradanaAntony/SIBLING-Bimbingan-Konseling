@@ -4,12 +4,13 @@
   <div>
     <div class="d-flex my-2 align-items-center">
       <h4 class="m-0 flex-grow-1" style="font-family: NunitoSans-ExtraBold; color: var(--title-color);line-height: 75px;">
-        Data Siswa</h4>
-      {{-- <a href="" class="btn btn-primary"><i class="uil uil-plus me-2"></i>Tambah Data</a> --}}
-
+        Data Siswa
+      </h4>
+      @can('Tambah Siswa')
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
         Tambah Data
       </button>
+      @endcan
       <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -160,10 +161,14 @@
                     <tr style="font-size: 14px">
                       <td>{{ $loop->iteration }}</td>
                       <td>
+                        @can('Ubah Siswa')
                         <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                           data-bs-target="#edit_data{{ $student->id }}">Edit</a>
+                        @endcan
+                        @can('Hapus Siswa')
                         <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                           data-bs-target="#delete_data{{ $student->id }}">Hapus</a>
+                        @endcan
                         <button class="btn btn-dark btn-sm">Tinjau</button>
     
                         <!-- Edit Modal -->

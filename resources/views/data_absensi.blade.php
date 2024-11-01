@@ -7,9 +7,11 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex justify-content-between align-items-center">
                         <h5 class="m-0 text-primary">Tabel Absensi Siswa</h5>
+                        @can('Tambah Absensi')
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAttendanceModal">
                             Tambah Absensi
                         </button>
+                        @endcan
                         <!-- Modal Tambah Data Absensi Bulanan -->
                         <div class="modal fade" id="addAttendanceModal" tabindex="-1" aria-labelledby="addMonthlyAttendanceModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -67,14 +69,8 @@
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="user_id_walas" class="form-label">Pilih Wali Kelas</label>
-                                                <select name="user_id_walas" class="form-select" id="user_id_walas" required>
-                                                    @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                            <input type="hidden" name="user_id" value="{{ Auth::id() }}">
+
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                                 <button type="submit" class="btn btn-primary">Tambah Data</button>
@@ -212,8 +208,12 @@
                                             <td>{{ $totalSakit }}</td>
                                             <td>{{ number_format($persentaseKehadiran, 2) }}%</td>
                                             <td>
+                                                @can('Ubah Absensi')
                                                 <a href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit_data{{ $student->id }}">Edit</a>
+                                                @endcan
+                                                @can('Hapus Absensi')
                                                 <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete_data{{ $student->id }}">Hapus</a>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach
@@ -231,18 +231,6 @@
                                                         @csrf
                                                         @method('PUT')
                                                         
-                                                        <!-- Dropdown untuk user_id_walas -->
-                                                        <div class="mb-3">
-                                                            <label for="user_id_walas" class="form-label">Wali Kelas</label>
-                                                            <select name="user_id_walas" class="form-select" id="user_id_walas">
-                                                                @foreach ($users as $user)
-                                                                    <option value="{{ $user->id }}" 
-                                                                        {{ $class->user_id_walas == $user->id ? 'selected' : '' }}>
-                                                                        {{ $user->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
                                                         <!-- Form untuk mengubah status kehadiran untuk setiap tanggal -->
                                                         <div class="mb-3">
                                                             @foreach ($dates as $date)
@@ -273,6 +261,7 @@
                                                                 </div>
                                                             @endforeach
                                                         </div>
+                                                        <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                                                         
                                                         <input type="hidden" name="month" value="{{ $selectedMonth }}">
                                                         <input type="hidden" name="year" value="{{ $selectedYear }}">

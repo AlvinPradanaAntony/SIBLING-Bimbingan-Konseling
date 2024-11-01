@@ -20,8 +20,7 @@
               <span class="account-user-avatar d-inline-block"><img
                   src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=random"
                   class="cust-avatar img-fluid rounded-circle" /></span>
-              <span class="account-user-name">{{ auth()->user()->name }}</span><span class="account-position">Guru
-                BK</span>
+              {{-- <span class="account-user-name">{{ auth()->user()->name }}</span><span class="account-position">{{ auth()->user()->role->role_name }}</span> --}}
             </a>
             <ul class="dropdown-menu dropdown-menu-end me-1 border border-0 custom-rounded"
               aria-labelledby="navbarDropdown" style="">

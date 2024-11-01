@@ -17,9 +17,10 @@ class RoleSeeder extends Seeder
             'Siswa', 
             'Wali Kelas', 
             'Guru BK', 
+            'Admin',
             'Super Admin'
         ];
-
+        
         foreach ($roles as $role) {
             Role::create(['role_name' => $role]);
         }

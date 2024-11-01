@@ -56,8 +56,6 @@ class AchievementController extends Controller
 
         return redirect()->route('achievement.index')->with('success', 'Jurusan berhasil ditambahkan!');
     }
-
-    // Menyimpan perubahan jurusan ke database
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -68,15 +66,9 @@ class AchievementController extends Controller
             'type' => 'required|string|max:255',
             'date' => 'required|date',
             'recognition' => 'required|string|max:255',
-            'certificate' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'certificate' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Mengubah menjadi nullable
             'student_id' => 'required|string|max:255',
         ]);
-
-        if ($request->hasFile('certificate')) {
-            $file = $request->file('certificate');
-            $path = $file->store('certificates', 'public');
-            $filename = basename($path);
-        }
 
         $achievement = Achievement::findOrFail($id);
         $achievement->ranking = $request->input('ranking');
@@ -86,31 +78,22 @@ class AchievementController extends Controller
         $achievement->type = $request->input('type');
         $achievement->date = $request->input('date');
         $achievement->recognition = $request->input('recognition');
-        // $achievement->certificate = $filename;
         if ($request->hasFile('certificate')) {
-            // Hapus sertifikat lama jika ada
             if ($achievement->certificate) {
                 Storage::disk('public')->delete('certificates/' . $achievement->certificate);
             }
-
-            // Simpan sertifikat baru
             $file = $request->file('certificate');
             $path = $file->store('certificates', 'public');
             $achievement->certificate = basename($path); // Menyimpan nama file pamflet baru
         }
         $achievement->student_id = $request->input('student_id');
         $achievement->save();
-
-        return redirect()->route('achievement.index', $achievement->id)->with('success', 'Jurusan berhasil diupdate!');
+        return redirect()->route('achievement.index', $achievement->id)->with('success', 'Pencapaian berhasil diperbarui!');
     }
-
-    // Fungsi untuk menghapus jurusan
     public function destroy($id)
     {
         $achievement = Achievement::findOrFail($id);
         $achievement->delete();
-
-        // Redirect atau menampilkan pesan sukses
         return redirect()->route('achievement.index')->with('success', 'Jurusan berhasil dihapus!');
     }
 }
