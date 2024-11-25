@@ -1,12 +1,15 @@
 <!-- resources/views/users/index.blade.php -->
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Users Data</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{--
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.dataTables.css">
+    <link rel="stylesheet" href="css/styles.css">
     <style>
         .profile-img-table {
             width: 50px;
@@ -15,11 +18,12 @@
             border-radius: 50%;
             cursor: pointer;
         }
-        
+
         .modal-preview-img {
             max-width: 150px;
             height: auto;
-            cursor: pointer; /* Menambahkan cursor pointer untuk indikasi bisa diklik */
+            cursor: pointer;
+            /* Menambahkan cursor pointer untuk indikasi bisa diklik */
         }
 
         #fullscreenPreview {
@@ -29,7 +33,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 9999;
             justify-content: center;
             align-items: center;
@@ -49,7 +53,9 @@
             cursor: pointer;
         }
     </style>
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+
 <body>
     <div class="container mt-5">
         <h2>Users Data</h2>
@@ -66,44 +72,41 @@
                 </thead>
                 <tbody>
                     @php
-                        // Dummy data
-                        $users = [
-                            [
-                                'id' => 1,
-                                'profile_picture' => 'https://via.placeholder.com/150',
-                                'name' => 'John Doe',
-                                'email' => 'john@example.com',
-                                'gender' => 'Male'
-                            ],
-                            [
-                                'id' => 2,
-                                'profile_picture' => 'https://via.placeholder.com/150',
-                                'name' => 'Jane Smith',
-                                'email' => 'jane@example.com',
-                                'gender' => 'Female'
-                            ],
-                            // Add more dummy data as needed
-                        ];
+                    // Dummy data
+                    $users = [
+                    [
+                    'id' => 1,
+                    'profile_picture' => 'https://via.placeholder.com/150',
+                    'name' => 'John Doe',
+                    'email' => 'john@example.com',
+                    'gender' => 'Male'
+                    ],
+                    [
+                    'id' => 2,
+                    'profile_picture' => 'https://via.placeholder.com/150',
+                    'name' => 'Jane Smith',
+                    'email' => 'jane@example.com',
+                    'gender' => 'Female'
+                    ],
+                    // Add more dummy data as needed
+                    ];
                     @endphp
 
                     @foreach($users as $user)
-                        <tr>
-                            <td>
-                                <img src="{{ $user['profile_picture'] }}" 
-                                     class="profile-img-table"
-                                     onclick="showFullscreen('{{ $user['profile_picture'] }}')"
-                                     alt="Profile picture">
-                            </td>
-                            <td>{{ $user['name'] }}</td>
-                            <td>{{ $user['email'] }}</td>
-                            <td>{{ $user['gender'] }}</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" 
-                                        onclick="openEditModal({{ json_encode($user) }})">
-                                    Edit
-                                </button>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            <img src="{{ $user['profile_picture'] }}" class="profile-img-table"
+                                onclick="showFullscreen('{{ $user['profile_picture'] }}')" alt="Profile picture">
+                        </td>
+                        <td>{{ $user['name'] }}</td>
+                        <td>{{ $user['email'] }}</td>
+                        <td>{{ $user['gender'] }}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="openEditModal({{ json_encode($user) }})">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -607,11 +610,8 @@
                         <div class="mb-3">
                             <label for="profilePreview" class="form-label">Current Profile Picture</label>
                             <div class="text-center">
-                                <img id="profilePreview" 
-                                     src="" 
-                                     class="modal-preview-img mb-2" 
-                                     onclick="showFullscreen(this.src)" 
-                                     title="Click to view fullscreen">
+                                <img id="profilePreview" src="" class="modal-preview-img mb-2"
+                                    onclick="showFullscreen(this.src)" title="Click to view fullscreen">
                             </div>
                             <input type="file" class="form-control" id="newProfilePicture" accept="image/*">
                         </div>
@@ -646,14 +646,418 @@
         <img src="" alt="Fullscreen preview">
     </div>
 
+    <div class="container">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Nama Variabel CSS</th>
+                    <th>Contoh Warna</th>
+                    <th>Kode Warna Hex</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                $colors = [
+                    '--first-color',
+                    '--first-color-alt',
+                    '--first-color-alt-second',
+                    '--first-color-lighter',
+                    '--title-color',
+                    '--text-color',
+                    '--text-color-light',
+                    '--input-color',
+                    '--body-color',
+                    '--container-color',
+                    '--container-color-second',
+                    '--color-bg-heroes',
+                    '--scroll-bar-color',
+                    '--scroll-thumb-color',
+                    '--scroll-thumb-hover-color',
+                    '--first-color-second',
+                    '--first-color-second-alt',
+                    '--first-color-second-alt-second',
+                    '--color-home-description',
+                    '--gradient-color',
+                ];
+                @endphp
+                @foreach($colors as $color)
+                <tr>
+                    <td>{{ $color }}</td>
+                    <td>
+                        <div class="rounded-circle"
+                            style="width: 30px; height: 30px; background: var({{ $color }});"></div>
+                    </td>
+                    <td id="hex-{{ Str::slug($color, '-') }}"></td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        @php
+        $variables = [
+            [
+                'name' => '--header-font',
+                'description' => 'Header Font',
+                'example' => '<span style="font-family: var(--header-font);">Sample Text</span>',
+                'value' => 'var(--header-font)',
+            ],
+            [
+                'name' => '--header-font-extraBold',
+                'description' => 'Header Font Extra Bold',
+                'example' => '<span style="font-family: var(--header-font-extraBold);">Sample Text</span>',
+                'value' => 'var(--header-font-extraBold)',
+            ],
+            [
+                'name' => '--body-font',
+                'description' => 'Body Font',
+                'example' => '<span style="font-family: var(--body-font);">Sample Text</span>',
+                'value' => 'var(--body-font)',
+            ],
+            [
+                'name' => '--font-medium',
+                'description' => 'Font Weight Medium',
+                'example' => '<span style="font-weight: var(--font-medium);">Medium Weight</span>',
+                'value' => 'var(--font-medium)',
+            ],
+            [
+                'name' => '--font-bold',
+                'description' => 'Font Weight Bold',
+                'example' => '<span style="font-weight: var(--font-bold);">Bold Weight</span>',
+                'value' => 'var(--font-bold)',
+            ],
+            [
+                'name' => '--font-extra-bold',
+                'description' => 'Font Weight Extra Bold',
+                'example' => '<span style="font-weight: var(--font-extra-bold);">Extra Bold Weight</span>',
+                'value' => 'var(--font-extra-bold)',
+            ],
+            [
+                'name' => '--m-0-5',
+                'description' => 'Margin Bottom 0.5rem',
+                'example' => '<div style="margin-bottom: var(--m-0-5); background-color: #f0f0f0;">Margin Example</div>',
+                'value' => 'var(--m-0-5)',
+            ],
+            [
+                'name' => '--z-modal',
+                'description' => 'Z-Index for Modal',
+                'example' => '<div style="position: relative; z-index: var(--z-modal);">Z-Index Example</div>',
+                'value' => 'var(--z-modal)',
+            ],
+            // Add more variables as needed
+        ];
+        @endphp
+
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Variable Name</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                    <th>CSS Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($variables as $var)
+                <tr>
+                    <td>{{ $var['name'] }}</td>
+                    <td>{{ $var['description'] }}</td>
+                    <td>{!! $var['example'] !!}</td>
+                    <td>{{ $var['value'] }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <!-- Font Variables -->
+        <div>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th>Variable Type</th>
+                        <th>Variable Name</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Font Variables -->
+                    <tr>
+                        <td>Font Variable</td>
+                        <td>--header-font</td>
+                        <td>
+                            <p style="font-family: var(--header-font);">
+                                This text uses --header-font.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Variable</td>
+                        <td>--header-font-extraBold</td>
+                        <td>
+                            <p style="font-family: var(--header-font-extraBold);">
+                                This text uses --header-font-extraBold.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Variable</td>
+                        <td>--body-font</td>
+                        <td>
+                            <p style="font-family: var(--body-font);">
+                                This text uses --body-font.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Variable</td>
+                        <td>--body-font-extraBold</td>
+                        <td>
+                            <p style="font-family: var(--body-font-extraBold);">
+                                This text uses --body-font-extraBold.
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Font Size Variables -->
+                    <tr>
+                        <td>Font Size Variable</td>
+                        <td>--big-font-size</td>
+                        <td>
+                            <p style="font-size: var(--big-font-size);">
+                                This text uses --big-font-size.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Size Variable</td>
+                        <td>--h1-font-size</td>
+                        <td>
+                            <h1 style="font-size: var(--h1-font-size);">
+                                This heading uses --h1-font-size.
+                            </h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Size Variable</td>
+                        <td>--h2-font-size</td>
+                        <td>
+                            <h2 style="font-size: var(--h2-font-size);">
+                                This heading uses --h2-font-size.
+                            </h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Size Variable</td>
+                        <td>--h3-font-size</td>
+                        <td>
+                            <h3 style="font-size: var(--h3-font-size);">
+                                This heading uses --h3-font-size.
+                            </h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Size Variable</td>
+                        <td>--h4-font-size</td>
+                        <td>
+                            <h4 style="font-size: var(--h4-font-size);">
+                                This heading uses --h4-font-size.
+                            </h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Size Variable</td>
+                        <td>--normal-font-size</td>
+                        <td>
+                            <p style="font-size: var(--normal-font-size);">
+                                This text uses --normal-font-size.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Size Variable</td>
+                        <td>--small-font-size</td>
+                        <td>
+                            <p style="font-size: var(--small-font-size);">
+                                This text uses --small-font-size.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Size Variable</td>
+                        <td>--smaller-font-size</td>
+                        <td>
+                            <p style="font-size: var(--smaller-font-size);">
+                                This text uses --smaller-font-size.
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Font Weight Variables -->
+                    <tr>
+                        <td>Font Weight Variable</td>
+                        <td>--font-medium</td>
+                        <td>
+                            <p style="font-weight: var(--font-medium);">
+                                This text uses --font-medium.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Weight Variable</td>
+                        <td>--font-bold</td>
+                        <td>
+                            <p style="font-weight: var(--font-bold);">
+                                This text uses --font-bold.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Font Weight Variable</td>
+                        <td>--font-extra-bold</td>
+                        <td>
+                            <p style="font-weight: var(--font-extra-bold);">
+                                This text uses --font-extra-bold.
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Margin Variables -->
+                    <tr>
+                        <td>Margin Variable</td>
+                        <td>--m-0-25</td>
+                        <td>
+                            <div style="background-color: #f0f0f0; margin-bottom: var(--m-0-25);">
+                                This div uses --m-0-25.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Margin Variable</td>
+                        <td>--m-0-5</td>
+                        <td>
+                            <div style="background-color: #d0d0d0; margin-bottom: var(--m-0-5);">
+                                This div uses --m-0-5.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Margin Variable</td>
+                        <td>--m-0-75</td>
+                        <td>
+                            <div style="background-color: #b0b0b0; margin-bottom: var(--m-0-75);">
+                                This div uses --m-0-75.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Margin Variable</td>
+                        <td>--m-1</td>
+                        <td>
+                            <div style="background-color: #909090; margin-bottom: var(--m-1);">
+                                This div uses --m-1.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Margin Variable</td>
+                        <td>--m-1-5</td>
+                        <td>
+                            <div style="background-color: #707070; margin-bottom: var(--m-1-5);">
+                                This div uses --m-1-5.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Margin Variable</td>
+                        <td>--m-2</td>
+                        <td>
+                            <div style="background-color: #505050; margin-bottom: var(--m-2);">
+                                This div uses --m-2.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Margin Variable</td>
+                        <td>--m-2-5</td>
+                        <td>
+                            <div style="background-color: #303030; margin-bottom: var(--m-2-5);">
+                                This div uses --m-2-5.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Margin Variable</td>
+                        <td>--m-3</td>
+                        <td>
+                            <div style="background-color: #101010; color: #fff; margin-bottom: var(--m-3);">
+                                This div uses --m-3.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Margin Variable</td>
+                        <td>--m-4</td>
+                        <td>
+                            <div style="background-color: #000; color: #fff; margin-bottom: var(--m-4);">
+                                This div uses --m-4.
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Z-Index Variables -->
+                    <tr>
+                        <td>Z-Index Variables</td>
+                        <td>--z-tooltip, --z-fixed, --z-modal</td>
+                        <td>
+                            <div style="position: relative; width: 200px; height: 200px; background-color: rgba(255, 0, 0, 0.5); z-index: var(--z-tooltip);">
+                                Z-Index: --z-tooltip
+                                <div style="position: absolute; top: 30px; left: 30px; width: 150px; height: 150px; background-color: rgba(0, 255, 0, 0.5); z-index: var(--z-fixed);">
+                                    Z-Index: --z-fixed
+                                    <div style="position: absolute; top: 30px; left: 30px; width: 100px; height: 100px; background-color: rgba(0, 0, 255, 0.5); z-index: var(--z-modal);">
+                                        Z-Index: --z-modal
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+        const colors = @json($colors);
+        colors.forEach(function(colorName) {
+            const computedStyle = getComputedStyle(document.documentElement);
+            const colorValue = computedStyle.getPropertyValue(colorName).trim();
+
+            // Create a temporary element to get the computed RGB value
+            const tempElement = document.createElement('div');
+            tempElement.style.backgroundColor = colorValue;
+            document.body.appendChild(tempElement);
+
+            const rgbColor = getComputedStyle(tempElement).backgroundColor;
+            document.body.removeChild(tempElement);
+
+            const hexColor = rgbToHex(rgbColor);
+            const hexElementId = 'hex-' + colorName.replace(/--/g, '').replace(/[^a-zA-Z0-9]/g, '-');
+            document.getElementById(hexElementId).textContent = hexColor;
+        });
+
+        function rgbToHex(rgb) {
+            const rgbValues = rgb.match(/\d+/g);
+            return '#' + rgbValues.map(function(value) {
+                return ('0' + parseInt(value).toString(16)).slice(-2).toUpperCase();
+            }).join('');
+        }
+    });
+        </script>
+
+
+    </div>
+
     <!-- JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
-  {{-- <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
-  <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.dataTables.js"></script> --}}
-  <script src="https://cdn.datatables.net/2.1.7/js/dataTables.bootstrap5.js"></script>
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
+    {{-- <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.dataTables.js"></script> --}}
+    <script src="https://cdn.datatables.net/2.1.7/js/dataTables.bootstrap5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         new DataTable('#example',{
@@ -722,4 +1126,5 @@
         }
     </script>
 </body>
+
 </html>
