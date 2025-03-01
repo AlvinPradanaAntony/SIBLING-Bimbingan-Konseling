@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('location');
             $table->string('salary');
             $table->date('dateline_date');
-            $table->string('pamphlet');
+            $table->binary('pamphlet')->nullable();
+            $table->string('link')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

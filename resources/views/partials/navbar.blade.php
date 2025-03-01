@@ -17,10 +17,15 @@
           <li class="nav-item dropdown frameProfile">
             <a class="nav-link dropdown-toggle nav-user" href="/#" id="navbarDropdown" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
-              <span class="account-user-avatar d-inline-block"><img
-                  src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=random"
-                  class="cust-avatar img-fluid rounded-circle" /></span>
-              {{-- <span class="account-user-name">{{ auth()->user()->name }}</span><span class="account-position">{{ auth()->user()->role->role_name }}</span> --}}
+              <span class="account-user-avatar d-inline-block">
+                @if (auth()->user()->photo)
+                  <img src="{{ route('user.showImage', auth()->user()->id) }}" alt="profileImg" class="cust-avatar img-fluid rounded-circle"/>
+                @else
+                  <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=random" class="cust-avatar img-fluid rounded-circle" />
+                @endif
+              </span>
+              <span class="account-user-name" id="profileName">{{ auth()->user()->name }}</span>
+              <span class="account-position">{{ auth()->user()->getRoleNames()->first() ?? 'Tidak Ada Role' }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end me-1 border border-0 custom-rounded"
               aria-labelledby="navbarDropdown" style="">
@@ -33,10 +38,21 @@
                 </a>
               </li>
               <li>
-                <a class="dropdown-item custom-item-dropdown d-flex align-items-center" href="/#">
+                <a class="text-decoration-none" href="/">
+                  <div class="dropdown-item custom-item-dropdown d-flex align-items-center">
+                    <i class="uil uil-estate me-2"></i>
+                    <span class="nameItem">Landing</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item custom-item-dropdown d-flex align-items-center" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   <i class="uil uil-sign-out-alt me-2"></i>
                   <span class="nameItem">Sign Out</span>
                 </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                  @csrf
+                </form>
               </li>
             </ul>
           </li>

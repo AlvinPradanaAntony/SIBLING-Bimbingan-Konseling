@@ -22,7 +22,6 @@ class AchievementSeeder extends Seeder
                 'type' => 'Individu',
                 'date' => '2023-08-15',
                 'recognition' => 'Medali Emas',
-                'certificate' => 'olimpiade_matematika_2023.pdf',
                 'student_id' => 1,
             ],
             [
@@ -33,7 +32,6 @@ class AchievementSeeder extends Seeder
                 'type' => 'Kelompok',
                 'date' => '2022-12-10',
                 'recognition' => 'Piala Perunggu',
-                'certificate' => 'pidato_bahasa_inggris_2022.pdf',
                 'student_id' => 2,
             ],
         ];

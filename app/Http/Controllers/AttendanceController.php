@@ -9,6 +9,8 @@ use App\Models\Student;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Imports\GuidanceImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AttendanceController extends Controller
 {
@@ -86,6 +88,61 @@ class AttendanceController extends Controller
         }
 
         return redirect()->back()->with('success', 'Data absensi bulanan berhasil ditambahkan');
+    }
+
+    // public function import(Request $request)
+    // {
+    //     $request->validate([
+    //         'file' => 'required|mimes:xlsx,xls,csv'
+    //     ]);
+
+    //     Excel::import(new AttendanceImport, $request->file('file'));
+
+    //     return redirect()->route('attendance.index')->with('success', 'Data asesmen berhasil diimpor');
+    // }
+
+    public function export()
+    {
+        // Mengambil semua data dari model Attendance
+        $attendances = Attendance::all();
+
+        // Buat file Excel
+        $excelData = [];
+        $excelData[] = ['ID', 'Date', 'Presence_status', 'Description', 'user_id', 'student_id']; // Judul kolom
+
+        foreach ($attendances as $attendance) {
+            $excelData[] = [
+                $attendance->id,      // Jika Anda ingin menyertakan ID
+                $attendance->date,
+                $attendance->presence_status,
+                $attendance->description,
+                $attendance->user->name,
+                $attendance->student->name,
+            ];
+        }
+
+        // Menggunakan PhpSpreadsheet untuk membuat file Excel
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Menyisipkan data ke dalam sheet
+        foreach ($excelData as $rowIndex => $row) {
+            foreach ($row as $colIndex => $cellValue) {
+                $sheet->setCellValueByColumnAndRow($colIndex + 1, $rowIndex + 1, $cellValue);
+            }
+        }
+
+        // Mengatur response untuk mengunduh file
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $filename = 'attendances.xlsx';
+
+        // Mengembalikan response download
+        return response()->stream(function() use ($writer) {
+            $writer->save('php://output');
+        }, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
     }
 
     public function update(Request $request, $student_id)

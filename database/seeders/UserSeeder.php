@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
   {
     $users = [
       [
-        'nip' => fake()->unique()->randomNumber(6),
+        'nomor_induk' => fake()->unique()->randomNumber(6),
         'name' => 'Khoirul',
         'gender' => 'Laki-laki',
         'place_of_birth' => 'Jember',
@@ -27,19 +27,19 @@ class UserSeeder extends Seeder
         'password' => bcrypt('khoirul123'),
       ],
       [
-        'nip' => fake()->unique()->randomNumber(6),
-        'name' => 'Rizky',
-        'email' => 'rizky@gmail.com',
+        'nomor_induk' => fake()->unique()->randomNumber(6),
+        'name' => 'Muhammad Khoirul Rosikin',
+        'email' => 'mkhoirulrosikin97@gmail.com',
         'gender' => 'Laki-laki',
         'place_of_birth' => 'Jember',
         'date_of_birth' => '1988-10-22',
-        'religion' => fake()->randomElement(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha']),
+        'religion' => 'Islam',
         'phone_number' => fake()->phoneNumber,
         'address' => fake()->address,
-        'password' => bcrypt('password'),
+        'password' => bcrypt('admin123'),
       ],
       [
-        'nip' => fake()->unique()->randomNumber(6),
+        'nomor_induk' => fake()->unique()->randomNumber(6),
         'name' => 'Tia Amelia',
         'email' => 'tia_amel@gmail.com',
         'gender' => 'Perempuan',
@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
         'password' => bcrypt('password'),
       ],
       [
-        'nip' => 'superadmin',
+        'nomor_induk' => 'superadmin',
         'name' => 'Super Admin',
         'email' => 'superadmin@gmail.com',
         'password' => bcrypt('superadmin'),
@@ -62,6 +62,9 @@ class UserSeeder extends Seeder
       $user = User::create($userData);
       if ($user->name === 'Khoirul') {
         $user->assignRole('Guru BK');
+      }
+      if ($user->name === 'Muhammad Khoirul Rosikin') {
+        $user->assignRole('Admin');
       }
       if ($user->name === 'Super Admin') {
         $user->assignRole('Super Admin');

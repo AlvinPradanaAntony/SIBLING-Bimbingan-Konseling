@@ -28,24 +28,38 @@
                     <div class="card-body">
                       <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
-                          <img src="{{ auth()->user()->profile_photo_url ?? 'https://ui-avatars.com/api/?name=' . auth()->user()->name . '&background=random' }}" alt="profile" class="rounded-circle" width="50">
+                          @if (auth()->user()->photo)
+                            <img src="{{ route('user.showImage', auth()->user()->id) }}" alt="profile" class="rounded-circle" width="50"/>
+                          @else
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=random" alt="profileImg" />
+                          @endif
                           <div class="ms-3">
                             <h5 class="card-title m-0" style="font-family: NunitoSans-ExtraBold">{{ auth()->user()->name }}</h5>
-                            <p class="m-0 small">Guru BK</p>
+                            <p class="m-0 small">{{ auth()->user()->getRoleNames()->first() ?? 'Tidak Ada Role' }}</p>
                             <p class="card-text small" style="color: var(--text-color-light)">{{ auth()->user()->email }}</p>
                           </div>
                         </div>
-                        <a href="" class="btn btn-primary">Edit Foto Profile</a>
                       </div>
                     </div>
                   </div> 
                   <div class="card mt-4" style="border-radius: 16px; border-color: #e2e2e4; background-color: var(--container-color)">
                     <div class="card-body">
                       <h5 class="card-title" style="font-family: NunitoSans-Bold ">Data Personal</h5>
-                      <form action="" method="POST" class="mt-4">
+                      <form action="{{ route('user.setting_account', auth()->user()->id) }}" method="POST" class="mt-4" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row">
+                          <div style="display: flex; justify-content: center; align-items: center;">
+                            <img id="outputUpdate" src="{{ route('user.showImage', auth()->user()->id) }}" alt="Foto" style="width: 90px; height: 90px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
+                          </div>
+                          <div class="mb-3">
+                              @if (auth()->user()->photo)
+                                <p class="text-muted">Jika tidak ingin mengganti file, biarkan kosong.</p>
+                              @else
+                                <p class="text-danger">Belum ada Foto yang diunggah.</p>
+                              @endif
+                            <input type="file" class="form-control" id="photo" name="photo" accept=".pdf,.jpg,.png" onchange="loadFileUpdate(event)">
+                          </div>
                           <div class="col-md-6">
                             <div class="mb-3">
                               <label for="nip" class="col-form-label">NIP/NUPTK</label>
@@ -67,8 +81,8 @@
                               <input type="text" class="form-control" id="place_of_birth" name="place_of_birth" value="{{ auth()->user()->place_of_birth }}">
                             </div>
                             <div class="mb-3">
-                              <label for="date_of_birth" class="col-form-label">Tanggal Lahir</label>
-                              <input type="text" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ auth()->user()->date_of_birth }}">
+                              <label for="address" class="col-form-label">Alamat</label>
+                              <textarea class="form-control" id="address" name="address">{{ auth()->user()->address }}</textarea>
                             </div>
                           </div>
                           <div class="col-md-6">
@@ -88,22 +102,12 @@
                               <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ auth()->user()->phone_number }}">
                             </div>
                             <div class="mb-3">
-                              <label for="address" class="col-form-label">Alamat</label>
-                              <input type="textarea" class="form-control" id="address" name="address" value="{{ auth()->user()->address }}">
+                              <label for="date_of_birth" class="col-form-label">Tanggal Lahir</label>
+                              <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ auth()->user()->date_of_birth }}">
                             </div>
                             <div class="mb-3">
                               <label for="email" class="col-form-label">Email</label>
                               <input type="email" class="form-control" id="email" name="email" value="{{ auth()->user()->email }}">
-                            </div>
-                            <div class="mb-3">
-                              <label for="role_id" class="col-form-label">Akses</label>
-                              <select class="form-control" id="role_id" name="role_id">
-                                @foreach ($roles as $role)
-                                  <option value="{{ $role->id }}" {{ auth()->user()->role_id == $role->id ? 'selected' : '' }}>
-                                    {{ $role->role_name }}
-                                  </option>
-                                @endforeach
-                              </select>
                             </div>
                           </div>
                         </div>
@@ -175,3 +179,11 @@
   </div>
 </div>
 @endsection
+
+<script>
+  var loadFileUpdate = function(event) {
+    var outputUpdate = document.getElementById('outputUpdate');
+    outputUpdate.src = URL.createObjectURL(event.target.files[0]);
+    
+  }
+</script>

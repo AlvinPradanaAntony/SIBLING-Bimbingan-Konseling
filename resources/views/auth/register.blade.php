@@ -41,9 +41,9 @@
                 </script>
               @endif
               <div>
-                <label for="nip">NIP/NUPTK</label>
-                <input id="nip" type="text" placeholder="NIP/NUPTK" name="nip" value="{{ old('nip') }}"
-                  required autocomplete="nip" autofocus></input>
+                <label for="nomor_induk">NIS</label>
+                <input id="nomor_induk" type="text" placeholder="NIS" name="nomor_induk" value="{{ old('nomor_induk') }}"
+                  required autocomplete="nomor_induk" autofocus></input>
               </div>
               <div class="row">
                 <div class="col-lg-6">
@@ -79,15 +79,10 @@
                   </div>
                 </div>
               </div>
-              <div>
-                <label for="role_id">Akses</label>
-                <select id="role_id" name="role_id"  required>
-                  <option value="" selected disabled>Pilih Role</option>
-                  <option value="1">Siswa</option>
-                  <option value="2">Wali Kelas</option>
-                  <option value="3">Guru BK</option>
-                  <option value="4">Admin</option>
-                </select>
+              <div hidden>
+                <label for="role_id">Hak Akses</label>
+                <input type="text" id="role_id" value="Siswa" readonly>
+                <input type="hidden" name="role_id" value="1">
               </div>
 
               <button type="submit" class="btn btn-primary w-100 mt-4" id="btnSubmit">

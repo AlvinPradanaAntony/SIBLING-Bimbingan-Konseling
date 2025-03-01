@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('religion', 30);
             $table->string('phone_number', 20);
             $table->string('address');
-            $table->string('photo')->nullable();
+            $table->binary  ('photo')->nullable();
             $table->date('admission_date');
             $table->string('guardian_name', 50);
             $table->string('guardian_phone_number', 20);

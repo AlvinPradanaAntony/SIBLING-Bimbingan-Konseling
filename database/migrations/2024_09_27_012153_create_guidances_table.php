@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('topics');
             $table->string('notes');
             $table->date('date');
+            $table->binary('proof_of_guidance')->nullable();
+            $table->integer('guidance_count')->default(0);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->timestamps();

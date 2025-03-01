@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('type', ['Individu', 'Kelompok']);
             $table->date('date');
             $table->string('recognition');
-            $table->string('certificate');
+            $table->binary('certificate')->nullable();
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

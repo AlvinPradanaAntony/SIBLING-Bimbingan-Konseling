@@ -49,6 +49,11 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => 'Ubah Asesmen']);
         Permission::create(['name' => 'Hapus Asesmen']);
 
+        Permission::create(['name' => 'Lihat Booking Bimbingan']);
+        Permission::create(['name' => 'Tambah Booking Bimbingan']);
+        Permission::create(['name' => 'Ubah Booking Bimbingan']);
+        Permission::create(['name' => 'Hapus Booking Bimbingan']);
+
         Permission::create(['name' => 'Lihat Bimbingan']);
         Permission::create(['name' => 'Tambah Bimbingan']);
         Permission::create(['name' => 'Ubah Bimbingan']);
@@ -121,6 +126,10 @@ class RolePermissionSeeder extends Seeder
             'Tambah Asesmen',
             'Ubah Asesmen',
             'Hapus Asesmen',
+            'Lihat Booking Bimbingan',
+            'Tambah Booking Bimbingan',
+            'Ubah Booking Bimbingan',
+            'Hapus Booking Bimbingan',
             'Lihat Bimbingan',
             'Tambah Bimbingan',
             'Ubah Bimbingan',
@@ -167,6 +176,7 @@ class RolePermissionSeeder extends Seeder
         $role_siswa->givePermissionTo([
             'Lihat Absensi',
             'Lihat Loker',
+            'Lihat Booking Bimbingan'
         ]);
     }
 }

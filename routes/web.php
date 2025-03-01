@@ -10,7 +10,7 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\MajorController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\StatusController;
-use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\GuidanceController;
 use App\Http\Controllers\AttendanceController;
@@ -20,6 +20,8 @@ use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\GuidanceBookingController;
+use App\Models\Guidance;
 use App\Models\Role;
 use App\Models\Student;
 /*
@@ -47,32 +49,42 @@ use App\Models\Student;
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-Route::get('/', [JobVacancyController::class, 'landing'], function () {
-    return view('landing');
-});
+// Route::get('/', [JobVacancyController::class, 'landing'], function () {
+//     return view('landing');
+// });
+Route::get('/', [JobVacancyController::class, 'landing'])->name('landing');
+
+Route::post('/submit', [GuidanceBookingController::class, 'handlePost'])->name('submit.form');
 
 Route::get('/coba', function () {
     return view('coba', ['siswa' => Student::with(['class', 'status'])->get(), 'active' => 'coba']);
 });
-Route::get('/settings', function () {
-    return view('settings',[
-        'active' => 'settings',
-        'roles' => Role::all()]);
-});
 
 Auth::routes(['verify' => true]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/settings', [UsersController::class, 'settings'])->name('user.settings');
+    Route::get('/settings/{id}/image', [UsersController::class, 'showImage'])->name('user.showImage');
+    Route::put('/settings/{id}', [UsersController::class, 'setting_account'])->name('user.setting_account');
+});
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/siswa', [StudentController::class, 'index'])->name('student.index')->middleware('permission:Lihat Siswa');
+    Route::get('/siswa/{id}/image', [StudentController::class, 'showImage'])->name('student.showImage');
+    Route::get('/siswa/{id}/download', [StudentController::class, 'download'])->name('student.download');
     Route::post('/siswa', [StudentController::class, 'store'])->name('student.store')->middleware('permission:Tambah Siswa');
+    Route::post('/siswa/import', [StudentController::class, 'import'])->name('student.import')->middleware('permission:Tambah Siswa');
+    Route::get('/siswa/export', [StudentController::class, 'export'])->name('student.export')->middleware('permission:Tambah Siswa');
     Route::put('/siswa/{id}', [StudentController::class, 'update'])->name('student.update')->middleware('permission:Ubah Siswa');
     Route::delete('/siswa/{id}', [StudentController::class, 'destroy'])->name('student.destroy')->middleware('permission:Hapus Siswa');
 });
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/users', [UsersController::class, 'index'])->name('user.index')->middleware('permission:Lihat User');
+    Route::get('/users/{id}/image', [UsersController::class, 'showImage'])->name('user.showImage');
+    Route::get('/users/{id}/download', [UsersController::class, 'download'])->name('user.download');
     Route::post('/users', [UsersController::class, 'store'])->name('user.store')->middleware('permission:Tambah User');
     Route::put('/users/{id}', [UsersController::class, 'update'])->name('user.update')->middleware('permission:Ubah User');
     Route::delete('/users/{id}', [UsersController::class, 'destroy'])->name('user.destroy')->middleware('permission:Hapus User');
@@ -117,15 +129,32 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/bookingBimbingan', [GuidanceBookingController::class, 'index'])->name('guidanceBooking.index')->middleware('permission:Lihat Booking Bimbingan');
+    Route::get('/guidanceBooking/{id}/image', [GuidanceBookingController::class, 'showImage'])->name('guidanceBooking.showImage');
+    Route::get('/guidanceBooking/{id}/download', [GuidanceBookingController::class, 'download'])->name('guidanceBooking.download');
+    Route::post('/bookingBimbingan', [GuidanceBookingController::class, 'store'])->name('guidanceBooking.store')->middleware('permission:Tambah Booking Bimbingan');
+    Route::put('/bookingBmbingan/{id}', [GuidanceBookingController::class, 'update'])->name('guidanceBooking.update')->middleware('permission:Ubah Booking Bimbingan');
+    Route::delete('/bookingBimbingan/{id}', [GuidanceBookingController::class, 'destroy'])->name('guidanceBooking.destroy')->middleware('permission:Hapus Booking Bimbingan');
+});
+
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/bimbingan', [GuidanceController::class, 'index'])->name('guidance.index')->middleware('permission:Lihat Bimbingan');
+    Route::get('/guidance/{id}/image', [GuidanceController::class, 'showImage'])->name('guidance.showImage');
+    Route::get('/guidance/{id}/download', [GuidanceController::class, 'download'])->name('guidance.download');
     Route::post('/bimbingan', [GuidanceController::class, 'store'])->name('guidance.store')->middleware('permission:Tambah Bimbingan');
+    Route::post('/bimbingan/import', [GuidanceController::class, 'import'])->name('guidance.import')->middleware('permission:Tambah Bimbingan');
+    Route::get('/bimbingan/export', [GuidanceController::class, 'export'])->name('guidance.export')->middleware('permission:Tambah Bimbingan');
     Route::put('/bimbingan/{id}', [GuidanceController::class, 'update'])->name('guidance.update')->middleware('permission:Ubah Bimbingan');
     Route::delete('/bimbingan/{id}', [GuidanceController::class, 'destroy'])->name('guidance.destroy')->middleware('permission:Hapus Bimbingan');
 });
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/kasus', [CaseController::class, 'index'])->name('case.index')->middleware('permission:Lihat Kasus');
+    Route::get('/kasus/{id}/image', [CaseController::class, 'showImage'])->name('case.showImage');
+    Route::get('/kasus/{id}/download', [CaseController::class, 'download'])->name('case.download');
     Route::post('/kasus', [CaseController::class, 'store'])->name('case.store')->middleware('permission:Tambah Kasus');
+    Route::post('/kasus/import', [CaseController::class, 'import'])->name('case.import')->middleware('permission:Tambah Kasus');
+    Route::get('/kasus/export', [CaseController::class, 'export'])->name('case.export')->middleware('permission:Tambah Kasus');
     Route::put('/kasus/{id}', [CaseController::class, 'update'])->name('case.update')->middleware('permission:Ubah Kasus');
     Route::delete('/kasus/{id}', [CaseController::class, 'destroy'])->name('case.destroy')->middleware('permission:Hapus Kasus');
 });
@@ -133,20 +162,30 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/absensi', [AttendanceController::class, 'index'])->name('attendance.index')->middleware('permission:Lihat Absensi');
     Route::post('/absensi', [AttendanceController::class, 'store'])->name('attendance.store')->middleware('permission:Tambah Absensi');
+    Route::post('/absensi/import', [AttendanceController::class, 'import'])->name('attendance.import')->middleware('permission:Tambah Absensi');
+    Route::get('/absensi/export', [AttendanceController::class, 'export'])->name('attendance.export')->middleware('permission:Tambah Absensi');
     Route::put('/absensi/{id}', [AttendanceController::class, 'update'])->name('attendance.update')->middleware('permission:Ubah Absensi');
     Route::delete('/absensi/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy')->middleware('permission:Hapus Absensi');
 });
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/loker', [JobVacancyController::class, 'index'])->name('jobVacancy.index')->middleware('permission:Lihat Loker');
+    Route::get('/loker/{id}/image', [JobVacancyController::class, 'showImage'])->name('jobVacancy.showImage');
+    Route::get('/loker/{id}/download', [JobVacancyController::class, 'download'])->name('jobVacancy.download');
     Route::post('/loker', [JobVacancyController::class, 'store'])->name('jobVacancy.store')->middleware('permission:Tambah Loker');
+    Route::post('/loker/import', [JobVacancyController::class, 'import'])->name('jobVacancy.import')->middleware('permission:Tambah Loker');
+    Route::get('/loker/export', [JobVacancyController::class, 'export'])->name('jobVacancy.export')->middleware('permission:Tambah Loker');
     Route::put('/loker/{id}', [JobVacancyController::class, 'update'])->name('jobVacancy.update')->middleware('permission:Ubah Loker');
     Route::delete('/loker/{id}', [JobVacancyController::class, 'destroy'])->name('jobVacancy.destroy')->middleware('permission:Hapus Loker');
 });
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/prestasi', [AchievementController::class, 'index'])->name('achievement.index')->middleware('permission:Lihat Prestasi');
+    Route::get('/prestasi/{id}/image', [AchievementController::class, 'showImage'])->name('achievement.showImage');
+    Route::get('/prestasi/{id}/download', [AchievementController::class, 'download'])->name('achievement.download');
     Route::post('/prestasi', [AchievementController::class, 'store'])->name('achievement.store')->middleware('permission:Tambah Prestasi');
+    Route::post('/prestasi/import', [AchievementController::class, 'import'])->name('achievement.import')->middleware('permission:Tambah Prestasi');
+    Route::get('/prestasi/export', [AchievementController::class, 'export'])->name('achievement.export')->middleware('permission:Tambah Prestasi');
     Route::put('/prestasi/{id}', [AchievementController::class, 'update'])->name('achievement.update')->middleware('permission:Ubah Prestasi');
     Route::delete('/prestasi/{id}', [AchievementController::class, 'destroy'])->name('achievement.destroy')->middleware('permission:Hapus Prestasi');
 });
@@ -154,15 +193,10 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/asesmen_siswa', [StudentAssessmentController::class, 'index'])->name('student_assessment.index')->middleware('permission:Lihat Asesmen Siswa');
     Route::post('/asesmen_siswa', [StudentAssessmentController::class, 'store'])->name('student_assessment.store')->middleware('permission:Tambah Asesmen Siswa');
+    Route::post('/asesmen_siswa/import', [StudentAssessmentController::class, 'import'])->name('student_assessment.import')->middleware('permission:Tambah Asesmen Siswa');
+    Route::get('/asesmen_siswa/export', [StudentAssessmentController::class, 'export'])->name('student_assessment.export')->middleware('permission:Tambah Asesmen Siswa');
     Route::put('/asesmen_siswa/{id}', [StudentAssessmentController::class, 'update'])->name('student_assessment.update')->middleware('permission:Ubah Asesmen Siswa');
     Route::delete('/asesmen_siswa/{id}', [StudentAssessmentController::class, 'destroy'])->name('student_assessment.destroy')->middleware('permission:Hapus Asesmen Siswa');
-});
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/laporan', [ReportsController::class, 'index'])->name('reports.index')->middleware('permission:Lihat Laporan');
-    Route::post('/laporan', [ReportsController::class, 'store'])->name('reports.store')->middleware('permission:Tambah Laporan');
-    Route::put('/laporan/{id}', [ReportsController::class, 'update'])->name('reports.update')->middleware('permission:Ubah Laporan');
-    Route::delete('/laporan/{id}', [ReportsController::class, 'destroy'])->name('reports.destroy')->middleware('permission:Hapus Laporan');
 });
 
 Route::group(['middleware' => 'auth'], function () {

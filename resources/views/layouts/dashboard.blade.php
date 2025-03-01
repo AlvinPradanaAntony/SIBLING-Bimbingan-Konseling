@@ -23,7 +23,7 @@
     @include('partials.sidebar')
     <section class="home-section">
       @include('partials.navbar')
-
+  
       @yield('content')
     </section>
   </div>

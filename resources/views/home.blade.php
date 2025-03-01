@@ -78,6 +78,249 @@
                     </div>
                   </div>
                 </div>
+                <div class="container">
+                  <div class="row">
+                    <!-- Grafik Bimbingan -->
+                    <div class="col-lg-6 mb-4">
+                      <div class="card">
+                        <div class="card-header">
+                          <h5>Grafik Bimbingan per Hari (Bulan Ini)</h5>
+                        </div>
+                        <div class="card-body">
+                          <canvas id="dailyGuidancesChart" width="400" height="200"></canvas>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Grafik Karir -->
+                    <div class="col-lg-6 mb-4">
+                      <div class="card">
+                        <div class="card-header">
+                          <h5>Grafik Karir per Bulan (Tahun Ini)</h5>
+                        </div>
+                        <div class="card-body">
+                          <canvas id="monthlyCareersChart" width="400" height="200"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <!-- Grafik Kasus -->
+                    <div class="col-lg-6 mb-4">
+                      <div class="card">
+                        <div class="card-header">
+                          <h5>Grafik Kasus per Hari (Bulan Ini)</h5>
+                        </div>
+                        <div class="card-body">
+                          <canvas id="dailyCasesChart" width="400" height="200"></canvas>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Grafik Prestasi -->
+                    <div class="col-lg-6 mb-4">
+                      <div class="card">
+                        <div class="card-header">
+                          <h5>Grafik Prestasi per Bulan (Tahun Ini)</h5>
+                        </div>
+                        <div class="card-body">
+                          <canvas id="monthlyAchievementsChart" width="400" height="200"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <!-- Grafik Absensi -->
+                    <div class="col-lg-12 mb-4">
+                      <div class="card">
+                        <div class="card-header">
+                          <h5>Grafik Absensi per Hari (Bulan Ini)</h5>
+                        </div>
+                        <div class="card-body">
+                          <canvas id="dailyAttendancesChart" width="400" height="200"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                  // Grafik Bimbingan
+                  var ctxGuidances = document.getElementById('dailyGuidancesChart').getContext('2d');
+                  var dailyGuidancesChart = new Chart(ctxGuidances, {
+                    type: 'line',
+                    data: {
+                      labels: @json(range(1, $days_in_month)),
+                      datasets: [{
+                        label: 'Jumlah Bimbingan per Hari',
+                        data: @json($guidances_per_day),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      scales: {
+                        x: {
+                          title: {
+                            display: true,
+                            text: 'Hari'
+                          }
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: 'Jumlah Bimbingan'
+                          },
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+
+                  // Grafik Kasus
+                  var ctxCases = document.getElementById('dailyCasesChart').getContext('2d');
+                  var dailyCasesChart = new Chart(ctxCases, {
+                    type: 'line',
+                    data: {
+                      labels: @json(range(1, $days_in_month)),
+                      datasets: [{
+                        label: 'Jumlah Kasus per Hari',
+                        data: @json($cases_per_day),
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      scales: {
+                        x: {
+                          title: {
+                            display: true,
+                            text: 'Hari'
+                          }
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: 'Jumlah Kasus'
+                          },
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+
+                  // Grafik Absensi
+                  var ctxAttendances = document.getElementById('dailyAttendancesChart').getContext('2d');
+                  var dailyAttendancesChart = new Chart(ctxAttendances, {
+                    type: 'line',
+                    data: {
+                      labels: @json(range(1, $days_in_month)),
+                      datasets: [{
+                        label: 'Jumlah Absensi per Hari',
+                        data: @json($attendances_per_day),
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      scales: {
+                        x: {
+                          title: {
+                            display: true,
+                            text: 'Hari'
+                          }
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: 'Jumlah Absensi'
+                          },
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+
+                  // Grafik Karir
+                  var ctxCareers = document.getElementById('monthlyCareersChart').getContext('2d');
+                  var monthlyCareersChart = new Chart(ctxCareers, {
+                    type: 'bar',
+                    data: {
+                      labels: @json($months_in_year),  // Menggunakan angka bulan
+                      datasets: [{
+                        label: 'Jumlah Karir per Bulan',
+                        data: @json($careers_per_month),
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      scales: {
+                        x: {
+                          title: {
+                            display: true,
+                            text: 'Bulan'
+                          }
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: 'Jumlah Karir'
+                          },
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+
+                  // Grafik Prestasi
+                  var ctxAchievements = document.getElementById('monthlyAchievementsChart').getContext('2d');
+                  var monthlyAchievementsChart = new Chart(ctxAchievements, {
+                    type: 'bar',
+                    data: {
+                      labels: @json($months_in_year),  // Menggunakan angka bulan
+                      datasets: [{
+                        label: 'Jumlah Prestasi per Bulan',
+                        data: @json($achievements_per_month),
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      scales: {
+                        x: {
+                          title: {
+                            display: true,
+                            text: 'Bulan'
+                          }
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: 'Jumlah Prestasi'
+                          },
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+                </script>
               </div>
               <div class="col-lg-4 m-0">
                 @include('partials.calender')

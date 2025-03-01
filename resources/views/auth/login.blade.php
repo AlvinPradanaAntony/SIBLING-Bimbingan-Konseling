@@ -55,6 +55,7 @@
             </form>
             <div>
               <p class="text-center mt-4 small">Belum punya akun? <a href="{{ route('register') }}">Daftar</a></p>
+              {{-- <p class="text-center mt-4 small">Kembali ke landing page? <a href="/">Landing</a></p> --}}
             </div>
           </div>
         </div>

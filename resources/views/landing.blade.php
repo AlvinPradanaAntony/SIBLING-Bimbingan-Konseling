@@ -66,10 +66,37 @@
                 </a>
               </li>
             </ul>
-            <div class="align-self-md-center me-3 nav__theme">
+            {{-- <div class="align-self-md-center me-3 nav__theme">
               <i class="uil uil-moon change-theme" id="theme-button"></i>
-            </div>
-            <a href="{{ route('login') }}" class="btn btn-primary navbar__btn align-self-center pt-1">Login</a>
+            </div> --}}
+            {{-- <a href="{{ route('login') }}" class="btn btn-primary navbar__btn align-self-center pt-1">Login</a> --}}
+            @guest
+                <a href="{{ route('login') }}" class="btn btn-primary navbar__btn align-self-center pt-1">Login</a>
+            @else
+                <li class="nav-item dropdown frameProfile list-unstyled">
+                    <a class="nav-link dropdown-toggle nav-user" href="/#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="account-user-avatar d-inline-block">
+                            @if (auth()->user()->photo)
+                                <img src="{{ route('user.showImage', auth()->user()->id) }}" alt="profileImg" class="cust-avatar img-fluid rounded-circle"/>
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=random" class="cust-avatar img-fluid rounded-circle" style="width: 48px; height: 48px; object-fit: cover;"/>
+                            @endif
+                        </span>
+                        <span class="account-user-name" id="profileName">{{ auth()->user()->name }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end me-1 border border-0 custom-rounded" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="text-decoration-none" href="/home">
+                                <div class="dropdown-item custom-item-dropdown d-flex align-items-center">
+                                    <i class="uil uil-estate me-2"></i>
+                                    <span class="nameItem">Home</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endguest
           </div>
         </div>
       </div>
@@ -86,21 +113,21 @@
             <h1 class="home__title mb-4 position-relative">Program Pengembangan Karir Lulusan SMK Negeri 7 Jember</h1>
             <p class="home__description mb-5 pe-4 position-relative">Saat ini, kami membuka peluang bagi generasi muda, terutama lulusan baru, untuk bergabung dan mengembangkan keterampilan di dunia kerja.</span></p>
             <div class="d-flex nav__btns position-relative">
-              <button class="btn button me-3" type="submit">Daftar Sekarang !</button>
-              <button class="btn button-alt" type="submit">Detail</button>
+              <button class="btn button me-3" type="button" onclick="location.href='#news'" role="link">Daftar Sekarang !</button>
+              <button class="btn button-alt" type="button" onclick="location.href='#news'" role="link">Detail</button>
             </div>
           </div>
           <div class="col-lg-6 position-relative d-lg-inline-block d-none">
             <img src="img/ornamen1.svg" class="ornamen1" alt="..." />
             <div class="ornamen mt-4 d-flex justify-content-center">
-              <span data-badge="Populer"></span>
-              <img src="img/samples_offer.jpg" />
+              <span data-badge="Terbaru"></span>
+              <img src="{{ route('jobVacancy.showImage', $latestJobVacancy->id) }}" alt="Pamflet Terbaru" class="img-fluid rounded">
             </div>
           </div>
         </div>
         <div class="datetime">
           <i class="uil uil-clock"></i>
-          <span>Batas Waktu: 30 September 2024</span>
+          <span><strong>Dateline : </strong>{{ \Carbon\Carbon::parse($latestJobVacancy->dateline_date)->locale('id')->isoFormat('D MMMM YYYY') }}</span>
         </div>
         <img src="img/wavy-lines.svg" class="wavy-lines" alt="..." />
       </div>
@@ -116,42 +143,62 @@
           @foreach ($job_vacancies as $job_vacancy)
           <div class="col-lg-4">
             <div class="card">
-              <img src="{{ asset('storage/pamphlets/' . $job_vacancy->pamphlet) }}" class="card-img-top" alt="Gambar lowongan kerja" />
+              <img src="{{ route('jobVacancy.showImage', $job_vacancy->id) }}" alt="Brosur" class="card-img-top">
               <div class="card-body">
                 <h5 class="card-title">{{ $job_vacancy->position }}</h5>
                 <p class="card-text">{{ $job_vacancy->description }}</p>
-                <a href="#" class="btn button">Detail</a>
+                <a href="#" class="btn button" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $job_vacancy->id }}">Detail</a>
               </div>
             </div>
           </div>
-          {{-- <div class="col-lg-4">
-            <div class="card">
-              <img src="img/samples_offer.jpg" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Shopee & SeaMoney Graduate Development Program 2025 (Indonesia)</h5>
-                <p class="card-text">Shopee International Indonesia saat ini membuka peluang bagi generasi muda terbuka
-                  bagi lulusan baru.</p>
-                <a href="#" class="btn button">Detail</a>
+          <!-- Modal untuk setiap pekerjaan -->
+          <div class="modal fade" id="detailModal-{{ $job_vacancy->id }}" tabindex="-1" aria-labelledby="detailModalLabel-{{ $job_vacancy->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="detailModalLabel-{{ $job_vacancy->id }}">{{ $job_vacancy->position }}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex">
+                  <div class="modal-text" style="flex: 1;">
+                    <h4>Posisi: {{ $job_vacancy->position }}</h4>
+                    <p><strong>Nama Perusahaan:</strong> {{ $job_vacancy->company_name }}</p>
+                    <p><strong>Tempat:</strong> {{ $job_vacancy->location }}</p>
+                    <p><strong>Gaji:</strong> {{ $job_vacancy->salary }}</p>
+                    <p><strong>Dateline:</strong> {{ $job_vacancy->dateline_date }}</p>
+                    <p><strong>Link:</strong> <a href="{{ $job_vacancy->link }}" target="_blank">{{ $job_vacancy->link }}</a></p>
+                    <p><strong>Deskripsi:</strong> {{ $job_vacancy->description }}</p>
+                  </div>
+                  
+                  <div class="modal-image" style="margin-left: 20px; max-width: 200px;">
+                    @if ($job_vacancy->pamphlet)
+                      <img src="{{ route('jobVacancy.showImage', $job_vacancy->id) }}" alt="Brosur" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+                      <a href="{{ route('jobVacancy.download', $job_vacancy->id) }}" class="btn btn-primary btn-sm">
+                        <i class="uil uil-download-alt"></i> Unduh
+                      </a>
+                    @else
+                      <p>Tidak ada pamflet</p>
+                    @endif
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-lg-4">
-            <div class="card">
-              <img src="img/samples_offer.jpg" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Shopee & SeaMoney Graduate Development Program 2025 (Indonesia)</h5>
-                <p class="card-text">Shopee International Indonesia saat ini membuka peluang bagi generasi muda terbuka
-                  bagi lulusan baru.</p>
-                <a href="#" class="btn button">Detail</a>
-              </div>
-            </div>
-          </div> --}}
           @endforeach
         </div>
 
         <div class="d-flex justify-content-center">
-          <button class="btn button">Lihat Lebih Banyak</button>
-        </div>
+    {{ $job_vacancies->links('pagination::bootstrap-4') }}
+</div>
+
+
+        {{-- <div class="d-flex justify-content-center">
+          <button class="btn button" id="loadMoreBtn">Lihat Lebih Banyak</button>
+          <button class="btn button" id="showLessBtn" style="display: none;">Lihat Lebih Sedikit</button>
+        </div> --}}
       </div>
     </section>
 
@@ -173,7 +220,7 @@
             <h3 class="about__title text-center mb-5">Dukungan</h3>
             <div class="about__logos text-center">
               <img src="img/logo-smk-7.png" class="me-2" alt="Logo 1" width="90" />
-              <img src="img/SMKN-7-JEMBER-4.png" class="me-2" alt="Logo 2" width="120" />
+              {{-- <img src="img/SMKN-7-JEMBER-4.png" class="me-2" alt="Logo 2" width="120" /> --}}
               <img src="img/smkbisa.png" class="me-2" alt="Logo 3" width="140" />
               <img src="img/app_logo_extend.png" class="me-2" alt="Logo 4" width="140" />
             </div>
@@ -226,20 +273,52 @@
             </div>
           </div>
           <div class="col-lg-6 mt-5 mt-lg-0">
-            <form action="#" class="contact__form">
+            <form action="{{ route('submit.form') }}" method="POST" enctype="multipart/form-data">
+              @csrf
               <div class="form-group">
                 <label for="name" class="form-label">Nama</label>
-                <input type="text" id="name" class="form-control" placeholder="Masukkan nama Anda"
+                <input type="text" id="name" name="name" class="form-control" placeholder="Masukkan nama anda"
                   required />
               </div>
               <div class="form-group mt-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" class="form-control" placeholder="Masukkan email Anda"
+                <label for="phone_number" class="form-label">Nomor WhatsApp</label>
+                <input type="number" id="phone_number" name="phone_number" class="form-control" placeholder="Masukkan nomor WhatsApp anda"
                   required />
               </div>
-              <div class="form-group mt-3">
-                <label for="message" class="form-label">Pesan</label>
-                <textarea id="message" class="form-control" rows="6" placeholder="Masukkan pesan Anda" required></textarea>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mt-3">
+                    <label for="booking_date" class="form-label">Pilih Tanggal</label>
+                    <input type="date" id="booking_date" name="booking_date" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mt-3">
+                    <label for="booking_time" class="form-label">Pilih Waktu</label>
+                    <select id="booking_time" name="booking_time" class="form-control @error('booking_time') is-invalid @enderror" required>
+                      <option value="" selected disabled>Pilih Waktu</option>
+                      @php
+                        $timeSlots = ['09:00', '09:15', '11:30', '11:45'];
+                        $maxBookingPerSlot = 3; // Maksimal booking per slot
+                        
+                        foreach ($timeSlots as $time) {
+                          $bookedCount = \App\Models\GuidanceBooking::where('booking_date', now()->format('Y-m-d') . " $time:00")->count();
+                          $remainingSlots = $maxBookingPerSlot - $bookedCount;
+                          $disabled = $remainingSlots <= 0 ? 'disabled' : '';
+                          echo "<option value='$time' $disabled>$time - Sisa $remainingSlots orang</option>";
+                        }
+                      @endphp
+                    </select>
+                    @error('booking_time')
+                      <div  class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>    
+                </div>
+              </div>
+              <div class="form-group" hidden>
+                <label for="status" class="form-label">Status</label>
+                <input type="text" id="status" name="status" class="form-control" value="pending"
+                  required />
               </div>
               <button type="submit" class="btn btn-primary mt-4">Kirim Pesan</button>
             </form>

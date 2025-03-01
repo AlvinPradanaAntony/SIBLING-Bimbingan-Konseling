@@ -21,7 +21,6 @@ class JobVacancySeeder extends Seeder
                 'location' => 'Jakarta',
                 'salary' => 'Rp10.000.000 - Rp15.000.000',
                 'dateline_date' => '2024-10-15',
-                'pamphlet' => 'pamphlet_software_engineer.pdf',
                 'user_id' => 1, // ID dari pengguna yang mengiklankan lowongan
             ],
             [
@@ -31,7 +30,6 @@ class JobVacancySeeder extends Seeder
                 'location' => 'Bandung',
                 'salary' => 'Rp8.000.000 - Rp12.000.000',
                 'dateline_date' => '2024-10-30',
-                'pamphlet' => 'pamphlet_uiux_designer.pdf',
                 'user_id' => 2,
             ],
             [
@@ -41,7 +39,6 @@ class JobVacancySeeder extends Seeder
                 'location' => 'Yogyakarta',
                 'salary' => 'Rp9.000.000 - Rp13.000.000',
                 'dateline_date' => '2024-11-01',
-                'pamphlet' => 'pamphlet_data_analyst.pdf',
                 'user_id' => 1,
             ],
         ];

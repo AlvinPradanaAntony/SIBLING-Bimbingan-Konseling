@@ -13,6 +13,12 @@
                         </button>
                         @endcan
                     </div>
+                    <div class="dt-container">
+                        <div class="row mt-2 justify-content-between">
+                            <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto"></div>
+                            <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto"></div>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="example" class="table table-striped" style="width:100%">
