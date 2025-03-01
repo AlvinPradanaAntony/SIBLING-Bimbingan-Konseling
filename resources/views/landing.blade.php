@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -12,78 +12,60 @@
   <title>Bimbingan Konseling | SMKN 7 Negeri Jember</title>
 
   @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-  <script>
-    const selectedTheme = localStorage.getItem("selected-theme");
-    if (selectedTheme) {
-      document.documentElement.setAttribute("data-theme", selectedTheme);
-    }
-  </script>
 </head>
 
 <body>
   <header class="header">
     <nav class="navbar navbar-expand-md fixed-top" id="header">
       <div class="container">
-        <button class="navbar-toggler me-4 m-md-0 border-0 shadow-none" type="button" data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-          <i class="uil uil-bars" style="font-size: 1.625rem; color: var(--title-color);"></i>
+        <button class="nav__toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="uil uil-bars nav__toggler__icon"></i>
         </button>
-        <a class="navbar-brand m-0" href="#">
-          <div class="d-flex align-items-center " id="logo__app">
-            <img src="img/app_logo.png" width="45" alt="logo_nav" />
-            <div class="ms-2 d-flex flex-column">
-              <h3>SIBLING</h3>
-              <span>Bimbingan Konseling</span>
-            </div>
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img src="img/app_logo.png" width="48" alt="Sibling" srcset="" />
+          <div class="ms-2 d-flex flex-column ">
+            <h3>SIBLING</h3>
+            <span>Bimbingan Konseling</span>
           </div>
         </a>
-        <div class="offcanvas offcanvas-start custom__canvas" tabindex="-1" id="offcanvasNavbar"
-          aria-labelledby="offcanvasNavbarLabel">
-          <div class="nav__close rounded-circle d-flex justify-content-center align-items-center d-md-none">
-            <i class="uil uil-times" data-bs-dismiss="offcanvas" aria-label="Close"></i>
-          </div>
-          <div class="offcanvas-header">
-            <div class="d-flex align-items-center " id="logo__app__sidebar">
-              <img src="img/app_logo.png" width="45" alt="logo_nav" />
-              <div class="ms-2 d-flex flex-column">
-                <h3>SIBLING</h3>
-                <span>Bimbingan Konseling</span>
-              </div>
+        <div class="offcanvas offcanvas-start offcanvas__container" data-bs-scroll="true" id="navbarNav">
+          <div class="offcanvas-header offcanvas__header">
+            <img src="img/app_logo.png" width="48" alt="Sibling" srcset="" />
+
+            <div class="nav__btns">
+              <i class="uil uil-moon change-theme me-1" id="theme-button"></i>
+              <i class="uil uil-times nav__close" data-bs-dismiss="offcanvas" aria-label="Close"></i>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> -->
             </div>
           </div>
-          <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end align-items-md-center flex-grow-1">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#home">
-                  <i class="uil uil-estate d-md-none me-1 nav__icon"></i>
+          <div class="offcanvas-body offcanvas__body nav__menu">
+            <ul class="navbar-nav ms-auto mb-lg-0">
+              <li class="nav-item me-3 align-self-md-center">
+                <a class="nav-link nav__link active" aria-current="page" href="#home">
+                  <i class="uil uil-estate d-md-none me-2 nav__icon"></i>
                   Home
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#news">
-                  <i class="uil uil-newspaper d-md-none me-1 nav__icon"></i>
+              <li class="nav-item me-3 align-self-md-center">
+                <a class="nav-link nav__link" href="#news">
+                  <i class="uil uil-atom d-md-none me-2 nav__icon"></i>
                   Berita
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#about">
-                  <i class="uil uil-info-circle d-md-none me-1 nav__icon"></i>
+              <li class="nav-item me-3 align-self-md-center">
+                <a class="nav-link nav__link" href="#about">
+                  <i class="uil uil-pricetag-alt d-md-none me-2 nav__icon"></i>
                   Tentang
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#contact">
-                  <i class="uil uil-phone d-md-none me-1 nav__icon"></i>
+              <li class="nav-item me-3 align-self-md-center">
+                <a class="nav-link nav__link" href="#contact">
+                  <i class="uil uil-message d-md-none me-2 nav__icon"></i>
                   Hubungi Kami
                 </a>
               </li>
-              <li class="nav-item ps-md-2 pe-md-3 d-none d-md-block">
-                <div class="change-theme">
-                  <i class="uil uil-moon"></i>
-                </div>
-              </li>
             </ul>
-<<<<<<< HEAD
             {{-- <div class="align-self-md-center me-3 nav__theme">
               <i class="uil uil-moon change-theme" id="theme-button"></i>
             </div> --}}
@@ -115,54 +97,16 @@
                     </ul>
                 </li>
             @endguest
-=======
->>>>>>> 2a247014f58d559ea1dcc3c73266ba3e299775b2
           </div>
         </div>
-        @auth
-          <div class="dropdown">
-            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <div class="d-flex gap-1 account align-items-center p-2">
-                <div class="p-md-0" style="padding-right: 0.75rem; padding-left: 0.75rem;">
-                  <img class="rounded-circle object-fit-cover"
-                    src="https://ui-avatars.com/api/?name=S+A&amp;color=7F9CF5&amp;background=EBF4FF" alt="Super Admin" />
-                </div>
-                <span class="d-none d-md-inline-block">Super Admin</span>
-              </div>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm custom__container mt-2 px-2">
-              <li class="mb-1">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <i class="uil uil-apps me-2"></i>
-                  <span>Dashboard</span>
-                </a>
-              </li>
-              <li class="mb-1">
-                <a class="dropdown-item d-flex align-items-center change-theme" href="#">
-                  <i class="uil uil-moon me-2"></i>
-                  <span>Tema Gelap</span>
-                </a>
-              </li>
-              <div class="dropdown-divider"></div>
-              <li>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <i class="uil uil-sign-out-alt me-2"></i>
-                  <span>Keluar</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        @else
-          <a href="{{ route('login') }}" class="btn btn-primary custom__btn">Login</a>
-        @endauth
       </div>
     </nav>
   </header>
+
   <main>
     <!--==================== HOME ====================-->
     <section class="home" id="home">
       <div class="container">
-<<<<<<< HEAD
         <span class="custom-badge">Karir</span>
         <div class="row">
           <div class="col-lg-6">
@@ -178,64 +122,28 @@
             <div class="ornamen mt-4 d-flex justify-content-center">
               <span data-badge="Terbaru"></span>
               <img src="{{ route('jobVacancy.showImage', $latestJobVacancy->id) }}" alt="Pamflet Terbaru" class="img-fluid rounded">
-=======
-        <div class="banner__heroes">
-          <span class="custom-badge">Karir</span>
-          <div class="row">
-            <div class="col-lg-6 d-flex flex-column">
-              <h1 class="home__title mb-3 mb-md-4 position-relative">Program Pengembangan Karir Lulusan SMK Negeri 7
-                Jember</h1>
-              <p class="home__description mb-4 mb-lg-3 mb-xl-5 pe-4 position-relative">Saat ini, kami membuka peluang
-                bagi generasi muda,
-                terutama lulusan baru, untuk bergabung dan mengembangkan keterampilan di dunia kerja.</p>
-              <div class="mb-5 mb-lg-0">
-                <a href="#news" class="btn btn-primary cta__btn py-3">Daftar Sekarang!</a>
-              </div>
-              <div class="datetime mt-auto">
-                <i class="uil uil-clock"></i>
-                <span>Batas Waktu: 30 September 2024</span>
-              </div>
-            </div>
-            <div class="col-lg-6 position-relative d-lg-inline-block d-none">
-              <img src="img/ornamen1.svg" class="ornamen1" alt="ornamen1" />
-              <div class="ornamen mt-4">
-                <span data-badge="Populer"></span>
-                <div class="w-100 h-100 d-flex justify-content-center overflow-hidden" style="border-radius:16px;">
-                  <img src="img/samples_offer.jpg" class="img-fluid" style="object-fit: cover;"/>
-                </div>
-              </div>
->>>>>>> 2a247014f58d559ea1dcc3c73266ba3e299775b2
             </div>
           </div>
-          <img src="img/wavy-lines.svg" class="wavy-lines" alt="wavy-lines" />
         </div>
-<<<<<<< HEAD
         <div class="datetime">
           <i class="uil uil-clock"></i>
           <span><strong>Dateline : </strong>{{ \Carbon\Carbon::parse($latestJobVacancy->dateline_date)->locale('id')->isoFormat('D MMMM YYYY') }}</span>
         </div>
         <img src="img/wavy-lines.svg" class="wavy-lines" alt="..." />
-=======
->>>>>>> 2a247014f58d559ea1dcc3c73266ba3e299775b2
       </div>
     </section>
+
     <!--==================== NEWS ====================-->
     <section class="news section" id="news">
       <div class="container">
-        <div class="text-center">
-          <h2 class="section__title">Informasi Lowongan Pekerjaan</h2>
-          <p class="section__subtitle">Berita terbaru seputar dunia kerja dan karir</p>
-        </div>
-        <div class="row mb-4">
-          {{-- @foreach ($job_vacancies as $job_vacancy)
+        <h2 class="section__title">Informasi Lowongan Pekerjaan</h2>
+        <p class="section__subtitle">Berita terbaru seputar dunia kerja dan karir</p>
+
+        <div class="row mb-5">
+          @foreach ($job_vacancies as $job_vacancy)
           <div class="col-lg-4">
             <div class="card">
-<<<<<<< HEAD
               <img src="{{ route('jobVacancy.showImage', $job_vacancy->id) }}" alt="Brosur" class="card-img-top">
-=======
-              <img src="{{ asset('storage/pamphlets/' . $job_vacancy->pamphlet) }}" class="card-img-top"
-                alt="Gambar lowongan kerja" />
->>>>>>> 2a247014f58d559ea1dcc3c73266ba3e299775b2
               <div class="card-body">
                 <h5 class="card-title">{{ $job_vacancy->position }}</h5>
                 <p class="card-text">{{ $job_vacancy->description }}</p>
@@ -243,7 +151,6 @@
               </div>
             </div>
           </div>
-<<<<<<< HEAD
           <!-- Modal untuk setiap pekerjaan -->
           <div class="modal fade" id="detailModal-{{ $job_vacancy->id }}" tabindex="-1" aria-labelledby="detailModalLabel-{{ $job_vacancy->id }}" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -293,48 +200,8 @@
           <button class="btn button" id="showLessBtn" style="display: none;">Lihat Lebih Sedikit</button>
         </div> --}}
       </div>
-=======
-          @endforeach --}}
-          <div class="col-lg-4 mb-3">
-            <div class="card">
-              <img src="https://picsum.photos/500/500?{{ rand(1,100) }}" class="img-fluid" style="height: 225px; object-fit: cover;" alt="..."  />
-              <div class="card-body">
-                <h5 class="card-title">Shopee & SeaMoney Graduate Development Program 2025 (Indonesia)</h5>
-                <p class="card-text">Shopee International Indonesia saat ini membuka peluang bagi generasi muda terbuka
-                  bagi lulusan baru.</p>
-                <a href="#" class="btn button">Detail</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 mb-3">
-            <div class="card">
-              <img src="https://picsum.photos/500/500?{{ rand(1,100) }}" class="img-fluid" style="height: 225px;" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Shopee & SeaMoney Graduate </h5>
-                <p class="card-text">Shopee International Indonesia saat ini membuka peluang bagi generasi muda terbuka
-                  bagi lulusan baru.</p>
-                <a href="#" class="btn button">Detail</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 mb-3">
-            <div class="card">
-              <img src="https://picsum.photos/500/500?{{ rand(1,100) }}" class="img-fluid" style="height: 225px; object-fit: cover" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Shopee & SeaMoney Graduate Development Program 2025 (Indonesia)</h5>
-                <p class="card-text">Shopee International Indonesia saat ini membuka peluang bagi generasi muda terbuka
-                  bagi lulusan baru.</p>
-                <a href="#" class="btn button">Detail</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center">
-            <button class="btn button">Lihat Lebih Banyak</button>
-          </div>
-        </div>
->>>>>>> 2a247014f58d559ea1dcc3c73266ba3e299775b2
     </section>
+
     <!--==================== ABOUT ====================-->
     <section class="about section" id="about">
       <div class="container">
@@ -392,8 +259,7 @@
                 <i class="uil uil-map-marker me-3 fs-4"></i>
                 <div>
                   <h3>Alamat</h3>
-                  <span>Jl. Randu Agung Jatiroto, Jam Koong, Jatiroto, Kec. Sumberbaru, Kabupaten Jember, Jawa Timur
-                    68156</span>
+                  <span>Jl. Randu Agung Jatiroto, Jam Koong, Jatiroto, Kec. Sumberbaru, Kabupaten Jember, Jawa Timur 68156</span>
                 </div>
               </div>
 
@@ -460,7 +326,9 @@
         </div>
       </div>
     </section>
+
   </main>
+
   <!--==================== Footer ====================-->
   <footer class="footer py-5">
     <div class="container">
@@ -497,8 +365,7 @@
         <div class="col-lg-auto mt-3 mt-lg-0 ms-auto">
           <h5 class="mb-3">Link Terkait</h5>
           <ul class="nav flex-column">
-            <li class="nav-item"><a href="https://smkn7jember.sch.id/" class="nav-link px-0 py-1">Profil SMKN 7
-                Jember</a></li>
+            <li class="nav-item"><a href="https://smkn7jember.sch.id/" class="nav-link px-0 py-1">Profil SMKN 7 Jember</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-0 py-1">Berita Karir</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-0 py-1">BKK</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-0 py-1">LSP</a></li>
@@ -536,7 +403,7 @@
     $(document).ready(function() {
       var badgeText = $('.ornamen span').data('badge'); // Ambil nilai dari data-badge
       $('.ornamen span').css('--badge-content', `"${badgeText}"`); // Set nilai untuk digunakan di CSS
-
+    
       $('a[href^="#"]').on('click', function(e) {
         e.preventDefault();
 
