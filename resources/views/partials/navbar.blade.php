@@ -17,6 +17,7 @@
           <li class="nav-item dropdown frameProfile">
             <a class="nav-link dropdown-toggle nav-user" href="/#" id="navbarDropdown" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
+<<<<<<< HEAD
               <span class="account-user-avatar d-inline-block">
                 @if (auth()->user()->photo)
                   <img src="{{ route('user.showImage', auth()->user()->id) }}" alt="profileImg" class="cust-avatar img-fluid rounded-circle"/>
@@ -26,6 +27,12 @@
               </span>
               <span class="account-user-name" id="profileName">{{ auth()->user()->name }}</span>
               <span class="account-position">{{ auth()->user()->getRoleNames()->first() ?? 'Tidak Ada Role' }}</span>
+=======
+              <span class="account-user-avatar d-inline-block"><img
+                  src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=random"
+                  class="cust-avatar img-fluid rounded-circle" /></span>
+              <span class="account-user-name">{{ auth()->user()->name }}</span><span class="account-position">Guru BK</span>
+>>>>>>> 2a247014f58d559ea1dcc3c73266ba3e299775b2
             </a>
             <ul class="dropdown-menu dropdown-menu-end me-1 border border-0 custom-rounded"
               aria-labelledby="navbarDropdown" style="">
