@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/siswa', [StudentController::class, 'store'])->name('student.store')->middleware('permission:Tambah Siswa');
     Route::post('/siswa/import', [StudentController::class, 'import'])->name('student.import')->middleware('permission:Tambah Siswa');
     Route::get('/siswa/export', [StudentController::class, 'export'])->name('student.export')->middleware('permission:Tambah Siswa');
+    Route::get('/student/download-format', [StudentController::class, 'downloadFormat'])->name('student.download_format')->middleware('permission:Tambah Siswa');
     Route::put('/siswa/{id}', [StudentController::class, 'update'])->name('student.update')->middleware('permission:Ubah Siswa');
     Route::delete('/siswa/{id}', [StudentController::class, 'destroy'])->name('student.destroy')->middleware('permission:Hapus Siswa');
 });
