@@ -152,6 +152,11 @@
                           <label for="file" class="form-label">Pilih File Excel</label>
                           <input type="file" name="file" class="form-control" required>
                         </div>
+                        <div class="mb-3">
+                          <a href="{{ route('case.download_format') }}" class="btn btn-sm btn-success">
+                            <i class="fas fa-download"></i> Download Format Excel
+                          </a>
+                        </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

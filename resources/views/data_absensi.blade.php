@@ -62,9 +62,9 @@
                             </form>
                         </div>
                         @can('Tambah Absensi')
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAttendanceModal">
+                        {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAttendanceModal">
                             Tambah
-                        </button>
+                        </button> --}}
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importAbsensiModal">
                             Import
                         </button>
@@ -154,6 +154,11 @@
                                     <div class="mb-3">
                                     <label for="file" class="form-label">Pilih File Excel</label>
                                     <input type="file" name="file" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                    <a href="{{ route('attendance.download_format') }}" class="btn btn-sm btn-success">
+                                        <i class="fas fa-download"></i> Download Format Excel
+                                    </a>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

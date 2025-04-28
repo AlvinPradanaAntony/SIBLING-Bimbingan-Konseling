@@ -11,9 +11,9 @@
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentAssessmentModal">
                 Tambah
               </button>
-              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importAsesmenSiswaModal">
+              {{-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importAsesmenSiswaModal">
                 Import
-              </button>
+              </button> --}}
               <a href="{{ route('student_assessment.export') }}" class="btn btn-success">
                 Ekspor
               </a>
@@ -61,8 +61,7 @@
                   </div>
                 </div>
               </div>
-              <!-- Import Modal -->
-              <div class="modal fade" id="importAsesmenSiswaModal" tabindex="-1" aria-labelledby="importAsesmenSiswaModalLabel" aria-hidden="true">
+              {{-- <div class="modal fade" id="importAsesmenSiswaModal" tabindex="-1" aria-labelledby="importAsesmenSiswaModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -76,6 +75,11 @@
                           <label for="file" class="form-label">Pilih File Excel</label>
                           <input type="file" name="file" class="form-control" required>
                         </div>
+                        <div class="mb-3">
+                          <a href="{{ route('student-assessment.download_format') }}" class="btn btn-sm btn-success">
+                            <i class="fas fa-download"></i> Download Format Excel
+                          </a>
+                        </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -84,7 +88,7 @@
                     </form>
                   </div>
                 </div>
-              </div>
+              </div> --}}
             </div>
             <div class="dt-container">
               <div class="row mt-2 justify-content-between">

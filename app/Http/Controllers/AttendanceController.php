@@ -12,11 +12,22 @@ use Carbon\Carbon;
 use App\Imports\GuidanceImport;
 use Maatwebsite\Excel\Facades\Excel;
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\DB;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+
 class AttendanceController extends Controller
 {
+    protected $UserModel;
+    protected $StudentModel;
     public function __construct()
     {
         $this->middleware(['auth', 'verified']);
+        $this->UserModel = new User();
+        $this->StudentModel = new Student();
     }
 
     public function index(Request $request)
@@ -90,16 +101,93 @@ class AttendanceController extends Controller
         return redirect()->back()->with('success', 'Data absensi bulanan berhasil ditambahkan');
     }
 
-    // public function import(Request $request)
-    // {
-    //     $request->validate([
-    //         'file' => 'required|mimes:xlsx,xls,csv'
-    //     ]);
+    public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,xls'
+    ]);
 
-    //     Excel::import(new AttendanceImport, $request->file('file'));
+    $file = $request->file('file');
+    $spreadsheet = IOFactory::load($file->getPathname());
+    $sheet = $spreadsheet->getActiveSheet();
+    $rows = $sheet->toArray();
 
-    //     return redirect()->route('attendance.index')->with('success', 'Data asesmen berhasil diimpor');
-    // }
+    $month = (int) $rows[1][0]; // dari baris ke-2 kolom A (0-indexed)
+    $year = (int) $rows[1][1];  // dari baris ke-2 kolom B
+
+    for ($i = 4; $i < count($rows); $i++) {
+        $row = $rows[$i];
+
+        if (empty($row[1])) continue; // skip jika tidak ada nama
+
+        $studentName = trim($row[1]);
+        $student = Student::where('name', $studentName)->first();
+
+        if (!$student) {
+            return back()->with('error', "Siswa tidak ditemukan: $studentName (baris " . ($i + 1) . ")");
+        }
+
+        for ($d = 1; $d <= 30; $d++) {
+            $status = strtoupper(trim($row[$d + 2]));
+            if (!in_array($status, ['H', 'A', 'I', 'S'])) continue;
+
+            $presenceStatus = match ($status) {
+                'H' => 'hadir',
+                'A' => 'alpa',
+                'I' => 'ijin',
+                'S' => 'sakit',
+            };
+
+            $date = sprintf('%04d-%02d-%02d', $year, $month, $d);
+
+            DB::table('attendances')->insert([
+                'date' => $date,
+                'presence_status' => $presenceStatus,
+                'description' => $presenceStatus . ' untuk ' . $studentName,
+                'user_id' => auth()->id(),
+                'student_id' => $student->id,
+            ]);
+        }
+    }
+
+    return back()->with('success', '✅ Data absensi berhasil diimpor!');
+}
+public function downloadFormat()
+{
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Header: info bulan dan tahun di atas
+    $sheet->setCellValue('A1', 'Bulan');
+    $sheet->setCellValue('B1', 'Tahun');
+    $sheet->setCellValue('A2', '4'); // Contoh: April
+    $sheet->setCellValue('B2', '2025');
+
+    // Header baris ke-3 (kolom nama siswa dan tanggal)
+    $header = ['No', 'Nama Siswa', 'L/P'];
+    for ($i = 1; $i <= 30; $i++) {
+        $header[] = str_pad($i, 2, '0', STR_PAD_LEFT); // 01, 02, ...
+    }
+    $sheet->fromArray($header, null, 'A4');
+
+    // Contoh baris data siswa
+    $data = [
+        [1, 'Budi Santoso', 'L'] + array_fill(3, 30, '-') // '-' untuk kolom absensi per tanggal
+    ];
+    $sheet->fromArray($data, null, 'A5');
+
+    // Auto-width kolom
+    foreach (range('A', $sheet->getHighestColumn()) as $col) {
+        $sheet->getColumnDimension($col)->setAutoSize(true);
+    }
+
+    $writer = new Xlsx($spreadsheet);
+    $filename = 'format_import_absensi.xlsx';
+
+    return response()->streamDownload(function () use ($writer) {
+        $writer->save('php://output');
+    }, $filename);
+}
 
     public function export()
     {

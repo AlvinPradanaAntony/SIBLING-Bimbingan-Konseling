@@ -10,11 +10,19 @@ use Faker\Provider\Base;
 use App\Imports\GuidanceImport;
 use Maatwebsite\Excel\Facades\Excel;
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\DB;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class JobVacancyController extends Controller
 {
+    protected $UserModel;
     public function __construct()
     {
         $this->middleware(['auth', 'verified'])->except(['landing']);
+        $this->UserModel = new User();
     }
     public function index()
     {
@@ -132,16 +140,98 @@ class JobVacancyController extends Controller
         return redirect()->route('jobVacancy.index')->with('success', 'Jurusan berhasil ditambahkan!');
     }
 
-    // public function import(Request $request)
-    // {
-    //     $request->validate([
-    //         'file' => 'required|mimes:xlsx,xls,csv'
-    //     ]);
+    public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,xls',
+    ]);
 
-    //     Excel::import(new JobVacancyImport, $request->file('file'));
+    $file = $request->file('file');
+    $spreadsheet = IOFactory::load($file->getPathname());
+    $sheet = $spreadsheet->getActiveSheet();
+    $rows = $sheet->toArray();
 
-    //     return redirect()->route('jobVacancy.index')->with('success', 'Data asesmen berhasil diimpor');
-    // }
+    for ($i = 1; $i < count($rows); $i++) {
+        if (
+            empty($rows[$i][0]) && empty($rows[$i][1]) && empty($rows[$i][2]) &&
+            empty($rows[$i][3]) && empty($rows[$i][4]) && empty($rows[$i][5]) &&
+            empty($rows[$i][6]) && empty($rows[$i][7]) && empty($rows[$i][8])
+        ) {
+            continue;
+        }
+
+        $position      = trim($rows[$i][0]);
+        $company_name  = trim($rows[$i][1]);
+        $description   = trim($rows[$i][2]);
+        $location      = trim($rows[$i][3]);
+        $salary        = trim($rows[$i][4]);
+        $dateline_date = trim($rows[$i][5]);
+        $pamphlet      = trim($rows[$i][6]);
+        $link          = trim($rows[$i][7]);
+        $user_name     = trim($rows[$i][8]);
+
+        $user = $this->UserModel->getByName($user_name);
+
+        if (!$user) {
+            return back()->with('error', "❌ User tidak ditemukan: $user_name (baris " . ($i + 1) . ")");
+        }
+
+        DB::table('job_vacancies')->insert([
+            'position'       => $position,
+            'company_name'   => $company_name,
+            'description'    => $description,
+            'location'       => $location,
+            'salary'         => $salary,
+            'dateline_date'  => $dateline_date,
+            'pamphlet'       => $pamphlet,
+            'link'           => $link,
+            'user_id'        => $user->id,
+        ]);
+    }
+
+    return back()->with('success', '✅ Data lowongan kerja berhasil diimpor!');
+}
+
+public function downloadFormat()
+{
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->setTitle('Format Loker');
+
+    // Header kolom
+    $sheet->fromArray([[
+        'Posisi',
+        'Nama Perusahaan',
+        'Deskripsi',
+        'Lokasi',
+        'Gaji',
+        'Tanggal Deadline',
+        'Pamflet (URL / Path)',
+        'Link Pendaftaran',
+        'Nama User'
+    ]], null, 'A1');
+
+    // Format tanggal
+    $sheet->getStyle('F2:F1000')->getNumberFormat()
+        ->setFormatCode('yyyy-mm-dd');
+
+    // Auto-size kolom
+    foreach (range('A', 'I') as $col) {
+        $sheet->getColumnDimension($col)->setAutoSize(true);
+    }
+
+    // Nama file dan response
+    $filename = 'format_import_loker.xlsx';
+    $writer = new Xlsx($spreadsheet);
+
+    return response()->stream(function () use ($writer) {
+        $writer->save('php://output');
+    }, 200, [
+        'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+    ]);
+}
+
 
     public function export()
     {
@@ -150,7 +240,7 @@ class JobVacancyController extends Controller
 
         // Buat file Excel
         $excelData = [];
-        $excelData[] = ['ID', 'Position', 'Company_name', 'Description', 'Location', 'Salary', 'Dateline_date', 'Pamphlet', 'Link', 'User_id']; // Judul kolom
+        $excelData[] = ['ID', 'Posisi', 'Nama Perusahaan', 'Deskripsi', 'Lokasi', 'Gaji', 'Tanggal Deadline', 'Pamphlet (URL / Path)', 'Link Pendaftaran', 'Nama User']; // Judul kolom
 
         foreach ($job_vacansies as $jobVacancy) {
             $excelData[] = [
@@ -180,7 +270,7 @@ class JobVacancyController extends Controller
 
         // Mengatur response untuk mengunduh file
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $filename = 'job_vacansies.xlsx';
+        $filename = 'loker.xlsx';
 
         // Mengembalikan response download
         return response()->stream(function() use ($writer) {

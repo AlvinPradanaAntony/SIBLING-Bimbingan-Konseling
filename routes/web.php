@@ -21,7 +21,10 @@ use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\GuidanceBookingController;
+use App\Models\Assessment;
+use App\Models\Attendance;
 use App\Models\Guidance;
+use App\Models\JobVacancy;
 use App\Models\Role;
 use App\Models\Student;
 /*
@@ -125,6 +128,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/asesmen/import', [AssessmentController::class, 'import'])->name('assessment.import')->middleware('permission:Tambah Asesmen');
     Route::get('/asesmen/export', [AssessmentController::class, 'export'])->name('assessment.export')->middleware('permission:Tambah Asesmen');
     Route::post('/asesmen', [AssessmentController::class, 'store'])->name('assessment.store')->middleware('permission:Tambah Asesmen');
+    Route::get('/asesmen/download-format', [AssessmentController::class, 'downloadFormat'])->name('assessment.download_format')->middleware('permission:Tambah Asesmen');
     Route::put('/asesmen/{id}', [AssessmentController::class, 'update'])->name('assessment.update')->middleware('permission:Ubah Asesmen');
     Route::delete('/asesmen/{id}', [AssessmentController::class, 'destroy'])->name('assessment.destroy')->middleware('permission:Hapus Asesmen');
 });
@@ -145,6 +149,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/bimbingan', [GuidanceController::class, 'store'])->name('guidance.store')->middleware('permission:Tambah Bimbingan');
     Route::post('/bimbingan/import', [GuidanceController::class, 'import'])->name('guidance.import')->middleware('permission:Tambah Bimbingan');
     Route::get('/bimbingan/export', [GuidanceController::class, 'export'])->name('guidance.export')->middleware('permission:Tambah Bimbingan');
+    Route::get('/bimbingan/download-format', [GuidanceController::class, 'downloadFormat'])->name('guidance.download_format')->middleware('permission:Tambah Bimbingan');
     Route::put('/bimbingan/{id}', [GuidanceController::class, 'update'])->name('guidance.update')->middleware('permission:Ubah Bimbingan');
     Route::delete('/bimbingan/{id}', [GuidanceController::class, 'destroy'])->name('guidance.destroy')->middleware('permission:Hapus Bimbingan');
 });
@@ -156,6 +161,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/kasus', [CaseController::class, 'store'])->name('case.store')->middleware('permission:Tambah Kasus');
     Route::post('/kasus/import', [CaseController::class, 'import'])->name('case.import')->middleware('permission:Tambah Kasus');
     Route::get('/kasus/export', [CaseController::class, 'export'])->name('case.export')->middleware('permission:Tambah Kasus');
+    Route::get('/kasus/download-format', [CaseController::class, 'downloadFormat'])->name('case.download_format')->middleware('permission:Tambah Kasus');
     Route::put('/kasus/{id}', [CaseController::class, 'update'])->name('case.update')->middleware('permission:Ubah Kasus');
     Route::delete('/kasus/{id}', [CaseController::class, 'destroy'])->name('case.destroy')->middleware('permission:Hapus Kasus');
 });
@@ -165,6 +171,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/absensi', [AttendanceController::class, 'store'])->name('attendance.store')->middleware('permission:Tambah Absensi');
     Route::post('/absensi/import', [AttendanceController::class, 'import'])->name('attendance.import')->middleware('permission:Tambah Absensi');
     Route::get('/absensi/export', [AttendanceController::class, 'export'])->name('attendance.export')->middleware('permission:Tambah Absensi');
+    Route::get('/absensi/download-format', [AttendanceController::class, 'downloadFormat'])->name('attendance.download_format')->middleware('permission:Tambah Absensi');
     Route::put('/absensi/{id}', [AttendanceController::class, 'update'])->name('attendance.update')->middleware('permission:Ubah Absensi');
     Route::delete('/absensi/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy')->middleware('permission:Hapus Absensi');
 });
@@ -176,6 +183,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/loker', [JobVacancyController::class, 'store'])->name('jobVacancy.store')->middleware('permission:Tambah Loker');
     Route::post('/loker/import', [JobVacancyController::class, 'import'])->name('jobVacancy.import')->middleware('permission:Tambah Loker');
     Route::get('/loker/export', [JobVacancyController::class, 'export'])->name('jobVacancy.export')->middleware('permission:Tambah Loker');
+    Route::get('/loker/download-format', [JobVacancyController::class, 'downloadFormat'])->name('jobVacancy.download_format')->middleware('permission:Tambah Loker');
     Route::put('/loker/{id}', [JobVacancyController::class, 'update'])->name('jobVacancy.update')->middleware('permission:Ubah Loker');
     Route::delete('/loker/{id}', [JobVacancyController::class, 'destroy'])->name('jobVacancy.destroy')->middleware('permission:Hapus Loker');
 });
@@ -196,6 +204,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/asesmen_siswa', [StudentAssessmentController::class, 'store'])->name('student_assessment.store')->middleware('permission:Tambah Asesmen Siswa');
     Route::post('/asesmen_siswa/import', [StudentAssessmentController::class, 'import'])->name('student_assessment.import')->middleware('permission:Tambah Asesmen Siswa');
     Route::get('/asesmen_siswa/export', [StudentAssessmentController::class, 'export'])->name('student_assessment.export')->middleware('permission:Tambah Asesmen Siswa');
+    Route::get('/asesmen_siswa/download-format', [StudentAssessmentController::class, 'downloadFormat'])->name('student-assessment.download_format')->middleware('permission:Tambah Asesmen Siswa');
     Route::put('/asesmen_siswa/{id}', [StudentAssessmentController::class, 'update'])->name('student_assessment.update')->middleware('permission:Ubah Asesmen Siswa');
     Route::delete('/asesmen_siswa/{id}', [StudentAssessmentController::class, 'destroy'])->name('student_assessment.destroy')->middleware('permission:Hapus Asesmen Siswa');
 });

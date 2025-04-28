@@ -47,4 +47,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getByName($name)
+    {
+        return $this->whereRaw('LOWER(TRIM(name)) = ?', [strtolower(trim($name))])->first();
+    }
 }

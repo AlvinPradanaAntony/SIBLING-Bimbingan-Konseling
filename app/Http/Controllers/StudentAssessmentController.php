@@ -66,11 +66,11 @@ class StudentAssessmentController extends Controller
 
         // Buat file Excel
         $excelData = [];
-        $excelData[] = ['ID', 'Student_id', 'Assessment_id', 'Answer']; // Judul kolom
+        $excelData[] = ['ID', 'Nama Siswa', 'Pertanyaan', 'Jawaban']; 
 
         foreach ($student_assessments as $student_assessment) {
             $excelData[] = [
-                $student_assessment->id,      // Jika Anda ingin menyertakan ID
+                $student_assessment->id,      
                 $student_assessment->student->name,
                 $student_assessment->assessment->question,
                 $student_assessment->answer,
@@ -90,7 +90,7 @@ class StudentAssessmentController extends Controller
 
         // Mengatur response untuk mengunduh file
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $filename = 'student_assessments.xlsx';
+        $filename = 'export_asesmen_siswa.xlsx';
 
         // Mengembalikan response download
         return response()->stream(function() use ($writer) {

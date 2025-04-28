@@ -26,4 +26,9 @@ class Student extends Model
     public function status(){
         return $this->belongsTo(Status::class);
     }
+
+    public function getByName($name)
+    {
+        return $this->whereRaw('LOWER(TRIM(name)) = ?', [strtolower(trim($name))])->first();
+    }
 }

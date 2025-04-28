@@ -18,4 +18,22 @@ class Classes extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    public function getByName($className)
+    {
+        if (!preg_match('/^(\S+)\s+(.+)\s+(\d+)$/', $className, $matches)) {
+            throw new \InvalidArgumentException("❌ Format nama kelas tidak valid: '{$className}'");
+        }
+
+        $classLevel = strtoupper($matches[1]);
+        $majorName = ucwords(strtolower(trim($matches[2])));
+        $classroom = (int) $matches[3];
+
+        return $this->select('classes.*', 'majors.major_name')
+            ->join('majors', 'classes.major_id', '=', 'majors.id')
+            ->where('classes.class_level', $classLevel)
+            ->whereRaw('LOWER(TRIM(majors.major_name)) = ?', [strtolower($majorName)])
+            ->where('classes.classroom', $classroom)
+            ->first();
+    }
 }

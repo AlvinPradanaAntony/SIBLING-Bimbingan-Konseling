@@ -11,13 +11,21 @@ use App\Models\Major;
 use Carbon\Carbon;
 use App\Imports\CaseImport;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\DB;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class CaseController extends Controller
 {
-
+    protected $UserModel;
+    protected $StudentModel;
     public function __construct()
     {
         $this->middleware(['auth', 'verified']);
+        $this->UserModel = new User();
+        $this->StudentModel = new Student();
     }
     
     public function index(Request $request){
@@ -147,16 +155,98 @@ class CaseController extends Controller
         return redirect()->route('case.index')->with('success', 'Kasus berhasil ditambahkan!');
     }
 
-    // public function import(Request $request)
-    // {
-    //     $request->validate([
-    //         'file' => 'required|mimes:xlsx,xls,csv'
-    //     ]);
+    public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,xls',
+    ]);
 
-    //     Excel::import(new CaseImport, $request->file('file'));
+    $file = $request->file('file');
+    $spreadsheet = IOFactory::load($file->getPathname());
+    $sheet = $spreadsheet->getActiveSheet();
+    $rows = $sheet->toArray();
 
-    //     return redirect()->route('case.index')->with('success', 'Data asesmen berhasil diimpor');
-    // }
+    for ($i = 1; $i < count($rows); $i++) {
+        if (
+            empty($rows[$i][0]) && empty($rows[$i][1]) && empty($rows[$i][2]) &&
+            empty($rows[$i][3]) && empty($rows[$i][4]) && empty($rows[$i][5]) &&
+            empty($rows[$i][6]) && empty($rows[$i][7])
+        ) {
+            continue;
+        }
+
+        $case_name     = trim($rows[$i][0]);
+        $description   = trim($rows[$i][1]);
+        $resolution    = trim($rows[$i][2]);
+        $case_point    = (int) $rows[$i][3];
+        $date          = trim($rows[$i][4]);
+        $evidence      = trim($rows[$i][5]);
+        $user_name     = trim($rows[$i][6]);
+        $student_name  = trim($rows[$i][7]);
+
+        $user = $this->UserModel->getByName($user_name);
+        $student = $this->StudentModel->getByName($student_name);
+
+        if (!$user) {
+            return back()->with('error', "❌ Guru BK tidak ditemukan: $user_name (baris " . ($i + 1) . ")");
+        }
+
+        if (!$student) {
+            return back()->with('error', "❌ Siswa tidak ditemukan: $student_name (baris " . ($i + 1) . ")");
+        }
+
+        DB::table('cases')->insert([
+            'case_name'   => $case_name,
+            'description' => $description,
+            'resolution'  => $resolution,
+            'case_point'  => $case_point,
+            'date'        => $date,
+            'evidence'    => $evidence,
+            'user_id'     => $user->id,
+            'student_id'  => $student->id,
+        ]);
+    }
+
+    return back()->with('success', '✅ Data kasus berhasil diimpor!');
+}
+public function downloadFormat()
+{
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->setTitle('Format Kasus');
+
+    // Header kolom
+    $sheet->fromArray([[
+        'Nama Kasus',
+        'Deskripsi',
+        'Solusi',
+        'Poin Kasus',
+        'Tanggal',
+        'Bukti',
+        'Guru BK',
+        'Nama Siswa'
+    ]], null, 'A1');
+
+    // Format tanggal
+    $sheet->getStyle('E2:E1000')->getNumberFormat()
+        ->setFormatCode('yyyy-mm-dd');
+
+    // Auto-size kolom
+    foreach (range('A', 'H') as $col) {
+        $sheet->getColumnDimension($col)->setAutoSize(true);
+    }
+
+    // Nama file dan response
+    $filename = 'format_import_kasus.xlsx';
+    $writer = new Xlsx($spreadsheet);
+
+    return response()->stream(function () use ($writer) {
+        $writer->save('php://output');
+    }, 200, [
+        'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+    ]);
+}
 
     public function export()
     {
@@ -165,7 +255,7 @@ class CaseController extends Controller
 
         // Buat file Excel
         $excelData = [];
-        $excelData[] = ['ID', 'Case_name', 'Description', 'Resolution', 'Case_point', 'Date', 'Evidence', 'User_id', 'Student_id']; // Judul kolom
+        $excelData[] = ['ID', 'Nama Kasus', 'Deskripsi', 'Solusi', 'Poin', 'Tanggal', 'Bukti', 'Guru BK', 'Nama Siswa']; // Judul kolom
 
         foreach ($cases as $case) {
             $excelData[] = [
@@ -194,7 +284,7 @@ class CaseController extends Controller
 
         // Mengatur response untuk mengunduh file
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $filename = 'cases.xlsx';
+        $filename = 'export_kasus.xlsx';
 
         // Mengembalikan response download
         return response()->stream(function() use ($writer) {

@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\Status;
 use App\Models\Classes;
+use App\Models\Major;
 use Illuminate\Http\Request;
 use App\Imports\StudentImport;
 use Maatwebsite\Excel\Facades\Excel;
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -17,9 +21,13 @@ use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 
 class StudentController extends Controller
 {
+    protected $ClassModel;
+    protected $StatusModel;
     public function __construct()
     {
         $this->middleware(['auth', 'verified']);
+        $this->ClassModel = new Classes();
+        $this->StatusModel = new Status();
     }
     public function index()
     {
@@ -133,35 +141,93 @@ class StudentController extends Controller
         return redirect()->route('student.index')->with('success', 'Data siswa berhasil ditambahkan');
     }
 
+    // public function import(Request $request)
+    // {
+    //     $request->validate([
+    //         'file' => 'required|mimes:xlsx,xls,csv'
+    //     ]);
+    //     Excel::import(new StudentImport, $request->file('file'));
+    //     return redirect()->route('student.index')->with('success', 'Data asesmen berhasil diimpor');
+    // }
+
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
+            'file' => 'required|file|mimes:xlsx,xls',
         ]);
-        Excel::import(new StudentImport, $request->file('file'));
-        return redirect()->route('student.index')->with('success', 'Data asesmen berhasil diimpor');
+
+        $file = $request->file('file');
+        $spreadsheet = IOFactory::load($file->getPathname());
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray();
+
+        for ($i = 1; $i < count($rows); $i++) {
+            // Skip baris kosong
+            if (empty($rows[$i][0]) && empty($rows[$i][1]) && empty($rows[$i][2])) {
+                continue;
+            }
+
+            $nisn = addslashes($rows[$i][0]);
+            $name = addslashes($rows[$i][1]);
+            $class = trim($rows[$i][2]);
+            $gender = $rows[$i][3];
+            $place_of_birth = $rows[$i][4];
+            $date_of_birth = $rows[$i][5];
+            $religion = $rows[$i][6];
+            $phone_number = $rows[$i][7];
+            $address = $rows[$i][8];
+            $guardian_name = $rows[$i][9];
+            $guardian_phone_number = $rows[$i][10];
+            $email = $rows[$i][11];
+            $status = trim($rows[$i][12]);
+            $admission_date = $rows[$i][13];
+
+            $kelas = $this->ClassModel->getByName($class);
+            $statu = $this->StatusModel->getByName($status);
+
+            if (!$kelas) {
+                return back()->with('error', "❌ Kelas tidak ditemukan: $class (baris ".($i+1).")");
+            }
+            if (!$statu) {
+                return back()->with('error', "❌ Status tidak ditemukan: $status (baris ".($i+1).")");
+            }
+
+            DB::table('students')->insert([
+                'nisn' => $nisn,
+                'name' => $name,
+                'class_id' => $kelas->id,
+                'gender' => $gender,
+                'place_of_birth' => $place_of_birth,
+                'date_of_birth' => $date_of_birth,
+                'religion' => $religion,
+                'phone_number' => $phone_number,
+                'address' => $address,
+                'guardian_name' => $guardian_name,
+                'guardian_phone_number' => $guardian_phone_number,
+                'email' => $email,
+                'status_id' => $statu->id,
+                'admission_date' => $admission_date,
+            ]);
+        }
+
+        return back()->with('success', '✅ Excel berhasil diimpor ke database!');
     }
+
 
     public function downloadFormat()
     {
         $spreadsheet = new Spreadsheet();
 
         $sheet1 = $spreadsheet->getActiveSheet();
-        $sheet1->setTitle('Template Siswa');
+        $sheet1->setTitle('Format Siswa');
 
-        $headers = ['NISN', 'Name', 'Class', 'Gender', 'Place of Birth', 'Date of Birth', 'Religion', 'Phone Number', 'Address', 'Guardian Name', 'Guardian Phone Number', 'Email', 'Status', 'Admission Date'];
+        $headers = ['NISN', 'Nama', 'Kelas', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 'Agama', 'No Telepon', 'Alamat', 'Nama Wali', 'Nomor Telepon Wali', 'Email', 'Status', 'Tanggal Masuk'];
         $sheet1->fromArray([$headers], null, 'A1');
 
         $classSheet = new Worksheet($spreadsheet, 'Daftar Kelas');
         $spreadsheet->addSheet($classSheet);
+        $classSheet->fromArray(['ID', 'Kelas', 'Jurusan', 'Ruang'], null, 'A1');
 
-        // Judul kolom
-        $classSheet->setCellValue('A1', 'ID');
-        $classSheet->setCellValue('B1', 'Class Level');
-        $classSheet->setCellValue('C1', 'Major');
-        $classSheet->setCellValue('D1', 'Classroom');
-
-        // Ambil data kelas
         $classes = Classes::with('major')->get();
         $classData = [];
         foreach ($classes as $class) {
@@ -172,99 +238,33 @@ class StudentController extends Controller
                 $class->classroom
             ];
         }
-
-        // Masukkan data mulai dari A2
         $classSheet->fromArray($classData, null, 'A2');
-
 
         $statusSheet = new Worksheet($spreadsheet, 'Daftar Status');
         $spreadsheet->addSheet($statusSheet);
-
-        $statusSheet->setCellValue('A1', 'ID');
-        $statusSheet->setCellValue('B1', 'Status Name');
+        $statusSheet->fromArray(['ID', 'Status'], null, 'A1');
 
         $statuses = Status::all();
         $statusData = [];
         foreach ($statuses as $status) {
             $statusData[] = [$status->id, $status->status_name];
         }
-
         $statusSheet->fromArray($statusData, null, 'A2');
 
-for ($i = 2; $i <= count($classData) + 1; $i++) {
-    $classSheet->setCellValue('E' . $i, '=B' . $i . ' & " " & C' . $i . ' & " " & D' . $i);
-}
-
-        $dropdownClass = $sheet1->getCell('C2')->getDataValidation();
-$dropdownClass->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
-$dropdownClass->setFormula1("'Daftar Kelas'!E2:E" . (count($classData) + 1));
-$dropdownClass->setAllowBlank(false);
-$dropdownClass->setShowDropDown(true);
-$classSheet->getColumnDimension('E')->setVisible(false);
-
-
-        $dropdownGender = $sheet1->getCell('D2')->getDataValidation();
-        $dropdownGender->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
-        $dropdownGender->setFormula1('"Laki-laki,Perempuan"');
-        $dropdownGender->setAllowBlank(false);
-        $dropdownGender->setShowDropDown(true);
-
-        $religions = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu']; // Bisa ditambah dari DB kalau perlu
-        $religionList = '"' . implode(',', $religions) . '"';
-
-        $dropdownReligion = $sheet1->getCell('G2')->getDataValidation();
-        $dropdownReligion->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
-        $dropdownReligion->setFormula1($religionList);
-        $dropdownReligion->setAllowBlank(false);
-        $dropdownReligion->setShowDropDown(true);
-
-        $dateColumns = ['F', 'N']; 
-        foreach ($dateColumns as $col) {
-            $sheet1->getStyle($col . '2:' . $col . '1000')
-                ->getNumberFormat()
-                ->setFormatCode('yyyy-mm-dd');
-
-            for ($i = 2; $i <= 1000; $i++) {
-                $dateValidation = $sheet1->getCell($col . $i)->getDataValidation();
-                $dateValidation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_DATE);
-                $dateValidation->setAllowBlank(false);
-                $dateValidation->setShowErrorMessage(true);
-                $dateValidation->setErrorTitle('Invalid Date Format');
-                $dateValidation->setError('Gunakan format tanggal YYYY-MM-DD.');
-            }
+        for ($i = 2; $i <= count($classData) + 1; $i++) {
+            $classSheet->setCellValue('E' . $i, '=B' . $i . ' & " " & C' . $i . ' & " " & D' . $i);
         }
 
         for ($i = 2; $i <= 1000; $i++) {
-            $phoneValidation = $sheet1->getCell('H' . $i)->getDataValidation();
-            $phoneValidation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_WHOLE);
-            $phoneValidation->setAllowBlank(false);
-            $phoneValidation->setShowErrorMessage(true);
-            $phoneValidation->setErrorTitle('Invalid Phone Number');
-            $phoneValidation->setError('Harap masukkan angka saja, tanpa huruf atau karakter lain.');
-
-            $guardianPhoneValidation = $sheet1->getCell('K' . $i)->getDataValidation();
-            $guardianPhoneValidation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_WHOLE);
-            $guardianPhoneValidation->setAllowBlank(false);
-            $guardianPhoneValidation->setShowErrorMessage(true);
-            $guardianPhoneValidation->setErrorTitle('Invalid Phone Number');
-            $guardianPhoneValidation->setError('Harap masukkan angka saja, tanpa huruf atau karakter lain.');
-        }
-        
-        for ($i = 2; $i <= 1000; $i++) {
-            $emailValidation = $sheet1->getCell('L' . $i)->getDataValidation();
-            $emailValidation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_CUSTOM);
-            $emailValidation->setFormula1('=ISNUMBER(FIND("@",L' . $i . '))');
-            $emailValidation->setAllowBlank(false);
-            $emailValidation->setShowErrorMessage(true);
-            $emailValidation->setErrorTitle('Invalid Email');
-            $emailValidation->setError('Harap masukkan email yang valid (harus ada "@").');
+            $dropdownGender = $sheet1->getCell('D' . $i)->getDataValidation();
+            $dropdownGender->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
+            $dropdownGender->setFormula1('"Laki-laki,Perempuan"');
+            $dropdownGender->setAllowBlank(false);
+            $dropdownGender->setShowDropDown(true);
         }
 
-        $dropdownStatus = $sheet1->getCell('M2')->getDataValidation();
-        $dropdownStatus->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
-        $dropdownStatus->setFormula1("'Daftar Status'!B2:B" . (count($statusData) + 1));
-        $dropdownStatus->setAllowBlank(false);
-        $dropdownStatus->setShowDropDown(true);
+        $sheet1->getStyle('F2:F1000')->getNumberFormat()->setFormatCode('yyyy-mm-dd');
+        $sheet1->getStyle('N2:N1000')->getNumberFormat()->setFormatCode('yyyy-mm-dd');
 
         $filename = 'format_import_siswa.xlsx';
         $writer = new Xlsx($spreadsheet);
@@ -282,7 +282,7 @@ $classSheet->getColumnDimension('E')->setVisible(false);
         $students = Student::all();
 
         $excelData = [];
-        $excelData[] = ['NISN', 'Name', 'Class', 'Gender', 'Place of Birth', 'Date of Birth', 'Religion', 'Phone Number', 'Address', 'Guardian Name', 'Guardian Phone', 'Email', 'Status', 'Admission Date']; // Judul kolom
+        $excelData[] = ['NISN', 'Nama', 'Kelas', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 'Agama', 'No Telepon', 'Alamat', 'Nama Wali', 'Nomor Telepon Wali', 'Email', 'Status', 'Tanggal Masuk']; // Judul kolom
 
         foreach ($students as $student) {
             $excelData[] = [
@@ -312,8 +312,17 @@ $classSheet->getColumnDimension('E')->setVisible(false);
             }
         }
 
+        $dateColumns = ['F', 'N']; 
+        $rowCount = count($students) + 1;
+
+        foreach ($dateColumns as $col) {
+            $sheet->getStyle($col . '2:' . $col . $rowCount)
+                ->getNumberFormat()
+                ->setFormatCode('yyyy-mm-dd');
+        }
+
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $filename = 'students.xlsx';
+        $filename = 'export_siswa.xlsx';
 
         return response()->stream(function() use ($writer) {
             $writer->save('php://output');

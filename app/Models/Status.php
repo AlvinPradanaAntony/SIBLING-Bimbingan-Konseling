@@ -15,4 +15,11 @@ class Status extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    public function getByName($statusName)
+{
+    return $this->whereRaw('LOWER(TRIM(status_name)) = ?', [strtolower(trim($statusName))])
+                ->first();
+}
+
 }

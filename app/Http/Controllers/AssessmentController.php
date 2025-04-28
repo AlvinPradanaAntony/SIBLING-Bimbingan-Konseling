@@ -7,6 +7,12 @@ use App\Models\Assessment;
 use App\Imports\AssessmentImport;
 use Maatwebsite\Excel\Facades\Excel;
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\DB;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class AssessmentController extends Controller
 {
     public function __construct()
@@ -40,13 +46,77 @@ class AssessmentController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
+            'file' => 'required|file|mimes:xlsx,xls',
         ]);
 
-        Excel::import(new AssessmentImport, $request->file('file'));
+        $file = $request->file('file');
+        $spreadsheet = IOFactory::load($file->getPathname());
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray();
 
-        return redirect()->route('assessment.index')->with('success', 'Data asesmen berhasil diimpor');
+        for ($i = 1; $i < count($rows); $i++) {
+            // Skip baris kosong
+            if (empty($rows[$i][0]) && empty($rows[$i][1])) {
+                continue;
+            }
+
+            $question = trim($rows[$i][0]);
+            $field = trim($rows[$i][1]);
+
+            // Validasi sederhana (opsional)
+            if (empty($question) || empty($field)) {
+                return back()->with('error', "❌ Pertanyaan atau field kosong di baris " . ($i + 1));
+            }
+
+            DB::table('assessments')->insert([
+                'question' => $question,
+                'field' => $field,
+            ]);
+        }
+
+        return back()->with('success', '✅ Template asesmen berhasil diimpor!');
     }
+
+    public function downloadFormat()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Format Asesmen');
+
+        // Header kolom
+        $sheet->setCellValue('A1', 'Pertanyaan');
+        $sheet->setCellValue('B1', 'Bidang');
+
+        // Dropdown untuk Field dari baris 2 sampai 1000
+        for ($row = 2; $row <= 1000; $row++) {
+            $validation = $sheet->getCell('B' . $row)->getDataValidation();
+            $validation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
+            $validation->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP);
+            $validation->setAllowBlank(true);
+            $validation->setShowInputMessage(true);
+            $validation->setShowErrorMessage(true);
+            $validation->setShowDropDown(true);
+            $validation->setFormula1('"Pribadi,Sosial,Belajar,Karir"');
+            $sheet->getCell('B' . $row)->setDataValidation($validation);
+        }
+
+        // Auto-size kolom agar rapi
+        foreach (range('A', 'B') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // Nama file
+        $filename = 'format_import_asesmen.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        return response()->stream(function () use ($writer) {
+            $writer->save('php://output');
+        }, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
+    }
+
 
     public function export()
     {
@@ -55,7 +125,7 @@ class AssessmentController extends Controller
 
         // Buat file Excel
         $excelData = [];
-        $excelData[] = ['ID', 'Question', 'Field']; // Judul kolom
+        $excelData[] = ['ID', 'Pertanyaan', 'Bidang']; // Judul kolom
 
         foreach ($assessments as $assessment) {
             $excelData[] = [
@@ -78,7 +148,7 @@ class AssessmentController extends Controller
 
         // Mengatur response untuk mengunduh file
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $filename = 'assessments.xlsx';
+        $filename = 'export_asesmen.xlsx';
 
         // Mengembalikan response download
         return response()->stream(function() use ($writer) {

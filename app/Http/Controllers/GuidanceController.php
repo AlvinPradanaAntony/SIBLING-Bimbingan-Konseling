@@ -13,12 +13,21 @@ use Carbon\Carbon;
 use App\Imports\GuidanceImport;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\DB;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class GuidanceController extends Controller
 {
+    protected $UserModel;
+    protected $StudentModel;
     public function __construct()
     {
         $this->middleware(['auth', 'verified']);
+        $this->UserModel = new User();
+        $this->StudentModel = new Student();
     }
     
     public function index(Request $request)
@@ -58,12 +67,6 @@ class GuidanceController extends Controller
         ), [
             'active' => 'guidance',
         ]);
-        // return view('data_bimbingan', [
-        //     'guidances' => Guidance::with(['student', 'user'])->get(),
-        //     'users' => User::all(),
-        //     'students' => Student::all(),
-        //     'active' => 'guidance'
-        // ]);
     }
 
     public function showImage($id)
@@ -152,26 +155,98 @@ class GuidanceController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
+            'file' => 'required|file|mimes:xlsx,xls',
         ]);
 
-        Excel::import(new GuidanceImport, $request->file('file'));
+        $file = $request->file('file');
+        $spreadsheet = IOFactory::load($file->getPathname());
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray();
 
-        return redirect()->route('guidance.index')->with('success', 'Data asesmen berhasil diimpor');
+        for ($i = 1; $i < count($rows); $i++) {
+            if (empty($rows[$i][0]) && empty($rows[$i][1]) && empty($rows[$i][2])) {
+                continue;
+            }
+
+            $topics = trim($rows[$i][0]);
+            $notes = trim($rows[$i][1]);
+            $date = trim($rows[$i][2]);
+            $proof_of_guidance = trim($rows[$i][3]);
+            $guidance_count = (int) $rows[$i][4];
+            $user_name = trim($rows[$i][5]);      
+            $student_name = trim($rows[$i][6]);   
+
+            $user = $this->UserModel->getByName($user_name);
+            $student = $this->StudentModel->getByName($student_name);
+
+            if (!$user) {
+                return back()->with('error', "❌ User tidak ditemukan: $user_name (baris " . ($i + 1) . ")");
+            }
+
+            if (!$student) {
+                return back()->with('error', "❌ Siswa tidak ditemukan: $student_name (baris " . ($i + 1) . ")");
+            }
+
+            DB::table('guidances')->insert([
+                'topics' => $topics,
+                'notes' => $notes,
+                'date' => $date,
+                'proof_of_guidance' => $proof_of_guidance,
+                'guidance_count' => $guidance_count,
+                'user_id' => $user->id,
+                'student_id' => $student->id,
+            ]);
+        }
+
+        return back()->with('success', '✅ Data bimbingan berhasil diimpor!');
+    }
+
+
+    public function downloadFormat()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Format Bimbingan');
+
+        // Header kolom
+        $sheet->fromArray([[
+            'Topik',
+            'Catatan',
+            'Tanggal',
+            'Bukti Bimbingan',
+            'Bimbingan Ke',
+            'Guru BK',
+            'Nama Siswa'
+        ]], null, 'A1');
+
+        $sheet->getStyle('C2:C1000')->getNumberFormat()
+            ->setFormatCode('yyyy-mm-dd');
+
+        foreach (range('A', 'G') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $filename = 'format_import_bimbingan.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        return response()->stream(function () use ($writer) {
+            $writer->save('php://output');
+        }, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
     }
 
     public function export()
     {
-        // Mengambil semua data dari model Guidance
         $guidances = Guidance::all();
 
-        // Buat file Excel
         $excelData = [];
-        $excelData[] = ['ID', 'Topics', 'Notes', 'Date', 'Proof_of_guidance', 'Guidance_count', 'User_id', 'Student_id']; // Judul kolom
+        $excelData[] = ['ID', 'Topik', 'Catatan', 'Tanggal', 'Bukti Bimbingan', 'Bimbingan Ke', 'Guru BK', 'Nama Siswa']; // Judul kolom
 
         foreach ($guidances as $guidance) {
             $excelData[] = [
-                $guidance->id,      // Jika Anda ingin menyertakan ID
+                $guidance->id,      
                 $guidance->topics,
                 $guidance->notes,
                 $guidance->date,
@@ -182,22 +257,18 @@ class GuidanceController extends Controller
             ];
         }
 
-        // Menggunakan PhpSpreadsheet untuk membuat file Excel
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Menyisipkan data ke dalam sheet
         foreach ($excelData as $rowIndex => $row) {
             foreach ($row as $colIndex => $cellValue) {
                 $sheet->setCellValueByColumnAndRow($colIndex + 1, $rowIndex + 1, $cellValue);
             }
         }
 
-        // Mengatur response untuk mengunduh file
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $filename = 'guidances.xlsx';
+        $filename = 'export_bimbingan.xlsx';
 
-        // Mengembalikan response download
         return response()->stream(function() use ($writer) {
             $writer->save('php://output');
         }, 200, [
